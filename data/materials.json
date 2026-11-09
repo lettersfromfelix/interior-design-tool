@@ -1,0 +1,50 @@
+{
+  "$schema": "../schemas/materials.schema.json",
+  "schemaVersion": 1,
+  "presets": [
+    { "id": "paint.light-grey", "name": "Light grey (current walls)", "color": "#D7D7D3", "roughness": 0.92 },
+    { "id": "paint.white", "name": "White", "color": "#F3F3F0", "roughness": 0.9 },
+    { "id": "paint.warm-white", "name": "Warm white", "color": "#F1ECE2", "roughness": 0.9 },
+    { "id": "paint.greige", "name": "Greige", "color": "#CDC4B6", "roughness": 0.92 },
+    { "id": "paint.sage", "name": "Sage green", "color": "#A9B39C", "roughness": 0.92 },
+    { "id": "paint.terracotta", "name": "Terracotta", "color": "#B9765A", "roughness": 0.92 },
+    { "id": "paint.dusty-blue", "name": "Dusty blue", "color": "#8FA2B0", "roughness": 0.92 },
+
+    { "id": "floor.stone-beige", "name": "Natural stone tiles, beige (current)", "color": "#DCD3C3", "roughness": 0.45,
+      "pattern": { "type": "tiles", "color2": "#C9BEAA", "scale": 60, "strength": 0.55 } },
+    { "id": "floor.oak-parquet", "name": "Oak parquet", "color": "#C49A6C", "roughness": 0.55,
+      "pattern": { "type": "planks", "color2": "#A97F52", "scale": 18, "strength": 0.6 } },
+    { "id": "floor.wood-decking", "name": "Wooden decking (balcony)", "color": "#9C7A5B", "roughness": 0.8,
+      "pattern": { "type": "planks", "color2": "#7E6046", "scale": 14, "strength": 0.7 } },
+
+    { "id": "kitchen.light-grey-matt", "name": "Kitchen fronts, light grey matt", "color": "#CBCCC8", "roughness": 0.6 },
+    { "id": "kitchen.black-matt", "name": "Kitchen, black matt", "color": "#1F1F1F", "roughness": 0.55 },
+    { "id": "kitchen.worktop-light", "name": "Worktop, light", "color": "#E2E0DA", "roughness": 0.35 },
+
+    { "id": "door.light-grey", "name": "Door leaf, light grey", "color": "#B9BBB9", "roughness": 0.5 },
+    { "id": "frame.anthracite", "name": "Frame, anthracite", "color": "#2C2C2C", "roughness": 0.5, "metalness": 0.2 },
+    { "id": "frame.white", "name": "Frame, white", "color": "#F1F1EE", "roughness": 0.4 },
+    { "id": "glass.clear", "name": "Clear glass", "color": "#DCEBEF", "roughness": 0.05, "opacity": 0.18 },
+    { "id": "glass.black", "name": "Black glass (hob)", "color": "#111214", "roughness": 0.15 },
+    { "id": "ceramic.white", "name": "White ceramic", "color": "#F6F6F3", "roughness": 0.2 },
+
+    { "id": "metal.stainless", "name": "Stainless steel", "color": "#B8BBBE", "roughness": 0.35, "metalness": 0.85 },
+    { "id": "metal.black-matte", "name": "Black, matte", "color": "#1E1E1E", "roughness": 0.5, "metalness": 0.6 },
+    { "id": "metal.brass", "name": "Brass", "color": "#B8954F", "roughness": 0.35, "metalness": 0.9 },
+    { "id": "metal.railing", "name": "Railing (dark metal bars)", "color": "#2A2A2A", "roughness": 0.5, "metalness": 0.6, "opacity": 0.4 },
+
+    { "id": "wood.oak-natural", "name": "Oak, natural", "color": "#C8A27A", "roughness": 0.6,
+      "pattern": { "type": "wood-grain", "color2": "#A9825B", "scale": 40, "strength": 0.5 } },
+    { "id": "wood.walnut", "name": "Walnut", "color": "#6E4C34", "roughness": 0.55,
+      "pattern": { "type": "wood-grain", "color2": "#553826", "scale": 40, "strength": 0.5 } },
+    { "id": "wood.ash-white", "name": "Ash, white oiled", "color": "#E3D7C4", "roughness": 0.6,
+      "pattern": { "type": "wood-grain", "color2": "#CDBEA6", "scale": 35, "strength": 0.45 } },
+
+    { "id": "fabric.boucle-cream", "name": "Bouclé, cream", "color": "#EDE6DA", "roughness": 0.97,
+      "pattern": { "type": "weave", "color2": "#DCD3C4", "scale": 2, "strength": 0.5 } },
+    { "id": "fabric.linen-grey", "name": "Linen, grey", "color": "#A5A39D", "roughness": 0.95,
+      "pattern": { "type": "weave", "color2": "#8F8D87", "scale": 1.5, "strength": 0.45 } },
+    { "id": "fabric.velvet-green", "name": "Velvet, bottle green", "color": "#2F4A3C", "roughness": 0.85 },
+    { "id": "leather.cognac", "name": "Leather, cognac", "color": "#8A5530", "roughness": 0.6 }
+  ]
+}

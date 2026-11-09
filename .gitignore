@@ -1,0 +1,22 @@
+# Dependencies & build output
+node_modules/
+dist/
+*.tsbuildinfo
+.vite/
+
+# Personal reference material stays local-only (contains the street address and interior photos).
+# Only the cropped, address-free underlay in data/underlay/ is committed.
+reference/floorplan.pdf
+reference/photos/
+
+# Floor-plan extraction debug output (regenerate with tools/floorplan/*.py)
+tools/floorplan/out/
+__pycache__/
+
+# Deleted layouts (safety net, see server/localFsApi.ts)
+layouts/.trash/
+
+# Editors / OS
+.DS_Store
+Thumbs.db
+*.log

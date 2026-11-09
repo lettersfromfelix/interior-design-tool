@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "presets": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+\\.[a-z0-9-]+$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "roughness": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "metalness": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "opacity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "emissive": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "emissiveIntensity": {
+            "type": "number",
+            "minimum": 0
+          },
+          "pattern": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "wood-grain",
+                  "planks",
+                  "tiles",
+                  "weave",
+                  "noise"
+                ]
+              },
+              "color2": {
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}$"
+              },
+              "scale": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "centimetres (> 0)"
+              },
+              "strength": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "type",
+              "color2",
+              "scale"
+            ],
+            "additionalProperties": false
+          },
+          "texture": {
+            "type": "object",
+            "properties": {
+              "map": {
+                "type": "string",
+                "minLength": 1
+              },
+              "normalMap": {
+                "type": "string",
+                "minLength": 1
+              },
+              "repeat": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "centimetres (> 0)"
+              }
+            },
+            "required": [
+              "map",
+              "repeat"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "color"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "presets"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,6284 @@
+{
+  "$schema": "../schemas/apartment.schema.json",
+  "schemaVersion": 1,
+  "name": "Wohnung 33 (3.5 Zimmer)",
+  "ceilingHeight": 255.0,
+  "north": {
+    "planUpBearing": 49.0
+  },
+  "location": {
+    "latitude": 47.38,
+    "longitude": 8.54,
+    "timeZone": "Europe/Zurich"
+  },
+  "defaults": {
+    "wallMaterial": "paint.light-grey",
+    "floorMaterial": "floor.stone-beige",
+    "ceilingMaterial": "paint.white",
+    "doorLeafMaterial": "door.light-grey",
+    "doorFrameMaterial": "frame.anthracite",
+    "windowFrameMaterial": "frame.anthracite",
+    "sashMaterial": "frame.white",
+    "glassMaterial": "glass.clear",
+    "railingMaterial": "metal.railing"
+  },
+  "source": {
+    "pdfScale": "1:100",
+    "ptToCm": 3.52779,
+    "originPt": [
+      128.0,
+      194.0
+    ],
+    "note": "Model x/z (cm) = (PDF point - originPt) * ptToCm. Derived by tools/floorplan/build_apartment.py."
+  },
+  "underlay": {
+    "image": "data/underlay/floorplan.png",
+    "x": -35.28,
+    "z": -28.22,
+    "widthCm": 1516.95,
+    "heightCm": 1107.73,
+    "rotation": 0,
+    "defaultOpacity": 0.5
+  },
+  "provenance": {
+    "confidence": "high",
+    "source": "plan",
+    "note": "Geometry extracted from the vector floor plan (1:100).",
+    "fields": {
+      "ceilingHeight": {
+        "confidence": "high",
+        "source": "user",
+        "note": "Given by you (255 cm). Checklist M01."
+      },
+      "north": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "From the plan's north arrow. Checklist M30."
+      },
+      "location": {
+        "confidence": "medium",
+        "source": "assumed",
+        "note": "City-level coordinates (Zurich)."
+      }
+    }
+  },
+  "rooms": [
+    {
+      "id": "zimmer-15-9",
+      "name": "Zimmer 15.9",
+      "kind": "indoor",
+      "outline": [
+        [
+          752.4,
+          559.2
+        ],
+        [
+          1244.7,
+          559.2
+        ],
+        [
+          1242.5,
+          563.6
+        ],
+        [
+          1242.5,
+          569.8
+        ],
+        [
+          1289.5,
+          665.2
+        ],
+        [
+          1269.9,
+          675.0
+        ],
+        [
+          1269.9,
+          868.2
+        ],
+        [
+          752.4,
+          868.2
+        ]
+      ],
+      "labelledArea": 15.9,
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "Room fill polygon of the plan; computed area 15.93 m2 (printed 15.9 m2). Interior walls at their centre line (BWF)."
+      }
+    },
+    {
+      "id": "living",
+      "name": "Wohnen/Essen",
+      "kind": "indoor",
+      "outline": [
+        [
+          427.1,
+          633.4
+        ],
+        [
+          328.0,
+          233.7
+        ],
+        [
+          405.5,
+          168.3
+        ],
+        [
+          419.6,
+          185.0
+        ],
+        [
+          596.3,
+          141.1
+        ],
+        [
+          631.0,
+          201.8
+        ],
+        [
+          718.7,
+          278.9
+        ],
+        [
+          826.6,
+          323.5
+        ],
+        [
+          943.2,
+          330.6
+        ],
+        [
+          1230.2,
+          251.4
+        ],
+        [
+          1245.1,
+          305.3
+        ],
+        [
+          1269.9,
+          305.3
+        ],
+        [
+          1269.9,
+          458.5
+        ],
+        [
+          1289.5,
+          468.2
+        ],
+        [
+          1244.7,
+          559.2
+        ],
+        [
+          593.9,
+          559.2
+        ],
+        [
+          593.9,
+          592.0
+        ],
+        [
+          533.3,
+          607.0
+        ]
+      ],
+      "labelledArea": 28.3,
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "Room fill polygon of the plan; computed area 28.33 m2 (printed 28.3 m2). Interior walls at their centre line (BWF)."
+      }
+    },
+    {
+      "id": "bath",
+      "name": "Bad",
+      "kind": "indoor",
+      "outline": [
+        [
+          585.3,
+          814.1
+        ],
+        [
+          576.6,
+          816.2
+        ],
+        [
+          570.6,
+          792.4
+        ],
+        [
+          549.8,
+          797.6
+        ],
+        [
+          556.1,
+          822.9
+        ],
+        [
+          437.7,
+          852.3
+        ],
+        [
+          431.4,
+          827.0
+        ],
+        [
+          344.5,
+          848.6
+        ],
+        [
+          299.0,
+          665.1
+        ],
+        [
+          533.9,
+          606.9
+        ]
+      ],
+      "labelledArea": 4.9,
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "Room fill polygon of the plan; computed area 4.91 m2 (printed 4.9 m2). Interior walls at their centre line (BWF)."
+      }
+    },
+    {
+      "id": "entree",
+      "name": "Entrée",
+      "kind": "indoor",
+      "outline": [
+        [
+          603.4,
+          809.6
+        ],
+        [
+          585.3,
+          814.1
+        ],
+        [
+          533.9,
+          606.9
+        ],
+        [
+          593.9,
+          592.0
+        ],
+        [
+          593.9,
+          559.2
+        ],
+        [
+          752.4,
+          559.2
+        ],
+        [
+          752.4,
+          868.2
+        ],
+        [
+          743.4,
+          868.2
+        ],
+        [
+          743.4,
+          1031.2
+        ],
+        [
+          603.4,
+          1031.2
+        ]
+      ],
+      "labelledArea": 7.9,
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "Room fill polygon of the plan; computed area 7.88 m2 (printed 7.9 m2). Interior walls at their centre line (BWF)."
+      }
+    },
+    {
+      "id": "zimmer-13-0",
+      "name": "Zimmer 13.0",
+      "kind": "indoor",
+      "outline": [
+        [
+          427.1,
+          633.4
+        ],
+        [
+          299.0,
+          665.1
+        ],
+        [
+          296.8,
+          656.4
+        ],
+        [
+          132.8,
+          697.1
+        ],
+        [
+          29.7,
+          281.7
+        ],
+        [
+          209.5,
+          237.1
+        ],
+        [
+          214.3,
+          215.7
+        ],
+        [
+          318.2,
+          238.4
+        ],
+        [
+          324.2,
+          236.9
+        ],
+        [
+          328.0,
+          233.7
+        ]
+      ],
+      "labelledArea": 13.0,
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "Room fill polygon of the plan; computed area 12.95 m2 (printed 13.0 m2). Interior walls at their centre line (BWF)."
+      }
+    },
+    {
+      "id": "balcony-n",
+      "name": "Balcony (north)",
+      "kind": "balcony",
+      "outline": [
+        [
+          192.0,
+          118.8
+        ],
+        [
+          192.2,
+          112.3
+        ],
+        [
+          192.8,
+          105.8
+        ],
+        [
+          193.9,
+          99.4
+        ],
+        [
+          195.4,
+          93.0
+        ],
+        [
+          197.3,
+          86.8
+        ],
+        [
+          199.6,
+          80.7
+        ],
+        [
+          202.2,
+          74.7
+        ],
+        [
+          205.3,
+          69.0
+        ],
+        [
+          208.8,
+          63.4
+        ],
+        [
+          212.6,
+          58.1
+        ],
+        [
+          216.7,
+          53.1
+        ],
+        [
+          221.2,
+          48.3
+        ],
+        [
+          225.9,
+          43.9
+        ],
+        [
+          231.0,
+          39.7
+        ],
+        [
+          236.3,
+          35.9
+        ],
+        [
+          241.8,
+          32.5
+        ],
+        [
+          247.6,
+          29.4
+        ],
+        [
+          253.5,
+          26.7
+        ],
+        [
+          259.6,
+          24.4
+        ],
+        [
+          265.8,
+          22.5
+        ],
+        [
+          272.2,
+          21.0
+        ],
+        [
+          278.6,
+          20.0
+        ],
+        [
+          285.1,
+          19.3
+        ],
+        [
+          291.7,
+          19.1
+        ],
+        [
+          298.2,
+          19.3
+        ],
+        [
+          304.7,
+          20.0
+        ],
+        [
+          311.1,
+          21.0
+        ],
+        [
+          317.5,
+          22.5
+        ],
+        [
+          323.7,
+          24.4
+        ],
+        [
+          329.8,
+          26.7
+        ],
+        [
+          335.7,
+          29.4
+        ],
+        [
+          341.5,
+          32.5
+        ],
+        [
+          347.0,
+          35.9
+        ],
+        [
+          352.3,
+          39.7
+        ],
+        [
+          357.4,
+          43.9
+        ],
+        [
+          362.1,
+          48.3
+        ],
+        [
+          366.6,
+          53.1
+        ],
+        [
+          370.7,
+          58.1
+        ],
+        [
+          374.5,
+          63.4
+        ],
+        [
+          378.0,
+          69.0
+        ],
+        [
+          381.1,
+          74.7
+        ],
+        [
+          383.7,
+          80.7
+        ],
+        [
+          386.0,
+          86.8
+        ],
+        [
+          387.9,
+          93.0
+        ],
+        [
+          405.5,
+          168.3
+        ],
+        [
+          328.0,
+          233.7
+        ],
+        [
+          318.2,
+          238.4
+        ],
+        [
+          214.3,
+          215.7
+        ],
+        [
+          195.4,
+          144.6
+        ],
+        [
+          193.9,
+          138.3
+        ],
+        [
+          192.8,
+          131.8
+        ],
+        [
+          192.2,
+          125.3
+        ]
+      ],
+      "hasCeiling": false,
+      "floorMaterial": "floor.wood-decking",
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Round balcony from the railing circle (inner radius 100 cm); floor area 3.53 m2 (plan: 6.6 m2 for both balconies). Checklist M22."
+      }
+    },
+    {
+      "id": "balcony-se",
+      "name": "Balcony (south-east)",
+      "kind": "balcony",
+      "outline": [
+        [
+          1242.5,
+          569.8
+        ],
+        [
+          1244.7,
+          559.2
+        ],
+        [
+          1289.5,
+          468.2
+        ],
+        [
+          1364.9,
+          467.0
+        ],
+        [
+          1371.4,
+          467.2
+        ],
+        [
+          1377.9,
+          467.9
+        ],
+        [
+          1384.4,
+          468.9
+        ],
+        [
+          1390.7,
+          470.4
+        ],
+        [
+          1397.0,
+          472.3
+        ],
+        [
+          1403.1,
+          474.6
+        ],
+        [
+          1409.0,
+          477.3
+        ],
+        [
+          1414.8,
+          480.4
+        ],
+        [
+          1420.3,
+          483.8
+        ],
+        [
+          1425.6,
+          487.6
+        ],
+        [
+          1430.6,
+          491.7
+        ],
+        [
+          1435.4,
+          496.2
+        ],
+        [
+          1439.9,
+          501.0
+        ],
+        [
+          1444.0,
+          506.0
+        ],
+        [
+          1447.8,
+          511.3
+        ],
+        [
+          1451.3,
+          516.9
+        ],
+        [
+          1454.3,
+          522.6
+        ],
+        [
+          1457.0,
+          528.6
+        ],
+        [
+          1459.3,
+          534.7
+        ],
+        [
+          1461.2,
+          540.9
+        ],
+        [
+          1462.7,
+          547.3
+        ],
+        [
+          1463.8,
+          553.7
+        ],
+        [
+          1464.4,
+          560.2
+        ],
+        [
+          1464.6,
+          566.7
+        ],
+        [
+          1464.4,
+          573.2
+        ],
+        [
+          1463.8,
+          579.7
+        ],
+        [
+          1462.7,
+          586.2
+        ],
+        [
+          1461.2,
+          592.5
+        ],
+        [
+          1459.3,
+          598.8
+        ],
+        [
+          1457.0,
+          604.9
+        ],
+        [
+          1454.3,
+          610.8
+        ],
+        [
+          1451.3,
+          616.6
+        ],
+        [
+          1447.8,
+          622.1
+        ],
+        [
+          1444.0,
+          627.4
+        ],
+        [
+          1439.9,
+          632.4
+        ],
+        [
+          1435.4,
+          637.2
+        ],
+        [
+          1430.6,
+          641.7
+        ],
+        [
+          1425.6,
+          645.8
+        ],
+        [
+          1420.3,
+          649.6
+        ],
+        [
+          1414.8,
+          653.1
+        ],
+        [
+          1409.0,
+          656.1
+        ],
+        [
+          1403.1,
+          658.8
+        ],
+        [
+          1397.0,
+          661.1
+        ],
+        [
+          1390.7,
+          663.0
+        ],
+        [
+          1384.4,
+          664.5
+        ],
+        [
+          1377.9,
+          665.6
+        ],
+        [
+          1371.4,
+          666.2
+        ],
+        [
+          1364.9,
+          666.4
+        ],
+        [
+          1289.5,
+          665.2
+        ]
+      ],
+      "hasCeiling": false,
+      "floorMaterial": "floor.wood-decking",
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Round balcony from the railing circle (inner radius 100 cm); floor area 3.53 m2 (plan: 6.6 m2 for both balconies). Checklist M22."
+      }
+    }
+  ],
+  "walls": [
+    {
+      "id": "w-living-zimmer-13-0",
+      "kind": "interior",
+      "start": [
+        328.0,
+        234.0
+      ],
+      "end": [
+        429.3,
+        642.1
+      ],
+      "thickness": 18.0,
+      "sides": {
+        "left": "living",
+        "right": "zimmer-13-0"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "18 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-entree-living",
+      "kind": "interior",
+      "start": [
+        584.9,
+        559.2
+      ],
+      "end": [
+        753.2,
+        559.2
+      ],
+      "thickness": 18.0,
+      "sides": {
+        "left": "living",
+        "right": "entree"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "18 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-entree-living-2",
+      "kind": "interior",
+      "start": [
+        593.9,
+        550.2
+      ],
+      "end": [
+        593.9,
+        601.2
+      ],
+      "thickness": 18.0,
+      "sides": {
+        "left": "entree",
+        "right": "living"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "18 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-entree-zimmer-15-9",
+      "kind": "interior",
+      "start": [
+        752.4,
+        568.4
+      ],
+      "end": [
+        752.4,
+        867.7
+      ],
+      "thickness": 18.0,
+      "sides": {
+        "left": "zimmer-15-9",
+        "right": "entree"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "18 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-living-zimmer-15-9",
+      "kind": "interior",
+      "start": [
+        753.2,
+        559.2
+      ],
+      "end": [
+        1244.2,
+        559.2
+      ],
+      "thickness": 18.0,
+      "sides": {
+        "left": "living",
+        "right": "zimmer-15-9"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "18 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-bath-entree",
+      "kind": "interior",
+      "start": [
+        531.7,
+        598.1
+      ],
+      "end": [
+        579.4,
+        790.3
+      ],
+      "thickness": 18.0,
+      "sides": {
+        "left": "entree",
+        "right": "bath"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "18 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-bath-living",
+      "kind": "interior",
+      "start": [
+        534.4,
+        606.7
+      ],
+      "end": [
+        427.6,
+        633.2
+      ],
+      "thickness": 18.0,
+      "sides": {
+        "left": "bath",
+        "right": "living"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "18 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-entree-living-3",
+      "kind": "interior",
+      "start": [
+        602.9,
+        589.7
+      ],
+      "end": [
+        534.4,
+        606.7
+      ],
+      "thickness": 18.0,
+      "sides": {
+        "left": "entree",
+        "right": "living"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "18 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-bath-zimmer-13-0",
+      "kind": "interior",
+      "start": [
+        427.6,
+        633.2
+      ],
+      "end": [
+        299.5,
+        665.0
+      ],
+      "thickness": 18.0,
+      "sides": {
+        "left": "bath",
+        "right": "zimmer-13-0"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "18 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-entree-interior",
+      "kind": "interior",
+      "start": [
+        579.4,
+        790.3
+      ],
+      "end": [
+        595.3,
+        854.2
+      ],
+      "thickness": 18.0,
+      "sides": {
+        "left": "entree"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "18 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-living-exterior",
+      "kind": "exterior",
+      "start": [
+        621.5,
+        113.8
+      ],
+      "end": [
+        407.1,
+        166.9
+      ],
+      "thickness": 41.0,
+      "sides": {
+        "left": "living"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "41 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-zimmer-13-0-exterior",
+      "kind": "exterior",
+      "start": [
+        212.2,
+        215.3
+      ],
+      "end": [
+        25.3,
+        261.7
+      ],
+      "thickness": 41.0,
+      "sides": {
+        "left": "zimmer-13-0"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "41 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-living-exterior-2",
+      "kind": "exterior",
+      "start": [
+        1290.4,
+        283.9
+      ],
+      "end": [
+        1290.4,
+        466.3
+      ],
+      "thickness": 41.0,
+      "sides": {
+        "right": "living"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "41 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-zimmer-15-9-exterior",
+      "kind": "exterior",
+      "start": [
+        1290.4,
+        667.1
+      ],
+      "end": [
+        1290.4,
+        867.5
+      ],
+      "thickness": 41.0,
+      "sides": {
+        "right": "zimmer-15-9"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "41 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-zimmer-13-0-party",
+      "kind": "party",
+      "start": [
+        6.3,
+        245.3
+      ],
+      "end": [
+        126.0,
+        727.6
+      ],
+      "thickness": 28.0,
+      "sides": {
+        "left": "zimmer-13-0"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "28 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-bath-party",
+      "kind": "party",
+      "start": [
+        283.2,
+        659.8
+      ],
+      "end": [
+        343.6,
+        902.9
+      ],
+      "thickness": 28.0,
+      "sides": {
+        "left": "bath"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "28 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-zimmer-13-0-party-2",
+      "kind": "party",
+      "start": [
+        272.5,
+        676.9
+      ],
+      "end": [
+        136.7,
+        710.6
+      ],
+      "thickness": 28.0,
+      "sides": {
+        "right": "zimmer-13-0"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "28 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-bath-party-2",
+      "kind": "party",
+      "start": [
+        603.4,
+        824.8
+      ],
+      "end": [
+        354.0,
+        886.7
+      ],
+      "thickness": 26.5,
+      "sides": {
+        "right": "bath"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "26 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-entree-party",
+      "kind": "party",
+      "start": [
+        589.4,
+        845.7
+      ],
+      "end": [
+        589.4,
+        1061.2
+      ],
+      "thickness": 28.0,
+      "sides": {
+        "left": "entree"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "28 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-zimmer-15-9-party",
+      "kind": "party",
+      "start": [
+        743.4,
+        882.2
+      ],
+      "end": [
+        1310.9,
+        882.2
+      ],
+      "thickness": 28.0,
+      "sides": {
+        "left": "zimmer-15-9"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "28 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-entree-party-2",
+      "kind": "party",
+      "start": [
+        755.9,
+        896.7
+      ],
+      "end": [
+        755.9,
+        1030.7
+      ],
+      "thickness": 25.0,
+      "sides": {
+        "right": "entree"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "25 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-entree-party-3",
+      "kind": "party",
+      "start": [
+        575.4,
+        1044.5
+      ],
+      "end": [
+        768.4,
+        1044.5
+      ],
+      "thickness": 26.5,
+      "sides": {
+        "left": "entree"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "27 cm wall from the plan's wall poche. Checklist M28 (reveal depth)."
+      }
+    },
+    {
+      "id": "w-living-glazing",
+      "kind": "glazing",
+      "start": [
+        600.8,
+        136.8
+      ],
+      "end": [
+        636.9,
+        200.1
+      ],
+      "thickness": 12.0,
+      "sides": {
+        "right": "living"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Glazing line from the plan; frame depth 12 cm assumed.",
+        "fields": {
+          "thickness": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Window frame depth not in plan."
+          }
+        }
+      }
+    },
+    {
+      "id": "w-zimmer-13-0-glazing",
+      "kind": "glazing",
+      "start": [
+        214.1,
+        209.6
+      ],
+      "end": [
+        321.0,
+        232.9
+      ],
+      "thickness": 12.0,
+      "sides": {
+        "right": "zimmer-13-0"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Glazing line from the plan; frame depth 12 cm assumed.",
+        "fields": {
+          "thickness": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Window frame depth not in plan."
+          }
+        }
+      }
+    },
+    {
+      "id": "w-living-glazing-2",
+      "kind": "glazing",
+      "start": [
+        633.8,
+        196.3
+      ],
+      "end": [
+        723.8,
+        275.4
+      ],
+      "thickness": 12.0,
+      "sides": {
+        "right": "living"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Glazing line from the plan; frame depth 12 cm assumed.",
+        "fields": {
+          "thickness": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Window frame depth not in plan."
+          }
+        }
+      }
+    },
+    {
+      "id": "w-living-glazing-3",
+      "kind": "glazing",
+      "start": [
+        323.0,
+        230.1
+      ],
+      "end": [
+        402.8,
+        162.7
+      ],
+      "thickness": 12.0,
+      "sides": {
+        "right": "living"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Glazing line from the plan; frame depth 12 cm assumed.",
+        "fields": {
+          "thickness": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Window frame depth not in plan."
+          }
+        }
+      }
+    },
+    {
+      "id": "w-living-glazing-4",
+      "kind": "glazing",
+      "start": [
+        719.6,
+        272.8
+      ],
+      "end": [
+        830.3,
+        318.5
+      ],
+      "thickness": 12.0,
+      "sides": {
+        "right": "living"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Glazing line from the plan; frame depth 12 cm assumed.",
+        "fields": {
+          "thickness": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Window frame depth not in plan."
+          }
+        }
+      }
+    },
+    {
+      "id": "w-living-glazing-5",
+      "kind": "glazing",
+      "start": [
+        1235.6,
+        248.3
+      ],
+      "end": [
+        1251.3,
+        305.1
+      ],
+      "thickness": 12.0,
+      "sides": {
+        "right": "living"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Glazing line from the plan; frame depth 12 cm assumed.",
+        "fields": {
+          "thickness": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Window frame depth not in plan."
+          }
+        }
+      }
+    },
+    {
+      "id": "w-living-glazing-6",
+      "kind": "glazing",
+      "start": [
+        825.5,
+        317.4
+      ],
+      "end": [
+        945.1,
+        324.7
+      ],
+      "thickness": 12.0,
+      "sides": {
+        "right": "living"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Glazing line from the plan; frame depth 12 cm assumed.",
+        "fields": {
+          "thickness": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Window frame depth not in plan."
+          }
+        }
+      }
+    },
+    {
+      "id": "w-living-glazing-7",
+      "kind": "glazing",
+      "start": [
+        1243.6,
+        299.3
+      ],
+      "end": [
+        1271.4,
+        299.3
+      ],
+      "thickness": 12.0,
+      "sides": {
+        "right": "living"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Glazing line from the plan; frame depth 12 cm assumed.",
+        "fields": {
+          "thickness": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Window frame depth not in plan."
+          }
+        }
+      }
+    },
+    {
+      "id": "w-living-glazing-8",
+      "kind": "glazing",
+      "start": [
+        940.2,
+        325.2
+      ],
+      "end": [
+        1230.0,
+        245.2
+      ],
+      "thickness": 12.0,
+      "sides": {
+        "right": "living"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Glazing line from the plan; frame depth 12 cm assumed.",
+        "fields": {
+          "thickness": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Window frame depth not in plan."
+          }
+        }
+      }
+    },
+    {
+      "id": "w-living-glazing-9",
+      "kind": "glazing",
+      "start": [
+        1295.6,
+        469.5
+      ],
+      "end": [
+        1249.4,
+        563.2
+      ],
+      "thickness": 12.0,
+      "sides": {
+        "right": "living"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Glazing line from the plan; frame depth 12 cm assumed.",
+        "fields": {
+          "thickness": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Window frame depth not in plan."
+          }
+        }
+      }
+    },
+    {
+      "id": "w-zimmer-15-9-glazing",
+      "kind": "glazing",
+      "start": [
+        1247.2,
+        565.8
+      ],
+      "end": [
+        1295.6,
+        663.9
+      ],
+      "thickness": 12.0,
+      "sides": {
+        "right": "zimmer-15-9"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Glazing line from the plan; frame depth 12 cm assumed.",
+        "fields": {
+          "thickness": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Window frame depth not in plan."
+          }
+        }
+      }
+    }
+  ],
+  "openings": [
+    {
+      "id": "d-living-zimmer-13-0",
+      "kind": "door",
+      "wall": "w-living-zimmer-13-0",
+      "centerFromStart": 47.9,
+      "width": 95.8,
+      "height": 205.0,
+      "sill": 0,
+      "door": {
+        "hinge": "end",
+        "opensTo": "right",
+        "leaves": 1,
+        "leafWidth": 82.0,
+        "style": "solid"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "Opening between the wall reveals from the plan; leaf 82 cm and swing from the door arc.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Door height not in plan; estimated from the photos."
+          }
+        }
+      }
+    },
+    {
+      "id": "d-entree-living",
+      "kind": "door",
+      "wall": "w-entree-living",
+      "centerFromStart": 62.8,
+      "width": 89.4,
+      "height": 205.0,
+      "sill": 0,
+      "door": {
+        "hinge": "start",
+        "opensTo": "left",
+        "leaves": 1,
+        "leafWidth": 82.0,
+        "style": "solid"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "Opening between the wall reveals from the plan; leaf 82 cm and swing from the door arc.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Door height not in plan; estimated from the photos."
+          }
+        }
+      }
+    },
+    {
+      "id": "d-entree-zimmer-15-9",
+      "kind": "door",
+      "wall": "w-entree-zimmer-15-9",
+      "centerFromStart": 41.7,
+      "width": 83.3,
+      "height": 205.0,
+      "sill": 0,
+      "door": {
+        "hinge": "start",
+        "opensTo": "left",
+        "leaves": 1,
+        "leafWidth": 76.0,
+        "style": "glazed"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "Opening between the wall reveals from the plan; leaf 76 cm and swing from the door arc.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Door height not in plan; estimated from the photos."
+          },
+          "door.style": {
+            "confidence": "medium",
+            "source": "photo",
+            "note": "Glass panel visible in IMG_4514."
+          }
+        }
+      }
+    },
+    {
+      "id": "d-living-zimmer-15-9",
+      "kind": "door",
+      "wall": "w-living-zimmer-15-9",
+      "centerFromStart": 443.2,
+      "width": 95.6,
+      "height": 205.0,
+      "sill": 0,
+      "door": {
+        "hinge": "start",
+        "opensTo": "right",
+        "leaves": 1,
+        "leafWidth": 82.0,
+        "style": "solid"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "Opening between the wall reveals from the plan; leaf 82 cm and swing from the door arc.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Door height not in plan; estimated from the photos."
+          }
+        }
+      }
+    },
+    {
+      "id": "d-bath-entree",
+      "kind": "door",
+      "wall": "w-bath-entree",
+      "centerFromStart": 73.5,
+      "width": 87.8,
+      "height": 205.0,
+      "sill": 0,
+      "door": {
+        "hinge": "start",
+        "opensTo": "right",
+        "leaves": 1,
+        "leafWidth": 82.0,
+        "style": "solid"
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "Opening between the wall reveals from the plan; leaf 82 cm and swing from the door arc.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Door height not in plan; estimated from the photos."
+          }
+        }
+      }
+    },
+    {
+      "id": "d-entrance",
+      "kind": "door",
+      "wall": "w-entree-party",
+      "centerFromStart": 62.4,
+      "width": 107.8,
+      "height": 210.0,
+      "sill": 0,
+      "door": {
+        "hinge": "end",
+        "opensTo": "left",
+        "leaves": 1,
+        "leafWidth": 98.5,
+        "style": "solid",
+        "isEntrance": true
+      },
+      "provenance": {
+        "confidence": "high",
+        "source": "plan",
+        "note": "Opening between the wall reveals from the plan; leaf 98 cm and swing from the door arc.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Door height not in plan; estimated from the photos."
+          }
+        }
+      }
+    },
+    {
+      "id": "win-living-1",
+      "kind": "window",
+      "wall": "w-living-glazing",
+      "centerFromStart": 36.4,
+      "width": 59.9,
+      "height": 230.0,
+      "sill": 0,
+      "window": {
+        "sashes": 1,
+        "operation": "casement",
+        "opensTo": "right",
+        "railing": {
+          "height": 100
+        }
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "French window (floor to almost ceiling) as drawn; 1 sash(es) from the plan.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Window height estimated from IMG_4508. Checklist M19."
+          },
+          "window.railing.height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Juliet railing outside. Checklist M20."
+          }
+        }
+      }
+    },
+    {
+      "id": "d-zimmer-13-0-balcony-n",
+      "kind": "door",
+      "wall": "w-zimmer-13-0-glazing",
+      "centerFromStart": 54.7,
+      "width": 98.4,
+      "height": 230.0,
+      "sill": 0,
+      "door": {
+        "hinge": "start",
+        "opensTo": "right",
+        "leaves": 1,
+        "leafWidth": 94.0,
+        "style": "glazed"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Opening between the wall reveals from the plan; leaf 94 cm and swing from the door arc.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Door height not in plan; estimated from the photos."
+          }
+        }
+      }
+    },
+    {
+      "id": "win-living-2",
+      "kind": "window",
+      "wall": "w-living-glazing-2",
+      "centerFromStart": 59.9,
+      "width": 106.8,
+      "height": 230.0,
+      "sill": 0,
+      "window": {
+        "sashes": 2,
+        "operation": "casement",
+        "opensTo": "right",
+        "railing": {
+          "height": 100
+        }
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "French window (floor to almost ceiling) as drawn; 2 sash(es) from the plan.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Window height estimated from IMG_4508. Checklist M19."
+          },
+          "window.railing.height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Juliet railing outside. Checklist M20."
+          }
+        }
+      }
+    },
+    {
+      "id": "d-living-balcony-n",
+      "kind": "door",
+      "wall": "w-living-glazing-3",
+      "centerFromStart": 52.2,
+      "width": 93.5,
+      "height": 230.0,
+      "sill": 0,
+      "door": {
+        "hinge": "end",
+        "opensTo": "right",
+        "leaves": 1,
+        "leafWidth": 94.0,
+        "style": "glazed"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Opening between the wall reveals from the plan; leaf 94 cm and swing from the door arc.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Door height not in plan; estimated from the photos."
+          }
+        }
+      }
+    },
+    {
+      "id": "win-living-3",
+      "kind": "window",
+      "wall": "w-living-glazing-4",
+      "centerFromStart": 59.9,
+      "width": 106.8,
+      "height": 230.0,
+      "sill": 0,
+      "window": {
+        "sashes": 2,
+        "operation": "casement",
+        "opensTo": "right",
+        "railing": {
+          "height": 100
+        }
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "French window (floor to almost ceiling) as drawn; 2 sash(es) from the plan.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Window height estimated from IMG_4508. Checklist M19."
+          },
+          "window.railing.height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Juliet railing outside. Checklist M20."
+          }
+        }
+      }
+    },
+    {
+      "id": "win-living-4",
+      "kind": "window",
+      "wall": "w-living-glazing-5",
+      "centerFromStart": 29.5,
+      "width": 45.9,
+      "height": 230.0,
+      "sill": 0,
+      "window": {
+        "sashes": 1,
+        "operation": "casement",
+        "opensTo": "right",
+        "railing": {
+          "height": 100
+        }
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "French window (floor to almost ceiling) as drawn; 1 sash(es) from the plan.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Window height estimated from IMG_4508. Checklist M19."
+          },
+          "window.railing.height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Juliet railing outside. Checklist M20."
+          }
+        }
+      }
+    },
+    {
+      "id": "win-living-5",
+      "kind": "window",
+      "wall": "w-living-glazing-6",
+      "centerFromStart": 59.9,
+      "width": 106.8,
+      "height": 230.0,
+      "sill": 0,
+      "window": {
+        "sashes": 2,
+        "operation": "casement",
+        "opensTo": "right",
+        "railing": {
+          "height": 100
+        }
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "French window (floor to almost ceiling) as drawn; 2 sash(es) from the plan.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Window height estimated from IMG_4508. Checklist M19."
+          },
+          "window.railing.height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Juliet railing outside. Checklist M20."
+          }
+        }
+      }
+    },
+    {
+      "id": "win-living-6",
+      "kind": "window",
+      "wall": "w-living-glazing-7",
+      "centerFromStart": 13.9,
+      "width": 18.9,
+      "height": 230.0,
+      "sill": 0,
+      "window": {
+        "sashes": 1,
+        "operation": "fixed",
+        "railing": {
+          "height": 100
+        }
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "French window (floor to almost ceiling) as drawn; 1 sash(es) from the plan.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Window height estimated from IMG_4508. Checklist M19."
+          },
+          "window.railing.height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Juliet railing outside. Checklist M20."
+          }
+        }
+      }
+    },
+    {
+      "id": "win-living-7",
+      "kind": "window",
+      "wall": "w-living-glazing-8",
+      "centerFromStart": 150.4,
+      "width": 287.7,
+      "height": 230.0,
+      "sill": 0,
+      "window": {
+        "sashes": 5,
+        "operation": "casement",
+        "opensTo": "right",
+        "railing": {
+          "height": 100
+        }
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "French window (floor to almost ceiling) as drawn; 5 sash(es) from the plan.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Window height estimated from IMG_4508. Checklist M19."
+          },
+          "window.railing.height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Juliet railing outside. Checklist M20."
+          }
+        }
+      }
+    },
+    {
+      "id": "d-living-balcony-se",
+      "kind": "door",
+      "wall": "w-living-glazing-9",
+      "centerFromStart": 52.2,
+      "width": 93.5,
+      "height": 230.0,
+      "sill": 0,
+      "door": {
+        "hinge": "start",
+        "opensTo": "right",
+        "leaves": 1,
+        "leafWidth": 93.5,
+        "style": "glazed"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Opening between the wall reveals from the plan; leaf 94 cm and swing from the door arc.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Door height not in plan; estimated from the photos."
+          }
+        }
+      }
+    },
+    {
+      "id": "d-zimmer-15-9-balcony-se",
+      "kind": "door",
+      "wall": "w-zimmer-15-9-glazing",
+      "centerFromStart": 54.7,
+      "width": 98.4,
+      "height": 230.0,
+      "sill": 0,
+      "door": {
+        "hinge": "end",
+        "opensTo": "right",
+        "leaves": 1,
+        "leafWidth": 94.0,
+        "style": "glazed"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Opening between the wall reveals from the plan; leaf 94 cm and swing from the door arc.",
+        "fields": {
+          "height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Door height not in plan; estimated from the photos."
+          }
+        }
+      }
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "kitchen",
+      "name": "Kitchen",
+      "kind": "kitchen",
+      "position": [
+        900.0,
+        514.0
+      ],
+      "rotation": 180,
+      "parts": [
+        {
+          "name": "tall unit 42",
+          "shape": "box",
+          "position": {
+            "x": 161.5,
+            "y": 120.0,
+            "z": -6.2
+          },
+          "size": {
+            "x": 42.0,
+            "y": 240.0,
+            "z": 60.0
+          },
+          "material": "fronts",
+          "provenance": {
+            "confidence": "medium",
+            "source": "plan",
+            "fields": {
+              "size.y": {
+                "confidence": "low",
+                "source": "photo",
+                "note": "Height estimated from IMG_4508 (black side panel almost reaches the ceiling). Checklist M24."
+              }
+            }
+          }
+        },
+        {
+          "name": "tall unit 62",
+          "shape": "box",
+          "position": {
+            "x": 109.5,
+            "y": 120.0,
+            "z": -6.2
+          },
+          "size": {
+            "x": 62.0,
+            "y": 240.0,
+            "z": 60.0
+          },
+          "material": "fronts",
+          "provenance": {
+            "confidence": "medium",
+            "source": "plan",
+            "fields": {
+              "size.y": {
+                "confidence": "low",
+                "source": "photo",
+                "note": "Height estimated from IMG_4508 (black side panel almost reaches the ceiling). Checklist M24."
+              }
+            }
+          }
+        },
+        {
+          "name": "side panel",
+          "shape": "box",
+          "position": {
+            "x": 181.5,
+            "y": 120.0,
+            "z": -6.2
+          },
+          "size": {
+            "x": 2.1,
+            "y": 240.0,
+            "z": 60.0
+          },
+          "material": "side-panel"
+        },
+        {
+          "name": "base cabinets",
+          "shape": "box",
+          "position": {
+            "x": -52.0,
+            "y": 48.5,
+            "z": -6.2
+          },
+          "size": {
+            "x": 261.0,
+            "y": 77.0,
+            "z": 60.0
+          },
+          "material": "fronts"
+        },
+        {
+          "name": "plinth",
+          "shape": "box",
+          "position": {
+            "x": -52.0,
+            "y": 5.0,
+            "z": -8.9
+          },
+          "size": {
+            "x": 261.0,
+            "y": 10.0,
+            "z": 54.7
+          },
+          "material": "plinth"
+        },
+        {
+          "name": "worktop",
+          "shape": "box",
+          "position": {
+            "x": -28.5,
+            "y": 88.5,
+            "z": -0.0
+          },
+          "size": {
+            "x": 214.0,
+            "y": 3.0,
+            "z": 72.5
+          },
+          "material": "worktop",
+          "provenance": {
+            "confidence": "medium",
+            "source": "plan",
+            "note": "72.5 cm deep worktop as drawn (overhang to the living room?). Checklist M23."
+          }
+        },
+        {
+          "name": "worktop end",
+          "shape": "box",
+          "position": {
+            "x": -159.0,
+            "y": 88.5,
+            "z": -5.0
+          },
+          "size": {
+            "x": 47.0,
+            "y": 3.0,
+            "z": 62.5
+          },
+          "material": "worktop"
+        },
+        {
+          "name": "sink",
+          "shape": "box",
+          "position": {
+            "x": 16.5,
+            "y": 90.1,
+            "z": 5.4
+          },
+          "size": {
+            "x": 49.7,
+            "y": 0.6,
+            "z": 40.7
+          },
+          "material": "steel"
+        },
+        {
+          "name": "hob",
+          "shape": "box",
+          "position": {
+            "x": -103.6,
+            "y": 90.2,
+            "z": -0.3
+          },
+          "size": {
+            "x": 48.8,
+            "y": 0.7,
+            "z": 48.8
+          },
+          "material": "hob"
+        }
+      ],
+      "materials": {
+        "fronts": "kitchen.light-grey-matt",
+        "side-panel": "kitchen.black-matt",
+        "plinth": "kitchen.black-matt",
+        "worktop": "kitchen.worktop-light",
+        "steel": "metal.stainless",
+        "hob": "glass.black"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Footprint exact from the plan: tall units 42 + 62 cm (60 deep), counter run 261 cm (214 cm at 72.5 cm depth, 47 cm at 62.5 cm), sink, 4-zone hob. Heights and colours from photo IMG_4508 and Swiss standard (worktop 90 cm). Checklist M23-M26."
+      }
+    },
+    {
+      "id": "built-in-wardrobe",
+      "name": "Built-in wardrobe (Einbauschrank)",
+      "kind": "built-in",
+      "position": [
+        673.5,
+        999.2
+      ],
+      "rotation": 180,
+      "parts": [
+        {
+          "name": "carcass",
+          "shape": "box",
+          "position": {
+            "x": 0.0,
+            "y": 127.5,
+            "z": -1.1
+          },
+          "size": {
+            "x": 140.0,
+            "y": 255.0,
+            "z": 61.9
+          },
+          "material": "body"
+        },
+        {
+          "name": "door left",
+          "shape": "box",
+          "position": {
+            "x": 21.0,
+            "y": 127.5,
+            "z": 31.0
+          },
+          "size": {
+            "x": 57.0,
+            "y": 255.0,
+            "z": 2.1
+          },
+          "material": "fronts"
+        },
+        {
+          "name": "door right",
+          "shape": "box",
+          "position": {
+            "x": -39.3,
+            "y": 127.5,
+            "z": 31.0
+          },
+          "size": {
+            "x": 61.5,
+            "y": 255.0,
+            "z": 2.1
+          },
+          "material": "fronts"
+        },
+        {
+          "name": "side compartment",
+          "shape": "box",
+          "position": {
+            "x": 60.0,
+            "y": 127.5,
+            "z": 31.0
+          },
+          "size": {
+            "x": 20.0,
+            "y": 255.0,
+            "z": 2.1
+          },
+          "material": "fronts"
+        }
+      ],
+      "materials": {
+        "body": "paint.white",
+        "fronts": "kitchen.light-grey-matt"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Footprint exact from the plan: 140 x 64 cm, two ~57.5 cm doors + ~20 cm side compartment. Not visible in the photos: height (assumed floor-to-ceiling) and colour are guesses. Checklist M27.",
+        "fields": {
+          "parts.*.size.y": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Assumed floor-to-ceiling."
+          }
+        }
+      }
+    },
+    {
+      "id": "column",
+      "name": "Column",
+      "kind": "column",
+      "position": [
+        822.7,
+        340.6
+      ],
+      "rotation": 0,
+      "parts": [
+        {
+          "name": "column",
+          "shape": "cylinder",
+          "radius": 7.7,
+          "height": 255.0,
+          "position": {
+            "x": 0,
+            "y": 127.5,
+            "z": 0
+          },
+          "material": "body"
+        }
+      ],
+      "materials": {
+        "body": "paint.white"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Round column, diameter 15 cm from the plan (drawn outline adds ~3 cm). Checklist M10."
+      }
+    },
+    {
+      "id": "bath-washer-dryer",
+      "name": "Washer/dryer stack",
+      "kind": "appliance",
+      "position": [
+        352.7,
+        702.6
+      ],
+      "rotation": 166.07,
+      "parts": [
+        {
+          "name": "washer/dryer stack",
+          "shape": "box",
+          "size": {
+            "x": 60.1,
+            "y": 170.0,
+            "z": 56.6
+          },
+          "position": {
+            "x": 0,
+            "y": 85.0,
+            "z": 0
+          },
+          "material": "body"
+        }
+      ],
+      "materials": {
+        "body": "paint.white"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "WM/TU stack as drawn (about 60 x 57 cm). Checklist M29.",
+        "fields": {
+          "parts.0.size.y": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Height not in plan (standard value)."
+          }
+        }
+      }
+    },
+    {
+      "id": "bath-shower-tray",
+      "name": "Shower tray",
+      "kind": "sanitary",
+      "position": [
+        371.4,
+        790.7
+      ],
+      "rotation": 166.07,
+      "parts": [
+        {
+          "name": "shower tray",
+          "shape": "box",
+          "size": {
+            "x": 80.0,
+            "y": 6.0,
+            "z": 99.5
+          },
+          "position": {
+            "x": 0,
+            "y": 3.0,
+            "z": 0
+          },
+          "material": "body"
+        }
+      ],
+      "materials": {
+        "body": "ceramic.white"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Tray about 80 x 100 cm as drawn; shower assumed (not a bathtub). Checklist M29.",
+        "fields": {
+          "parts.0.size.y": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Height not in plan (standard value)."
+          }
+        }
+      }
+    },
+    {
+      "id": "bath-washbasin",
+      "name": "Washbasin",
+      "kind": "sanitary",
+      "position": [
+        461.4,
+        796.5
+      ],
+      "rotation": 166.07,
+      "parts": [
+        {
+          "name": "washbasin",
+          "shape": "box",
+          "size": {
+            "x": 55.0,
+            "y": 16.0,
+            "z": 44.8
+          },
+          "position": {
+            "x": 0,
+            "y": 78.0,
+            "z": 0
+          },
+          "material": "body"
+        }
+      ],
+      "materials": {
+        "body": "ceramic.white"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Washbasin as drawn; mounting height assumed 86 cm.",
+        "fields": {
+          "parts.0.size.y": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Height not in plan (standard value)."
+          }
+        }
+      }
+    },
+    {
+      "id": "bath-wc",
+      "name": "WC",
+      "kind": "sanitary",
+      "position": [
+        520.4,
+        777.0
+      ],
+      "rotation": 166.07,
+      "parts": [
+        {
+          "name": "wc",
+          "shape": "box",
+          "size": {
+            "x": 36.0,
+            "y": 42.0,
+            "z": 54.3
+          },
+          "position": {
+            "x": 0,
+            "y": 21.0,
+            "z": 0
+          },
+          "material": "body"
+        }
+      ],
+      "materials": {
+        "body": "ceramic.white"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Wall-hung WC as drawn; seat height assumed 42 cm.",
+        "fields": {
+          "parts.0.size.y": {
+            "confidence": "low",
+            "source": "assumed",
+            "note": "Height not in plan (standard value)."
+          }
+        }
+      }
+    },
+    {
+      "id": "bath-prewall",
+      "name": "Installation wall",
+      "kind": "sanitary",
+      "position": [
+        493.7,
+        824.9
+      ],
+      "rotation": 166.07,
+      "parts": [
+        {
+          "name": "pre-wall",
+          "shape": "box",
+          "size": {
+            "x": 122.0,
+            "y": 120,
+            "z": 26.1
+          },
+          "position": {
+            "x": 0,
+            "y": 60,
+            "z": 0
+          },
+          "material": "body"
+        }
+      ],
+      "materials": {
+        "body": "paint.white"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Installation wall behind washbasin and WC as drawn; height assumed 120 cm."
+      }
+    },
+    {
+      "id": "shaft-bath-west",
+      "name": "Shaft",
+      "kind": "other",
+      "position": [
+        391.1,
+        850.5
+      ],
+      "rotation": 0,
+      "parts": [
+        {
+          "name": "shaft",
+          "shape": "extrusion",
+          "height": 255.0,
+          "points": [
+            [
+              40.3,
+              -23.5
+            ],
+            [
+              -46.6,
+              -1.9
+            ],
+            [
+              -40.2,
+              23.6
+            ],
+            [
+              46.5,
+              1.8
+            ]
+          ],
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "material": "body"
+        }
+      ],
+      "materials": {
+        "body": "paint.white"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Shaft (notch excluded from the bathroom area in the plan)."
+      }
+    },
+    {
+      "id": "shaft-bath-east",
+      "name": "Shaft",
+      "kind": "other",
+      "position": [
+        563.3,
+        807.3
+      ],
+      "rotation": 0,
+      "parts": [
+        {
+          "name": "shaft",
+          "shape": "extrusion",
+          "height": 255.0,
+          "points": [
+            [
+              7.4,
+              -14.9
+            ],
+            [
+              -13.5,
+              -9.7
+            ],
+            [
+              -7.2,
+              15.6
+            ],
+            [
+              13.3,
+              9.0
+            ]
+          ],
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "material": "body"
+        }
+      ],
+      "materials": {
+        "body": "paint.white"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Shaft (notch excluded from the bathroom area in the plan)."
+      }
+    },
+    {
+      "id": "balcony-n-railing",
+      "name": "Balcony railing",
+      "kind": "railing",
+      "position": [
+        291.7,
+        118.8
+      ],
+      "rotation": 0,
+      "parts": [
+        {
+          "name": "railing",
+          "shape": "extrusion",
+          "height": 100,
+          "points": [
+            [
+              105.8,
+              0.0
+            ],
+            [
+              105.8,
+              3.7
+            ],
+            [
+              105.6,
+              7.4
+            ],
+            [
+              105.3,
+              11.1
+            ],
+            [
+              104.8,
+              14.7
+            ],
+            [
+              104.2,
+              18.4
+            ],
+            [
+              103.5,
+              22.0
+            ],
+            [
+              102.7,
+              25.6
+            ],
+            [
+              101.7,
+              29.2
+            ],
+            [
+              100.7,
+              32.7
+            ],
+            [
+              99.5,
+              36.2
+            ],
+            [
+              98.1,
+              39.6
+            ],
+            [
+              96.7,
+              43.1
+            ],
+            [
+              95.1,
+              46.4
+            ],
+            [
+              93.5,
+              49.7
+            ],
+            [
+              91.7,
+              52.9
+            ],
+            [
+              89.8,
+              56.1
+            ],
+            [
+              87.7,
+              59.2
+            ],
+            [
+              85.6,
+              62.2
+            ],
+            [
+              83.4,
+              65.2
+            ],
+            [
+              81.1,
+              68.0
+            ],
+            [
+              78.7,
+              70.8
+            ],
+            [
+              76.1,
+              73.5
+            ],
+            [
+              73.5,
+              76.1
+            ],
+            [
+              70.8,
+              78.7
+            ],
+            [
+              68.0,
+              81.1
+            ],
+            [
+              65.2,
+              83.4
+            ],
+            [
+              62.2,
+              85.6
+            ],
+            [
+              59.2,
+              87.7
+            ],
+            [
+              56.1,
+              89.8
+            ],
+            [
+              52.9,
+              91.7
+            ],
+            [
+              49.7,
+              93.5
+            ],
+            [
+              46.4,
+              95.1
+            ],
+            [
+              43.1,
+              96.7
+            ],
+            [
+              39.6,
+              98.1
+            ],
+            [
+              36.2,
+              99.5
+            ],
+            [
+              32.7,
+              100.7
+            ],
+            [
+              29.2,
+              101.7
+            ],
+            [
+              25.6,
+              102.7
+            ],
+            [
+              22.0,
+              103.5
+            ],
+            [
+              18.4,
+              104.2
+            ],
+            [
+              14.7,
+              104.8
+            ],
+            [
+              11.1,
+              105.3
+            ],
+            [
+              7.4,
+              105.6
+            ],
+            [
+              3.7,
+              105.8
+            ],
+            [
+              0.0,
+              105.8
+            ],
+            [
+              -3.7,
+              105.8
+            ],
+            [
+              -7.4,
+              105.6
+            ],
+            [
+              -11.1,
+              105.3
+            ],
+            [
+              -14.7,
+              104.8
+            ],
+            [
+              -18.4,
+              104.2
+            ],
+            [
+              -22.0,
+              103.5
+            ],
+            [
+              -25.6,
+              102.7
+            ],
+            [
+              -29.2,
+              101.7
+            ],
+            [
+              -32.7,
+              100.7
+            ],
+            [
+              -36.2,
+              99.5
+            ],
+            [
+              -39.6,
+              98.1
+            ],
+            [
+              -43.1,
+              96.7
+            ],
+            [
+              -46.4,
+              95.1
+            ],
+            [
+              -49.7,
+              93.5
+            ],
+            [
+              -52.9,
+              91.7
+            ],
+            [
+              -56.1,
+              89.8
+            ],
+            [
+              -59.2,
+              87.7
+            ],
+            [
+              -62.2,
+              85.6
+            ],
+            [
+              -65.2,
+              83.4
+            ],
+            [
+              -68.0,
+              81.1
+            ],
+            [
+              -70.8,
+              78.7
+            ],
+            [
+              -73.5,
+              76.1
+            ],
+            [
+              -76.1,
+              73.5
+            ],
+            [
+              -78.7,
+              70.8
+            ],
+            [
+              -81.1,
+              68.0
+            ],
+            [
+              -83.4,
+              65.2
+            ],
+            [
+              -85.6,
+              62.2
+            ],
+            [
+              -87.7,
+              59.2
+            ],
+            [
+              -89.8,
+              56.1
+            ],
+            [
+              -91.7,
+              52.9
+            ],
+            [
+              -93.5,
+              49.7
+            ],
+            [
+              -95.1,
+              46.4
+            ],
+            [
+              -96.7,
+              43.1
+            ],
+            [
+              -98.1,
+              39.6
+            ],
+            [
+              -99.5,
+              36.2
+            ],
+            [
+              -100.7,
+              32.7
+            ],
+            [
+              -101.7,
+              29.2
+            ],
+            [
+              -102.7,
+              25.6
+            ],
+            [
+              -103.5,
+              22.0
+            ],
+            [
+              -104.2,
+              18.4
+            ],
+            [
+              -104.8,
+              14.7
+            ],
+            [
+              -105.3,
+              11.1
+            ],
+            [
+              -105.6,
+              7.4
+            ],
+            [
+              -105.8,
+              3.7
+            ],
+            [
+              -105.8,
+              0.0
+            ],
+            [
+              -105.8,
+              -3.7
+            ],
+            [
+              -105.6,
+              -7.4
+            ],
+            [
+              -105.3,
+              -11.1
+            ],
+            [
+              -104.8,
+              -14.7
+            ],
+            [
+              -104.2,
+              -18.4
+            ],
+            [
+              -103.5,
+              -22.0
+            ],
+            [
+              -102.7,
+              -25.6
+            ],
+            [
+              -101.7,
+              -29.2
+            ],
+            [
+              -100.7,
+              -32.7
+            ],
+            [
+              -99.5,
+              -36.2
+            ],
+            [
+              -98.1,
+              -39.6
+            ],
+            [
+              -96.7,
+              -43.1
+            ],
+            [
+              -95.1,
+              -46.4
+            ],
+            [
+              -93.5,
+              -49.7
+            ],
+            [
+              -91.7,
+              -52.9
+            ],
+            [
+              -89.8,
+              -56.1
+            ],
+            [
+              -87.7,
+              -59.2
+            ],
+            [
+              -85.6,
+              -62.2
+            ],
+            [
+              -83.4,
+              -65.2
+            ],
+            [
+              -81.1,
+              -68.0
+            ],
+            [
+              -78.7,
+              -70.8
+            ],
+            [
+              -76.1,
+              -73.5
+            ],
+            [
+              -73.5,
+              -76.1
+            ],
+            [
+              -70.8,
+              -78.7
+            ],
+            [
+              -68.0,
+              -81.1
+            ],
+            [
+              -65.2,
+              -83.4
+            ],
+            [
+              -62.2,
+              -85.6
+            ],
+            [
+              -59.2,
+              -87.7
+            ],
+            [
+              -56.1,
+              -89.8
+            ],
+            [
+              -52.9,
+              -91.7
+            ],
+            [
+              -49.7,
+              -93.5
+            ],
+            [
+              -46.4,
+              -95.1
+            ],
+            [
+              -43.1,
+              -96.7
+            ],
+            [
+              -39.6,
+              -98.1
+            ],
+            [
+              -36.2,
+              -99.5
+            ],
+            [
+              -32.7,
+              -100.7
+            ],
+            [
+              -29.2,
+              -101.7
+            ],
+            [
+              -25.6,
+              -102.7
+            ],
+            [
+              -22.0,
+              -103.5
+            ],
+            [
+              -18.4,
+              -104.2
+            ],
+            [
+              -14.7,
+              -104.8
+            ],
+            [
+              -11.1,
+              -105.3
+            ],
+            [
+              -7.4,
+              -105.6
+            ],
+            [
+              -3.7,
+              -105.8
+            ],
+            [
+              0.0,
+              -105.8
+            ],
+            [
+              3.7,
+              -105.8
+            ],
+            [
+              7.4,
+              -105.6
+            ],
+            [
+              11.1,
+              -105.3
+            ],
+            [
+              14.7,
+              -104.8
+            ],
+            [
+              18.4,
+              -104.2
+            ],
+            [
+              22.0,
+              -103.5
+            ],
+            [
+              25.6,
+              -102.7
+            ],
+            [
+              29.2,
+              -101.7
+            ],
+            [
+              32.7,
+              -100.7
+            ],
+            [
+              36.2,
+              -99.5
+            ],
+            [
+              39.6,
+              -98.1
+            ],
+            [
+              43.1,
+              -96.7
+            ],
+            [
+              46.4,
+              -95.1
+            ],
+            [
+              49.7,
+              -93.5
+            ],
+            [
+              52.9,
+              -91.7
+            ],
+            [
+              56.1,
+              -89.8
+            ],
+            [
+              59.2,
+              -87.7
+            ],
+            [
+              62.2,
+              -85.6
+            ],
+            [
+              65.2,
+              -83.4
+            ],
+            [
+              68.0,
+              -81.1
+            ],
+            [
+              70.8,
+              -78.7
+            ],
+            [
+              73.5,
+              -76.1
+            ],
+            [
+              76.1,
+              -73.5
+            ],
+            [
+              78.7,
+              -70.8
+            ],
+            [
+              81.1,
+              -68.0
+            ],
+            [
+              83.4,
+              -65.2
+            ],
+            [
+              85.6,
+              -62.2
+            ],
+            [
+              87.7,
+              -59.2
+            ],
+            [
+              89.8,
+              -56.1
+            ],
+            [
+              91.7,
+              -52.9
+            ],
+            [
+              93.5,
+              -49.7
+            ],
+            [
+              95.1,
+              -46.4
+            ],
+            [
+              96.7,
+              -43.1
+            ],
+            [
+              98.1,
+              -39.6
+            ],
+            [
+              99.5,
+              -36.2
+            ],
+            [
+              100.7,
+              -32.7
+            ],
+            [
+              101.7,
+              -29.2
+            ],
+            [
+              102.7,
+              -25.6
+            ],
+            [
+              103.5,
+              -22.0
+            ],
+            [
+              104.2,
+              -18.4
+            ],
+            [
+              104.8,
+              -14.7
+            ],
+            [
+              105.3,
+              -11.1
+            ],
+            [
+              105.6,
+              -7.4
+            ],
+            [
+              105.8,
+              -3.7
+            ],
+            [
+              99.6,
+              -3.5
+            ],
+            [
+              99.4,
+              -7.0
+            ],
+            [
+              99.1,
+              -10.4
+            ],
+            [
+              98.7,
+              -13.9
+            ],
+            [
+              98.2,
+              -17.3
+            ],
+            [
+              97.5,
+              -20.7
+            ],
+            [
+              96.7,
+              -24.1
+            ],
+            [
+              95.8,
+              -27.5
+            ],
+            [
+              94.8,
+              -30.8
+            ],
+            [
+              93.7,
+              -34.1
+            ],
+            [
+              92.4,
+              -37.3
+            ],
+            [
+              91.1,
+              -40.5
+            ],
+            [
+              89.6,
+              -43.7
+            ],
+            [
+              88.0,
+              -46.8
+            ],
+            [
+              86.3,
+              -49.8
+            ],
+            [
+              84.5,
+              -52.8
+            ],
+            [
+              82.6,
+              -55.7
+            ],
+            [
+              80.6,
+              -58.6
+            ],
+            [
+              78.6,
+              -61.4
+            ],
+            [
+              76.4,
+              -64.1
+            ],
+            [
+              74.1,
+              -66.7
+            ],
+            [
+              71.7,
+              -69.2
+            ],
+            [
+              69.2,
+              -71.7
+            ],
+            [
+              66.7,
+              -74.1
+            ],
+            [
+              64.1,
+              -76.4
+            ],
+            [
+              61.4,
+              -78.6
+            ],
+            [
+              58.6,
+              -80.6
+            ],
+            [
+              55.7,
+              -82.6
+            ],
+            [
+              52.8,
+              -84.5
+            ],
+            [
+              49.8,
+              -86.3
+            ],
+            [
+              46.8,
+              -88.0
+            ],
+            [
+              43.7,
+              -89.6
+            ],
+            [
+              40.5,
+              -91.1
+            ],
+            [
+              37.3,
+              -92.4
+            ],
+            [
+              34.1,
+              -93.7
+            ],
+            [
+              30.8,
+              -94.8
+            ],
+            [
+              27.5,
+              -95.8
+            ],
+            [
+              24.1,
+              -96.7
+            ],
+            [
+              20.7,
+              -97.5
+            ],
+            [
+              17.3,
+              -98.2
+            ],
+            [
+              13.9,
+              -98.7
+            ],
+            [
+              10.4,
+              -99.1
+            ],
+            [
+              7.0,
+              -99.4
+            ],
+            [
+              3.5,
+              -99.6
+            ],
+            [
+              0.0,
+              -99.7
+            ],
+            [
+              -3.5,
+              -99.6
+            ],
+            [
+              -7.0,
+              -99.4
+            ],
+            [
+              -10.4,
+              -99.1
+            ],
+            [
+              -13.9,
+              -98.7
+            ],
+            [
+              -17.3,
+              -98.2
+            ],
+            [
+              -20.7,
+              -97.5
+            ],
+            [
+              -24.1,
+              -96.7
+            ],
+            [
+              -27.5,
+              -95.8
+            ],
+            [
+              -30.8,
+              -94.8
+            ],
+            [
+              -34.1,
+              -93.7
+            ],
+            [
+              -37.3,
+              -92.4
+            ],
+            [
+              -40.5,
+              -91.1
+            ],
+            [
+              -43.7,
+              -89.6
+            ],
+            [
+              -46.8,
+              -88.0
+            ],
+            [
+              -49.8,
+              -86.3
+            ],
+            [
+              -52.8,
+              -84.5
+            ],
+            [
+              -55.7,
+              -82.6
+            ],
+            [
+              -58.6,
+              -80.6
+            ],
+            [
+              -61.4,
+              -78.6
+            ],
+            [
+              -64.1,
+              -76.4
+            ],
+            [
+              -66.7,
+              -74.1
+            ],
+            [
+              -69.2,
+              -71.7
+            ],
+            [
+              -71.7,
+              -69.2
+            ],
+            [
+              -74.1,
+              -66.7
+            ],
+            [
+              -76.4,
+              -64.1
+            ],
+            [
+              -78.6,
+              -61.4
+            ],
+            [
+              -80.6,
+              -58.6
+            ],
+            [
+              -82.6,
+              -55.7
+            ],
+            [
+              -84.5,
+              -52.8
+            ],
+            [
+              -86.3,
+              -49.8
+            ],
+            [
+              -88.0,
+              -46.8
+            ],
+            [
+              -89.6,
+              -43.7
+            ],
+            [
+              -91.1,
+              -40.5
+            ],
+            [
+              -92.4,
+              -37.3
+            ],
+            [
+              -93.7,
+              -34.1
+            ],
+            [
+              -94.8,
+              -30.8
+            ],
+            [
+              -95.8,
+              -27.5
+            ],
+            [
+              -96.7,
+              -24.1
+            ],
+            [
+              -97.5,
+              -20.7
+            ],
+            [
+              -98.2,
+              -17.3
+            ],
+            [
+              -98.7,
+              -13.9
+            ],
+            [
+              -99.1,
+              -10.4
+            ],
+            [
+              -99.4,
+              -7.0
+            ],
+            [
+              -99.6,
+              -3.5
+            ],
+            [
+              -99.7,
+              0.0
+            ],
+            [
+              -99.6,
+              3.5
+            ],
+            [
+              -99.4,
+              7.0
+            ],
+            [
+              -99.1,
+              10.4
+            ],
+            [
+              -98.7,
+              13.9
+            ],
+            [
+              -98.2,
+              17.3
+            ],
+            [
+              -97.5,
+              20.7
+            ],
+            [
+              -96.7,
+              24.1
+            ],
+            [
+              -95.8,
+              27.5
+            ],
+            [
+              -94.8,
+              30.8
+            ],
+            [
+              -93.7,
+              34.1
+            ],
+            [
+              -92.4,
+              37.3
+            ],
+            [
+              -91.1,
+              40.5
+            ],
+            [
+              -89.6,
+              43.7
+            ],
+            [
+              -88.0,
+              46.8
+            ],
+            [
+              -86.3,
+              49.8
+            ],
+            [
+              -84.5,
+              52.8
+            ],
+            [
+              -82.6,
+              55.7
+            ],
+            [
+              -80.6,
+              58.6
+            ],
+            [
+              -78.6,
+              61.4
+            ],
+            [
+              -76.4,
+              64.1
+            ],
+            [
+              -74.1,
+              66.7
+            ],
+            [
+              -71.7,
+              69.2
+            ],
+            [
+              -69.2,
+              71.7
+            ],
+            [
+              -66.7,
+              74.1
+            ],
+            [
+              -64.1,
+              76.4
+            ],
+            [
+              -61.4,
+              78.6
+            ],
+            [
+              -58.6,
+              80.6
+            ],
+            [
+              -55.7,
+              82.6
+            ],
+            [
+              -52.8,
+              84.5
+            ],
+            [
+              -49.8,
+              86.3
+            ],
+            [
+              -46.8,
+              88.0
+            ],
+            [
+              -43.7,
+              89.6
+            ],
+            [
+              -40.5,
+              91.1
+            ],
+            [
+              -37.3,
+              92.4
+            ],
+            [
+              -34.1,
+              93.7
+            ],
+            [
+              -30.8,
+              94.8
+            ],
+            [
+              -27.5,
+              95.8
+            ],
+            [
+              -24.1,
+              96.7
+            ],
+            [
+              -20.7,
+              97.5
+            ],
+            [
+              -17.3,
+              98.2
+            ],
+            [
+              -13.9,
+              98.7
+            ],
+            [
+              -10.4,
+              99.1
+            ],
+            [
+              -7.0,
+              99.4
+            ],
+            [
+              -3.5,
+              99.6
+            ],
+            [
+              0.0,
+              99.7
+            ],
+            [
+              3.5,
+              99.6
+            ],
+            [
+              7.0,
+              99.4
+            ],
+            [
+              10.4,
+              99.1
+            ],
+            [
+              13.9,
+              98.7
+            ],
+            [
+              17.3,
+              98.2
+            ],
+            [
+              20.7,
+              97.5
+            ],
+            [
+              24.1,
+              96.7
+            ],
+            [
+              27.5,
+              95.8
+            ],
+            [
+              30.8,
+              94.8
+            ],
+            [
+              34.1,
+              93.7
+            ],
+            [
+              37.3,
+              92.4
+            ],
+            [
+              40.5,
+              91.1
+            ],
+            [
+              43.7,
+              89.6
+            ],
+            [
+              46.8,
+              88.0
+            ],
+            [
+              49.8,
+              86.3
+            ],
+            [
+              52.8,
+              84.5
+            ],
+            [
+              55.7,
+              82.6
+            ],
+            [
+              58.6,
+              80.6
+            ],
+            [
+              61.4,
+              78.6
+            ],
+            [
+              64.1,
+              76.4
+            ],
+            [
+              66.7,
+              74.1
+            ],
+            [
+              69.2,
+              71.7
+            ],
+            [
+              71.7,
+              69.2
+            ],
+            [
+              74.1,
+              66.7
+            ],
+            [
+              76.4,
+              64.1
+            ],
+            [
+              78.6,
+              61.4
+            ],
+            [
+              80.6,
+              58.6
+            ],
+            [
+              82.6,
+              55.7
+            ],
+            [
+              84.5,
+              52.8
+            ],
+            [
+              86.3,
+              49.8
+            ],
+            [
+              88.0,
+              46.8
+            ],
+            [
+              89.6,
+              43.7
+            ],
+            [
+              91.1,
+              40.5
+            ],
+            [
+              92.4,
+              37.3
+            ],
+            [
+              93.7,
+              34.1
+            ],
+            [
+              94.8,
+              30.8
+            ],
+            [
+              95.8,
+              27.5
+            ],
+            [
+              96.7,
+              24.1
+            ],
+            [
+              97.5,
+              20.7
+            ],
+            [
+              98.2,
+              17.3
+            ],
+            [
+              98.7,
+              13.9
+            ],
+            [
+              99.1,
+              10.4
+            ],
+            [
+              99.4,
+              7.0
+            ],
+            [
+              99.6,
+              3.5
+            ],
+            [
+              99.7,
+              0.0
+            ]
+          ],
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "material": "bars"
+        }
+      ],
+      "materials": {
+        "bars": "metal.railing"
+      },
+      "collides": true,
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Railing ring as drawn; height 100 cm assumed (photo IMG_4509).",
+        "fields": {
+          "parts.0.height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Railing height estimated. Checklist M22."
+          }
+        }
+      }
+    },
+    {
+      "id": "balcony-se-railing",
+      "name": "Balcony railing",
+      "kind": "railing",
+      "position": [
+        1364.9,
+        566.7
+      ],
+      "rotation": 0,
+      "parts": [
+        {
+          "name": "railing",
+          "shape": "extrusion",
+          "height": 100,
+          "points": [
+            [
+              105.9,
+              0.0
+            ],
+            [
+              105.8,
+              3.7
+            ],
+            [
+              105.6,
+              7.4
+            ],
+            [
+              105.3,
+              11.1
+            ],
+            [
+              104.8,
+              14.7
+            ],
+            [
+              104.3,
+              18.4
+            ],
+            [
+              103.6,
+              22.0
+            ],
+            [
+              102.7,
+              25.6
+            ],
+            [
+              101.8,
+              29.2
+            ],
+            [
+              100.7,
+              32.7
+            ],
+            [
+              99.5,
+              36.2
+            ],
+            [
+              98.2,
+              39.7
+            ],
+            [
+              96.7,
+              43.1
+            ],
+            [
+              95.2,
+              46.4
+            ],
+            [
+              93.5,
+              49.7
+            ],
+            [
+              91.7,
+              52.9
+            ],
+            [
+              89.8,
+              56.1
+            ],
+            [
+              87.8,
+              59.2
+            ],
+            [
+              85.7,
+              62.2
+            ],
+            [
+              83.4,
+              65.2
+            ],
+            [
+              81.1,
+              68.1
+            ],
+            [
+              78.7,
+              70.8
+            ],
+            [
+              76.2,
+              73.5
+            ],
+            [
+              73.5,
+              76.2
+            ],
+            [
+              70.8,
+              78.7
+            ],
+            [
+              68.1,
+              81.1
+            ],
+            [
+              65.2,
+              83.4
+            ],
+            [
+              62.2,
+              85.7
+            ],
+            [
+              59.2,
+              87.8
+            ],
+            [
+              56.1,
+              89.8
+            ],
+            [
+              52.9,
+              91.7
+            ],
+            [
+              49.7,
+              93.5
+            ],
+            [
+              46.4,
+              95.2
+            ],
+            [
+              43.1,
+              96.7
+            ],
+            [
+              39.7,
+              98.2
+            ],
+            [
+              36.2,
+              99.5
+            ],
+            [
+              32.7,
+              100.7
+            ],
+            [
+              29.2,
+              101.8
+            ],
+            [
+              25.6,
+              102.7
+            ],
+            [
+              22.0,
+              103.6
+            ],
+            [
+              18.4,
+              104.3
+            ],
+            [
+              14.7,
+              104.8
+            ],
+            [
+              11.1,
+              105.3
+            ],
+            [
+              7.4,
+              105.6
+            ],
+            [
+              3.7,
+              105.8
+            ],
+            [
+              0.0,
+              105.9
+            ],
+            [
+              -3.7,
+              105.8
+            ],
+            [
+              -7.4,
+              105.6
+            ],
+            [
+              -11.1,
+              105.3
+            ],
+            [
+              -14.7,
+              104.8
+            ],
+            [
+              -18.4,
+              104.3
+            ],
+            [
+              -22.0,
+              103.6
+            ],
+            [
+              -25.6,
+              102.7
+            ],
+            [
+              -29.2,
+              101.8
+            ],
+            [
+              -32.7,
+              100.7
+            ],
+            [
+              -36.2,
+              99.5
+            ],
+            [
+              -39.7,
+              98.2
+            ],
+            [
+              -43.1,
+              96.7
+            ],
+            [
+              -46.4,
+              95.2
+            ],
+            [
+              -49.7,
+              93.5
+            ],
+            [
+              -52.9,
+              91.7
+            ],
+            [
+              -56.1,
+              89.8
+            ],
+            [
+              -59.2,
+              87.8
+            ],
+            [
+              -62.2,
+              85.7
+            ],
+            [
+              -65.2,
+              83.4
+            ],
+            [
+              -68.1,
+              81.1
+            ],
+            [
+              -70.8,
+              78.7
+            ],
+            [
+              -73.5,
+              76.2
+            ],
+            [
+              -76.2,
+              73.5
+            ],
+            [
+              -78.7,
+              70.8
+            ],
+            [
+              -81.1,
+              68.1
+            ],
+            [
+              -83.4,
+              65.2
+            ],
+            [
+              -85.7,
+              62.2
+            ],
+            [
+              -87.8,
+              59.2
+            ],
+            [
+              -89.8,
+              56.1
+            ],
+            [
+              -91.7,
+              52.9
+            ],
+            [
+              -93.5,
+              49.7
+            ],
+            [
+              -95.2,
+              46.4
+            ],
+            [
+              -96.7,
+              43.1
+            ],
+            [
+              -98.2,
+              39.7
+            ],
+            [
+              -99.5,
+              36.2
+            ],
+            [
+              -100.7,
+              32.7
+            ],
+            [
+              -101.8,
+              29.2
+            ],
+            [
+              -102.7,
+              25.6
+            ],
+            [
+              -103.6,
+              22.0
+            ],
+            [
+              -104.3,
+              18.4
+            ],
+            [
+              -104.8,
+              14.7
+            ],
+            [
+              -105.3,
+              11.1
+            ],
+            [
+              -105.6,
+              7.4
+            ],
+            [
+              -105.8,
+              3.7
+            ],
+            [
+              -105.9,
+              0.0
+            ],
+            [
+              -105.8,
+              -3.7
+            ],
+            [
+              -105.6,
+              -7.4
+            ],
+            [
+              -105.3,
+              -11.1
+            ],
+            [
+              -104.8,
+              -14.7
+            ],
+            [
+              -104.3,
+              -18.4
+            ],
+            [
+              -103.6,
+              -22.0
+            ],
+            [
+              -102.7,
+              -25.6
+            ],
+            [
+              -101.8,
+              -29.2
+            ],
+            [
+              -100.7,
+              -32.7
+            ],
+            [
+              -99.5,
+              -36.2
+            ],
+            [
+              -98.2,
+              -39.7
+            ],
+            [
+              -96.7,
+              -43.1
+            ],
+            [
+              -95.2,
+              -46.4
+            ],
+            [
+              -93.5,
+              -49.7
+            ],
+            [
+              -91.7,
+              -52.9
+            ],
+            [
+              -89.8,
+              -56.1
+            ],
+            [
+              -87.8,
+              -59.2
+            ],
+            [
+              -85.7,
+              -62.2
+            ],
+            [
+              -83.4,
+              -65.2
+            ],
+            [
+              -81.1,
+              -68.1
+            ],
+            [
+              -78.7,
+              -70.8
+            ],
+            [
+              -76.2,
+              -73.5
+            ],
+            [
+              -73.5,
+              -76.2
+            ],
+            [
+              -70.8,
+              -78.7
+            ],
+            [
+              -68.1,
+              -81.1
+            ],
+            [
+              -65.2,
+              -83.4
+            ],
+            [
+              -62.2,
+              -85.7
+            ],
+            [
+              -59.2,
+              -87.8
+            ],
+            [
+              -56.1,
+              -89.8
+            ],
+            [
+              -52.9,
+              -91.7
+            ],
+            [
+              -49.7,
+              -93.5
+            ],
+            [
+              -46.4,
+              -95.2
+            ],
+            [
+              -43.1,
+              -96.7
+            ],
+            [
+              -39.7,
+              -98.2
+            ],
+            [
+              -36.2,
+              -99.5
+            ],
+            [
+              -32.7,
+              -100.7
+            ],
+            [
+              -29.2,
+              -101.8
+            ],
+            [
+              -25.6,
+              -102.7
+            ],
+            [
+              -22.0,
+              -103.6
+            ],
+            [
+              -18.4,
+              -104.3
+            ],
+            [
+              -14.7,
+              -104.8
+            ],
+            [
+              -11.1,
+              -105.3
+            ],
+            [
+              -7.4,
+              -105.6
+            ],
+            [
+              -3.7,
+              -105.8
+            ],
+            [
+              0.0,
+              -105.9
+            ],
+            [
+              3.7,
+              -105.8
+            ],
+            [
+              7.4,
+              -105.6
+            ],
+            [
+              11.1,
+              -105.3
+            ],
+            [
+              14.7,
+              -104.8
+            ],
+            [
+              18.4,
+              -104.3
+            ],
+            [
+              22.0,
+              -103.6
+            ],
+            [
+              25.6,
+              -102.7
+            ],
+            [
+              29.2,
+              -101.8
+            ],
+            [
+              32.7,
+              -100.7
+            ],
+            [
+              36.2,
+              -99.5
+            ],
+            [
+              39.7,
+              -98.2
+            ],
+            [
+              43.1,
+              -96.7
+            ],
+            [
+              46.4,
+              -95.2
+            ],
+            [
+              49.7,
+              -93.5
+            ],
+            [
+              52.9,
+              -91.7
+            ],
+            [
+              56.1,
+              -89.8
+            ],
+            [
+              59.2,
+              -87.8
+            ],
+            [
+              62.2,
+              -85.7
+            ],
+            [
+              65.2,
+              -83.4
+            ],
+            [
+              68.1,
+              -81.1
+            ],
+            [
+              70.8,
+              -78.7
+            ],
+            [
+              73.5,
+              -76.2
+            ],
+            [
+              76.2,
+              -73.5
+            ],
+            [
+              78.7,
+              -70.8
+            ],
+            [
+              81.1,
+              -68.1
+            ],
+            [
+              83.4,
+              -65.2
+            ],
+            [
+              85.7,
+              -62.2
+            ],
+            [
+              87.8,
+              -59.2
+            ],
+            [
+              89.8,
+              -56.1
+            ],
+            [
+              91.7,
+              -52.9
+            ],
+            [
+              93.5,
+              -49.7
+            ],
+            [
+              95.2,
+              -46.4
+            ],
+            [
+              96.7,
+              -43.1
+            ],
+            [
+              98.2,
+              -39.7
+            ],
+            [
+              99.5,
+              -36.2
+            ],
+            [
+              100.7,
+              -32.7
+            ],
+            [
+              101.8,
+              -29.2
+            ],
+            [
+              102.7,
+              -25.6
+            ],
+            [
+              103.6,
+              -22.0
+            ],
+            [
+              104.3,
+              -18.4
+            ],
+            [
+              104.8,
+              -14.7
+            ],
+            [
+              105.3,
+              -11.1
+            ],
+            [
+              105.6,
+              -7.4
+            ],
+            [
+              105.8,
+              -3.7
+            ],
+            [
+              99.6,
+              -3.5
+            ],
+            [
+              99.5,
+              -7.0
+            ],
+            [
+              99.2,
+              -10.4
+            ],
+            [
+              98.7,
+              -13.9
+            ],
+            [
+              98.2,
+              -17.3
+            ],
+            [
+              97.5,
+              -20.7
+            ],
+            [
+              96.7,
+              -24.1
+            ],
+            [
+              95.8,
+              -27.5
+            ],
+            [
+              94.8,
+              -30.8
+            ],
+            [
+              93.7,
+              -34.1
+            ],
+            [
+              92.4,
+              -37.4
+            ],
+            [
+              91.1,
+              -40.6
+            ],
+            [
+              89.6,
+              -43.7
+            ],
+            [
+              88.0,
+              -46.8
+            ],
+            [
+              86.3,
+              -49.9
+            ],
+            [
+              84.6,
+              -52.8
+            ],
+            [
+              82.7,
+              -55.8
+            ],
+            [
+              80.7,
+              -58.6
+            ],
+            [
+              78.6,
+              -61.4
+            ],
+            [
+              76.4,
+              -64.1
+            ],
+            [
+              74.1,
+              -66.7
+            ],
+            [
+              71.7,
+              -69.3
+            ],
+            [
+              69.3,
+              -71.7
+            ],
+            [
+              66.7,
+              -74.1
+            ],
+            [
+              64.1,
+              -76.4
+            ],
+            [
+              61.4,
+              -78.6
+            ],
+            [
+              58.6,
+              -80.7
+            ],
+            [
+              55.8,
+              -82.7
+            ],
+            [
+              52.8,
+              -84.6
+            ],
+            [
+              49.9,
+              -86.3
+            ],
+            [
+              46.8,
+              -88.0
+            ],
+            [
+              43.7,
+              -89.6
+            ],
+            [
+              40.6,
+              -91.1
+            ],
+            [
+              37.4,
+              -92.4
+            ],
+            [
+              34.1,
+              -93.7
+            ],
+            [
+              30.8,
+              -94.8
+            ],
+            [
+              27.5,
+              -95.8
+            ],
+            [
+              24.1,
+              -96.7
+            ],
+            [
+              20.7,
+              -97.5
+            ],
+            [
+              17.3,
+              -98.2
+            ],
+            [
+              13.9,
+              -98.7
+            ],
+            [
+              10.4,
+              -99.2
+            ],
+            [
+              7.0,
+              -99.5
+            ],
+            [
+              3.5,
+              -99.6
+            ],
+            [
+              0.0,
+              -99.7
+            ],
+            [
+              -3.5,
+              -99.6
+            ],
+            [
+              -7.0,
+              -99.5
+            ],
+            [
+              -10.4,
+              -99.2
+            ],
+            [
+              -13.9,
+              -98.7
+            ],
+            [
+              -17.3,
+              -98.2
+            ],
+            [
+              -20.7,
+              -97.5
+            ],
+            [
+              -24.1,
+              -96.7
+            ],
+            [
+              -27.5,
+              -95.8
+            ],
+            [
+              -30.8,
+              -94.8
+            ],
+            [
+              -34.1,
+              -93.7
+            ],
+            [
+              -37.4,
+              -92.4
+            ],
+            [
+              -40.6,
+              -91.1
+            ],
+            [
+              -43.7,
+              -89.6
+            ],
+            [
+              -46.8,
+              -88.0
+            ],
+            [
+              -49.9,
+              -86.3
+            ],
+            [
+              -52.8,
+              -84.6
+            ],
+            [
+              -55.8,
+              -82.7
+            ],
+            [
+              -58.6,
+              -80.7
+            ],
+            [
+              -61.4,
+              -78.6
+            ],
+            [
+              -64.1,
+              -76.4
+            ],
+            [
+              -66.7,
+              -74.1
+            ],
+            [
+              -69.3,
+              -71.7
+            ],
+            [
+              -71.7,
+              -69.3
+            ],
+            [
+              -74.1,
+              -66.7
+            ],
+            [
+              -76.4,
+              -64.1
+            ],
+            [
+              -78.6,
+              -61.4
+            ],
+            [
+              -80.7,
+              -58.6
+            ],
+            [
+              -82.7,
+              -55.8
+            ],
+            [
+              -84.6,
+              -52.8
+            ],
+            [
+              -86.3,
+              -49.9
+            ],
+            [
+              -88.0,
+              -46.8
+            ],
+            [
+              -89.6,
+              -43.7
+            ],
+            [
+              -91.1,
+              -40.6
+            ],
+            [
+              -92.4,
+              -37.4
+            ],
+            [
+              -93.7,
+              -34.1
+            ],
+            [
+              -94.8,
+              -30.8
+            ],
+            [
+              -95.8,
+              -27.5
+            ],
+            [
+              -96.7,
+              -24.1
+            ],
+            [
+              -97.5,
+              -20.7
+            ],
+            [
+              -98.2,
+              -17.3
+            ],
+            [
+              -98.7,
+              -13.9
+            ],
+            [
+              -99.2,
+              -10.4
+            ],
+            [
+              -99.5,
+              -7.0
+            ],
+            [
+              -99.6,
+              -3.5
+            ],
+            [
+              -99.7,
+              0.0
+            ],
+            [
+              -99.6,
+              3.5
+            ],
+            [
+              -99.5,
+              7.0
+            ],
+            [
+              -99.2,
+              10.4
+            ],
+            [
+              -98.7,
+              13.9
+            ],
+            [
+              -98.2,
+              17.3
+            ],
+            [
+              -97.5,
+              20.7
+            ],
+            [
+              -96.7,
+              24.1
+            ],
+            [
+              -95.8,
+              27.5
+            ],
+            [
+              -94.8,
+              30.8
+            ],
+            [
+              -93.7,
+              34.1
+            ],
+            [
+              -92.4,
+              37.4
+            ],
+            [
+              -91.1,
+              40.6
+            ],
+            [
+              -89.6,
+              43.7
+            ],
+            [
+              -88.0,
+              46.8
+            ],
+            [
+              -86.3,
+              49.9
+            ],
+            [
+              -84.6,
+              52.8
+            ],
+            [
+              -82.7,
+              55.8
+            ],
+            [
+              -80.7,
+              58.6
+            ],
+            [
+              -78.6,
+              61.4
+            ],
+            [
+              -76.4,
+              64.1
+            ],
+            [
+              -74.1,
+              66.7
+            ],
+            [
+              -71.7,
+              69.3
+            ],
+            [
+              -69.3,
+              71.7
+            ],
+            [
+              -66.7,
+              74.1
+            ],
+            [
+              -64.1,
+              76.4
+            ],
+            [
+              -61.4,
+              78.6
+            ],
+            [
+              -58.6,
+              80.7
+            ],
+            [
+              -55.8,
+              82.7
+            ],
+            [
+              -52.8,
+              84.6
+            ],
+            [
+              -49.9,
+              86.3
+            ],
+            [
+              -46.8,
+              88.0
+            ],
+            [
+              -43.7,
+              89.6
+            ],
+            [
+              -40.6,
+              91.1
+            ],
+            [
+              -37.4,
+              92.4
+            ],
+            [
+              -34.1,
+              93.7
+            ],
+            [
+              -30.8,
+              94.8
+            ],
+            [
+              -27.5,
+              95.8
+            ],
+            [
+              -24.1,
+              96.7
+            ],
+            [
+              -20.7,
+              97.5
+            ],
+            [
+              -17.3,
+              98.2
+            ],
+            [
+              -13.9,
+              98.7
+            ],
+            [
+              -10.4,
+              99.2
+            ],
+            [
+              -7.0,
+              99.5
+            ],
+            [
+              -3.5,
+              99.6
+            ],
+            [
+              0.0,
+              99.7
+            ],
+            [
+              3.5,
+              99.6
+            ],
+            [
+              7.0,
+              99.5
+            ],
+            [
+              10.4,
+              99.2
+            ],
+            [
+              13.9,
+              98.7
+            ],
+            [
+              17.3,
+              98.2
+            ],
+            [
+              20.7,
+              97.5
+            ],
+            [
+              24.1,
+              96.7
+            ],
+            [
+              27.5,
+              95.8
+            ],
+            [
+              30.8,
+              94.8
+            ],
+            [
+              34.1,
+              93.7
+            ],
+            [
+              37.4,
+              92.4
+            ],
+            [
+              40.6,
+              91.1
+            ],
+            [
+              43.7,
+              89.6
+            ],
+            [
+              46.8,
+              88.0
+            ],
+            [
+              49.9,
+              86.3
+            ],
+            [
+              52.8,
+              84.6
+            ],
+            [
+              55.8,
+              82.7
+            ],
+            [
+              58.6,
+              80.7
+            ],
+            [
+              61.4,
+              78.6
+            ],
+            [
+              64.1,
+              76.4
+            ],
+            [
+              66.7,
+              74.1
+            ],
+            [
+              69.3,
+              71.7
+            ],
+            [
+              71.7,
+              69.3
+            ],
+            [
+              74.1,
+              66.7
+            ],
+            [
+              76.4,
+              64.1
+            ],
+            [
+              78.6,
+              61.4
+            ],
+            [
+              80.7,
+              58.6
+            ],
+            [
+              82.7,
+              55.8
+            ],
+            [
+              84.6,
+              52.8
+            ],
+            [
+              86.3,
+              49.9
+            ],
+            [
+              88.0,
+              46.8
+            ],
+            [
+              89.6,
+              43.7
+            ],
+            [
+              91.1,
+              40.6
+            ],
+            [
+              92.4,
+              37.4
+            ],
+            [
+              93.7,
+              34.1
+            ],
+            [
+              94.8,
+              30.8
+            ],
+            [
+              95.8,
+              27.5
+            ],
+            [
+              96.7,
+              24.1
+            ],
+            [
+              97.5,
+              20.7
+            ],
+            [
+              98.2,
+              17.3
+            ],
+            [
+              98.7,
+              13.9
+            ],
+            [
+              99.2,
+              10.4
+            ],
+            [
+              99.5,
+              7.0
+            ],
+            [
+              99.6,
+              3.5
+            ],
+            [
+              99.7,
+              0.0
+            ]
+          ],
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "material": "bars"
+        }
+      ],
+      "materials": {
+        "bars": "metal.railing"
+      },
+      "collides": true,
+      "provenance": {
+        "confidence": "medium",
+        "source": "plan",
+        "note": "Railing ring as drawn; height 100 cm assumed (photo IMG_4509).",
+        "fields": {
+          "parts.0.height": {
+            "confidence": "low",
+            "source": "photo",
+            "note": "Railing height estimated. Checklist M22."
+          }
+        }
+      }
+    }
+  ],
+  "checks": [
+    {
+      "id": "M01",
+      "title": "Ceiling height",
+      "how": "Floor to ceiling in the living room; repeat in Zimmer 15.9 and the Entrée to confirm it is the same everywhere.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 255.0,
+      "from": [
+        809.2,
+        0,
+        366.8
+      ],
+      "to": [
+        809.2,
+        255.0,
+        366.8
+      ]
+    },
+    {
+      "id": "M02",
+      "title": "Zimmer 15.9 - clear width",
+      "how": "Wall to wall from the Entrée wall to the outer wall, about in the middle of the room.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 508.5,
+      "from": [
+        761.4,
+        100.0,
+        666.1
+      ],
+      "to": [
+        1269.9,
+        100.0,
+        666.1
+      ],
+      "refs": [
+        "w-entree-zimmer-15-9",
+        "w-zimmer-15-9-exterior"
+      ]
+    },
+    {
+      "id": "M03",
+      "title": "Zimmer 15.9 - clear depth",
+      "how": "Wall to wall from the kitchen wall to the opposite wall.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 300.0,
+      "from": [
+        1133.0,
+        100.0,
+        568.2
+      ],
+      "to": [
+        1133.0,
+        100.0,
+        868.2
+      ],
+      "refs": [
+        "w-living-zimmer-15-9",
+        "w-zimmer-15-9-party"
+      ]
+    },
+    {
+      "id": "M04",
+      "title": "Zimmer 13.0 - clear width",
+      "how": "Wall to wall, perpendicular to the long walls, in the middle of the room.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 292.0,
+      "from": [
+        356.2,
+        100.0,
+        385.2
+      ],
+      "to": [
+        72.9,
+        100.0,
+        455.5
+      ],
+      "refs": [
+        "w-living-zimmer-13-0",
+        "w-zimmer-13-0-party"
+      ]
+    },
+    {
+      "id": "M05",
+      "title": "Zimmer 13.0 - clear length",
+      "how": "From the window wall (balcony side) to the opposite wall.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 428.0,
+      "from": [
+        214.8,
+        100.0,
+        235.8
+      ],
+      "to": [
+        318.0,
+        100.0,
+        651.2
+      ],
+      "refs": [
+        "w-zimmer-13-0-exterior",
+        "w-zimmer-13-0-party-2"
+      ]
+    },
+    {
+      "id": "M06",
+      "title": "Kitchen wall (living-room side) between the two door frames",
+      "how": "Along the wall behind the kitchen, from the frame of the Entrée door to the frame of the door to Zimmer 15.9.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 456.2,
+      "from": [
+        692.4,
+        220,
+        550.2
+      ],
+      "to": [
+        1148.6,
+        220,
+        550.2
+      ],
+      "refs": [
+        "w-living-zimmer-15-9"
+      ]
+    },
+    {
+      "id": "M07",
+      "title": "Column - distance to the kitchen wall",
+      "how": "From the kitchen wall (living side) to the centre of the column.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 209.6,
+      "from": [
+        822.7,
+        100.0,
+        550.2
+      ],
+      "to": [
+        822.7,
+        100.0,
+        340.6
+      ],
+      "refs": [
+        "column"
+      ]
+    },
+    {
+      "id": "M08",
+      "title": "Column - distance to the window",
+      "how": "From the centre of the column to the glass/frame of the nearest window.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 17.3,
+      "from": [
+        822.7,
+        100.0,
+        340.6
+      ],
+      "to": [
+        823.8,
+        100.0,
+        323.3
+      ],
+      "refs": [
+        "column",
+        "w-living-glazing-6"
+      ]
+    },
+    {
+      "id": "M09",
+      "title": "Column - diameter",
+      "how": "Diameter of the round column.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 15.4,
+      "refs": [
+        "column"
+      ]
+    },
+    {
+      "id": "M10",
+      "title": "Entrée - width at the built-in wardrobe",
+      "how": "Wall to wall just in front of the built-in wardrobe.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 140.0,
+      "from": [
+        603.4,
+        100.0,
+        939.2
+      ],
+      "to": [
+        743.4,
+        100.0,
+        939.2
+      ],
+      "refs": [
+        "w-entree-party",
+        "w-entree-party-2"
+      ]
+    },
+    {
+      "id": "M11",
+      "title": "Entrée - length to the built-in wardrobe",
+      "how": "From the wall with the living-room door to the doors of the built-in wardrobe.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 399.0,
+      "from": [
+        673.5,
+        100.0,
+        568.2
+      ],
+      "to": [
+        673.5,
+        100.0,
+        967.2
+      ],
+      "refs": [
+        "w-entree-living",
+        "built-in-wardrobe"
+      ]
+    },
+    {
+      "id": "M12",
+      "title": "Bad - clear length",
+      "how": "From the wall to the living room to the wall behind washbasin/WC.",
+      "priority": "nice",
+      "unit": "cm",
+      "planValue": 206.1,
+      "from": [
+        451.8,
+        100.0,
+        636.5
+      ],
+      "to": [
+        501.4,
+        100.0,
+        836.5
+      ],
+      "refs": [
+        "w-bath-living",
+        "w-bath-party-2"
+      ]
+    },
+    {
+      "id": "M13",
+      "title": "Entrance door - opening width",
+      "how": "Clear width between the wall reveals (left and right of the door frame), and check the swing direction.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 107.8,
+      "from": [
+        589.4,
+        150,
+        854.2
+      ],
+      "to": [
+        589.4,
+        150,
+        962.0
+      ],
+      "refs": [
+        "d-entrance"
+      ]
+    },
+    {
+      "id": "M14",
+      "title": "Door Entrée - living room - opening width",
+      "how": "Clear width between the wall reveals (left and right of the door frame), and check the swing direction.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 89.4,
+      "from": [
+        603.0,
+        150,
+        559.2
+      ],
+      "to": [
+        692.4,
+        150,
+        559.2
+      ],
+      "refs": [
+        "d-entree-living"
+      ]
+    },
+    {
+      "id": "M15",
+      "title": "Door Entrée - Zimmer 15.9 - opening width",
+      "how": "Clear width between the wall reveals (left and right of the door frame), and check the swing direction.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 83.3,
+      "from": [
+        752.4,
+        150,
+        568.4
+      ],
+      "to": [
+        752.4,
+        150,
+        651.8
+      ],
+      "refs": [
+        "d-entree-zimmer-15-9"
+      ]
+    },
+    {
+      "id": "M16",
+      "title": "Door living room - Zimmer 15.9 - opening width",
+      "how": "Clear width between the wall reveals (left and right of the door frame), and check the swing direction.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 95.6,
+      "from": [
+        1148.6,
+        150,
+        559.2
+      ],
+      "to": [
+        1244.2,
+        150,
+        559.2
+      ],
+      "refs": [
+        "d-living-zimmer-15-9"
+      ]
+    },
+    {
+      "id": "M17",
+      "title": "Door living room - Zimmer 13.0 - opening width",
+      "how": "Clear width between the wall reveals (left and right of the door frame), and check the swing direction.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 95.8,
+      "from": [
+        328.0,
+        150,
+        234.0
+      ],
+      "to": [
+        351.1,
+        150,
+        327.0
+      ],
+      "refs": [
+        "d-living-zimmer-13-0"
+      ]
+    },
+    {
+      "id": "M18",
+      "title": "Door Entrée - Bad - opening width",
+      "how": "Clear width between the wall reveals (left and right of the door frame), and check the swing direction.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 87.8,
+      "from": [
+        538.8,
+        150,
+        626.8
+      ],
+      "to": [
+        560.0,
+        150,
+        712.0
+      ],
+      "refs": [
+        "d-bath-entree"
+      ]
+    },
+    {
+      "id": "M19",
+      "title": "Interior doors - opening height",
+      "how": "Floor to the underside of the door frame (all interior doors).",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 205.0,
+      "from": [
+        603.0,
+        0,
+        559.2
+      ],
+      "to": [
+        603.0,
+        205.0,
+        559.2
+      ],
+      "refs": [
+        "d-living-zimmer-13-0",
+        "d-entree-living",
+        "d-entree-zimmer-15-9",
+        "d-living-zimmer-15-9",
+        "d-bath-entree"
+      ]
+    },
+    {
+      "id": "M20",
+      "title": "Entrance door - opening height",
+      "how": "Floor to the underside of the door frame.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 210.0,
+      "from": [
+        589.4,
+        0,
+        854.2
+      ],
+      "to": [
+        589.4,
+        210.0,
+        854.2
+      ],
+      "refs": [
+        "d-entrance"
+      ]
+    },
+    {
+      "id": "M21",
+      "title": "French window (2 sashes) - width",
+      "how": "Glass/frame width of one double French window unit (between the dark posts).",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 106.8,
+      "from": [
+        638.7,
+        150,
+        200.6
+      ],
+      "to": [
+        718.9,
+        150,
+        271.1
+      ],
+      "refs": [
+        "win-living-2"
+      ]
+    },
+    {
+      "id": "M22",
+      "title": "French windows - opening height",
+      "how": "Floor to the top of the window frame; confirm there is no sill.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 230.0,
+      "from": [
+        638.7,
+        0,
+        200.6
+      ],
+      "to": [
+        638.7,
+        230.0,
+        200.6
+      ],
+      "refs": [
+        "win-living-1",
+        "win-living-2",
+        "win-living-3",
+        "win-living-4",
+        "win-living-5",
+        "win-living-7"
+      ]
+    },
+    {
+      "id": "M23",
+      "title": "Juliet railing - height",
+      "how": "Floor to the top of the railing outside the French windows.",
+      "priority": "nice",
+      "unit": "cm",
+      "planValue": 100.0,
+      "refs": [
+        "win-living-1",
+        "win-living-2",
+        "win-living-3",
+        "win-living-4",
+        "win-living-5",
+        "win-living-7"
+      ]
+    },
+    {
+      "id": "M24",
+      "title": "Balcony doors - width and height",
+      "how": "Clear width between the reveals; height floor to the top of the frame.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 98.4,
+      "from": [
+        219.5,
+        150,
+        210.8
+      ],
+      "to": [
+        315.6,
+        150,
+        231.7
+      ],
+      "refs": [
+        "d-zimmer-13-0-balcony-n",
+        "d-living-balcony-n",
+        "d-living-balcony-se",
+        "d-zimmer-15-9-balcony-se"
+      ]
+    },
+    {
+      "id": "M25",
+      "title": "Balcony - inner diameter",
+      "how": "Across the round balcony, railing to railing (inside).",
+      "priority": "nice",
+      "unit": "cm",
+      "planValue": 213.5,
+      "refs": [
+        "balcony-n",
+        "balcony-se"
+      ]
+    },
+    {
+      "id": "M26",
+      "title": "Kitchen - worktop height",
+      "how": "Floor to the top of the worktop.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 90.0,
+      "refs": [
+        "kitchen"
+      ]
+    },
+    {
+      "id": "M27",
+      "title": "Kitchen - worktop depth and run length",
+      "how": "Depth: wall to the front edge of the worktop (sink area). Length: tall units + counter, wall-side.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 72.5,
+      "refs": [
+        "kitchen"
+      ]
+    },
+    {
+      "id": "M28",
+      "title": "Kitchen - tall units height and widths",
+      "how": "Height of the tall units (floor to top) and the width of each.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 240.0,
+      "refs": [
+        "kitchen"
+      ]
+    },
+    {
+      "id": "M29",
+      "title": "Built-in wardrobe - width, depth, height",
+      "how": "Outer size of the built-in wardrobe at the end of the Entrée.",
+      "priority": "must",
+      "unit": "cm",
+      "planValue": 140.0,
+      "refs": [
+        "built-in-wardrobe"
+      ]
+    },
+    {
+      "id": "M30",
+      "title": "Wall thickness at door reveals",
+      "how": "Reveal depth at an interior door (expected 18 cm) and at a balcony door (outer wall).",
+      "priority": "nice",
+      "unit": "cm",
+      "planValue": 18.0,
+      "refs": [
+        "w-entree-zimmer-15-9"
+      ]
+    },
+    {
+      "id": "M31",
+      "title": "North direction",
+      "how": "Optional: compass bearing of the kitchen wall direction (phone compass).",
+      "priority": "nice",
+      "unit": "deg",
+      "planValue": 139.0
+    },
+    {
+      "id": "M32",
+      "title": "Bathroom fixtures",
+      "how": "Optional: positions and sizes of shower, washbasin, WC and washer/dryer.",
+      "priority": "nice",
+      "unit": "cm",
+      "planValue": 0.0,
+      "refs": [
+        "bath-washer-dryer",
+        "bath-shower-tray",
+        "bath-washbasin",
+        "bath-wc",
+        "bath-prewall"
+      ]
+    }
+  ]
+}
