@@ -66,6 +66,11 @@ export const Opening = z
         leafWidth: PositiveCm.optional(),
         style: z.enum(["solid", "glazed"]),
         isEntrance: z.boolean().optional(),
+        /**
+         * How far the leaf can be opened, in degrees (default 90: open as drawn on the plan; at most 180: folded back
+         * against the wall). The app stops a leaf earlier where it would meet a wall or a fixture.
+         */
+        maxOpening: z.number().min(90).max(180).optional(),
       })
       .optional(),
     window: z

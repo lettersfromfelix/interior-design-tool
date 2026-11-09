@@ -57,6 +57,29 @@ describe("partsBounds", () => {
     close(lathe.max, [0, 10, 40], 1);
   });
 
+  it("stands arcs upright with the rotations documented in CATALOGUE.md", () => {
+    // a quarter ring of radius 50 with a 0.5 cm tube; angles are seen from the front, counter-clockwise from +x
+    const arc = (rotation: Part["rotation"]) =>
+      partsBounds([{ shape: "torus", radius: 50, tube: 0.5, arc: 90, position: at(), rotation, material: "m" }])!;
+    const c45 = 50 * Math.SQRT1_2;
+    const t45 = 0.5 * Math.SQRT1_2;
+    // { x: -90 }: from +x up to +y
+    close(arc({ x: -90 }).min, [0, 0, -0.5], 1);
+    close(arc({ x: -90 }).max, [50.5, 50.5, 0.5], 1);
+    // { x: -90, y: 180 }: from −x up to +y
+    close(arc({ x: -90, y: 180 }).min, [-50.5, 0, -0.5], 1);
+    close(arc({ x: -90, y: 180 }).max, [0, 50.5, 0.5], 1);
+    // start angle s in 0…180: { x: s − 90, y: 90, z: 90 }; s = 45 runs from 45° over the top to 135°
+    close(arc({ x: -45, y: 90, z: 90 }).min, [-(c45 + t45), c45 - t45, -0.5], 1);
+    close(arc({ x: -45, y: 90, z: 90 }).max, [c45 + t45, 50.5, 0.5], 1);
+    // start angle s in 180…360: { x: 270 − s, y: -90, z: -90 }; s = 225 runs from 225° under the bottom to 315°
+    close(arc({ x: 45, y: -90, z: -90 }).min, [-(c45 + t45), -50.5, -0.5], 1);
+    close(arc({ x: 45, y: -90, z: -90 }).max, [c45 + t45, -(c45 - t45), 0.5], 1);
+    // y is applied last: { x: -90, y: 90 } turns the first arc into the side plane, from +z up to +y
+    close(arc({ x: -90, y: 90 }).min, [-0.5, 0, 0], 1);
+    close(arc({ x: -90, y: 90 }).max, [0.5, 50.5, 50.5], 1);
+  });
+
   it("includes repeat, repeatAround and mirror copies", () => {
     const legs: Part = { shape: "box", size: { x: 4, y: 40, z: 4 }, position: at(40, 20, 20), material: "m", mirror: ["x", "z"] };
     const b = partsBounds([legs])!;

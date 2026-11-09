@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { partFootprints } from "../catalogue/bounds";
 import { convexHull, insideConvex, overlapDepth, pushCircleOut, rayToPolygon } from "../geometry/convex";
+import { area } from "../geometry/polygon";
 import { emptyLayout, setPlacement, setRotation } from "../layout/commands";
 import { resolvePoses } from "../layout/poses";
 import { ApartmentFile } from "../schema/apartment";
@@ -9,8 +10,8 @@ import { CatalogueItem } from "../schema/catalogue";
 import type { Vec2 } from "../schema/common";
 import type { LayoutFile, PlacedItem } from "../schema/layout";
 import { DEFAULT_AIDS, readAids, rotationStep, type Aids } from "./aids";
-import { indexApartment } from "./apartment";
-import { clearanceZones, layoutConflicts } from "./collisions";
+import { doorSwings, indexApartment, leafSolid } from "./apartment";
+import { clearanceZones, layoutConflicts, solidsOverlap } from "./collisions";
 import { sideDistances } from "./distances";
 import { constrainToAxis, snapMeasurePoint } from "./measure";
 import { frontDirection, localSolids, rotationFacing, worldRect } from "./shapes";
@@ -152,6 +153,42 @@ describe("apartment index", () => {
     expect(blocks(mid, 100)).toBe(false);
     expect(blocks(mid, 230)).toBe(true); // lintel
   });
+  it("opens interior doors up to 180° unless a wall or fixture stops a leaf, the others 90°", () => {
+    const free = (id: string, deg: number) =>
+      index.leaves.filter((l) => l.door === id).every((l) => !index.obstacles.some((ob) => solidsOverlap(leafSolid(l, deg), ob)));
+    for (const o of ap.openings.filter((x) => x.door)) {
+      const range = index.doors.get(o.id)!;
+      const interior = !o.door!.isEntrance && !o.id.includes("balcony");
+      expect(o.door!.maxOpening, o.id).toBe(interior ? 180 : undefined);
+      expect(range.max, o.id).toBeGreaterThanOrEqual(90);
+      expect(range.max, o.id).toBeLessThanOrEqual(o.door!.maxOpening ?? 90);
+      if (!interior) expect(range.max, o.id).toBe(90);
+      if (range.max > 90) expect(free(o.id, range.max), o.id).toBe(true);
+      if (range.max < (o.door!.maxOpening ?? 90)) {
+        // stopped one degree before the leaf would run into the wall or fixture it names
+        expect(range.stoppedBy, o.id).toBeDefined();
+        expect(free(o.id, range.max + 1), o.id).toBe(false);
+      } else expect(range.stoppedBy, o.id).toBeUndefined();
+    }
+    expect([...index.doors.values()].filter((r) => r.max === 180).length).toBeGreaterThan(0);
+  });
+  it("widens a door's swing area as far as a layout opens the door, never below 90°", () => {
+    const at = (id: string) => index.leaves.findIndex((l) => l.door === id);
+    const open = [...index.doors].find(([, r]) => r.max === 180)![0];
+    expect(doorSwings(index, undefined)).toBe(index.swings);
+    expect(doorSwings(index, { [open]: 45 })).toBe(index.swings);
+    const wide = doorSwings(index, { [open]: 180 });
+    expect(wide.filter((s, i) => s !== index.swings[i]).map((s) => s.id)).toEqual([open]);
+    // a half disc instead of a quarter
+    expect(Math.abs(area(wide[at(open)].poly)) / Math.abs(area(index.swings[at(open)].poly))).toBeCloseTo(2, 2);
+    // a door a wall stops only sweeps up to there
+    const stopped = [...index.doors].find(([, r]) => r.stoppedBy);
+    if (stopped) {
+      const [id, range] = stopped;
+      const capped = doorSwings(index, { [id]: 180 })[at(id)];
+      expect(Math.abs(area(capped.poly)) / Math.abs(area(index.swings[at(id)].poly))).toBeCloseTo(range.max / 90, 2);
+    }
+  });
 });
 
 describe("wall snapping", () => {
@@ -220,6 +257,19 @@ describe("collisions", () => {
 
     expect(conflictsOf(layout(placed("l", "lamp", free))).get("l")).toContainEqual({ kind: "no-surface", hard: false });
     expect(conflictsOf(layout(placed("sh", "shelf", free))).get("sh")).toContainEqual({ kind: "off-wall", hard: false });
+  });
+  it("flags furniture where a door folds back only in layouts that open the door that far", () => {
+    const id = [...index.doors].find(([, r]) => r.max === 180)![0];
+    const l = index.leaves.find((x) => x.door === id)!;
+    // a small item beside the hinge, where the leaf passes at 150°
+    const r = l.geometry.leafWidth * 0.6;
+    const th = (150 * Math.PI) / 180;
+    const p = l.at(l.leaf.x + l.leaf.dir * r * Math.cos(th), l.geometry.sgn * (l.thickness / 2 + r * Math.sin(th)));
+    const doc = layout(placed("x", "lamp", p, 0));
+    const door = { kind: "door", other: id, hard: false };
+    expect(conflictsOf(doc).get("x")).not.toContainEqual(door);
+    expect(conflictsOf({ ...doc, doors: { [id]: 120 } }).get("x")).not.toContainEqual(door);
+    expect(conflictsOf({ ...doc, doors: { [id]: 180 } }).get("x")).toContainEqual(door);
   });
 });
 

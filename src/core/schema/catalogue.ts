@@ -60,7 +60,7 @@ export const ModelGeometry = z.strictObject({
 
 export const Geometry = z.discriminatedUnion("type", [ParametricGeometry, ModelGeometry]);
 
-/** A horizontal area other items can stand on (Phase 3: stacking). */
+/** A horizontal area that `onTop` items can stand on (stacking). */
 export const Surface = z.strictObject({
   name: z.string().min(1).optional(),
   /** Above the item's bottom (cm). */
@@ -104,9 +104,9 @@ export const CatalogueItem = z.strictObject({
   materialSlots: z.record(z.string().min(1), MaterialSlot),
   surfaces: z.array(Surface).optional(),
   clearance: Clearance.optional(),
-  /** Shape used for collision checks (Phase 3). Default: parametric "parts", model "box". Rugs: "none". */
+  /** Shape used for collision checks. Default: parametric "parts", model "box". Rugs: "none". */
   collision: z.enum(["parts", "box", "none"]).optional(),
-  /** Optional finer collision shape for model items (Phase 3). Their `material` is ignored. */
+  /** Optional finer collision shape for model items. Their `material` is ignored. */
   collisionParts: z.array(Part).optional(),
   price: Price.optional(),
   productUrl: z.url({ protocol: /^https?$/ }).optional(),

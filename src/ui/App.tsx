@@ -49,7 +49,7 @@ function Banners() {
       </button>
     );
   }
-  if (walking) return <div className="overlay-note overlay-note--walk">Click into the view to look around · W A S D or arrow keys: walk · Shift: run · Esc: free the mouse, again: leave</div>;
+  if (walking) return <div className="overlay-note overlay-note--walk">W A S D: walk · Arrow keys: turn and look up or down · Shift: run · Click: look with the mouse · Esc: free the mouse, again: leave</div>;
   if (placing) return <div className="overlay-note">Click into the view to place {placing} · R: rotate · Esc: cancel</div>;
   if (measuring) {
     return <div className="overlay-note">Tape measure: click two points · snaps to corners and edges · Shift: straight · Alt: no snapping · Esc: done</div>;

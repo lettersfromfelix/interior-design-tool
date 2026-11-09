@@ -23,6 +23,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import { DOOR_OPEN, emptyLayout } from "../core/layout/commands";
 import { resolvePoses, type WorldPose } from "../core/layout/poses";
+import { indexApartment, shownOpening } from "../core/placement/apartment";
 import { clearanceZones, type Conflict } from "../core/placement/collisions";
 import type { Solid } from "../core/placement/shapes";
 import type { Vec2 } from "../core/schema/common";
@@ -312,10 +313,12 @@ export class Engine {
     this.applyLighting(s);
   }
 
-  /** Show the doors as far open as the layout says (display only). */
+  /** Show the doors as far open as the layout says (display only), but never further than a door opens. */
   private applyDoors(doc: LayoutFile): void {
+    const ap = this.store.getState().data.apartment;
+    const index = ap ? indexApartment(ap) : undefined;
     for (const [id, leaves] of this.build?.doors ?? []) {
-      const deg = doc.doors?.[id] ?? DOOR_OPEN;
+      const deg = index ? shownOpening(index, doc.doors, id) : (doc.doors?.[id] ?? DOOR_OPEN);
       for (const leaf of leaves) setLeafOpening(leaf, deg);
     }
     this.requestRender();

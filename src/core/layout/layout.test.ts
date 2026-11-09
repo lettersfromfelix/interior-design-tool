@@ -96,7 +96,10 @@ describe("layout commands", () => {
     expect(setDoorOpening(next, "d-2", 0)).toBe(next);
     next = setDoorOpening(setDoorOpening(next, "d-1", DOOR_OPEN), "d-2", undefined);
     expect(next).not.toHaveProperty("doors");
-    expect(setDoorOpening(doc, "d-1", 120)).toBe(doc);
+    // beyond 90° (interior doors fold back up to 180°)
+    expect(setDoorOpening(doc, "d-1", 120).doors).toEqual({ "d-1": 120 });
+    expect(setDoorOpening(doc, "d-1", 250).doors).toEqual({ "d-1": 180 });
+    expect(setDoorOpening(doc, "d-1", 90.4)).toBe(doc);
   });
 
   it("sets wall colours per room or per wall side and floors, and removes empty groups again", () => {

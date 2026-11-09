@@ -15,7 +15,7 @@ export const PlacedItem = z.strictObject({
   rotation: z.number(),
   /** Wall items: floor to the item's bottom edge (cm). Other placement types derive it. */
   elevation: z.number().min(0).optional(),
-  /** Stands on surface `surface` (index) of another placed item (Phase 3: stacking). */
+  /** Stands on surface `surface` (index) of another placed item; `position` and `rotation` are then relative to it. */
   parent: z.strictObject({ uid: z.string().min(1), surface: z.number().int().min(0) }).optional(),
   /** Material slot -> preset id or "@original". Omitted slots use the catalogue default. */
   materials: z.record(z.string().min(1), SlotChoice).optional(),
@@ -23,7 +23,7 @@ export const PlacedItem = z.strictObject({
   hidden: z.boolean().optional(),
 });
 
-/** Wall colours and floor materials of a layout (Phase 4). */
+/** Wall colours and floor materials of a layout. */
 export const LayoutSurfaces = z.strictObject({
   walls: z
     .strictObject({
@@ -48,10 +48,11 @@ export const LayoutFile = z.strictObject({
   updatedAt: z.string().optional(),
   surfaces: LayoutSurfaces.optional(),
   /**
-   * Door id -> how far the door is shown open, in degrees: 0 = closed, 90 = open as drawn on the plan (the default).
+   * Door id -> how far the door is shown open, in degrees: 0 = closed, 90 = open as drawn on the plan (the default),
+   * up to 180 = folded back against the wall (doors that allow it, see `maxOpening` in data/apartment.json).
    * Display only: the door itself is defined in data/apartment.json.
    */
-  doors: z.record(z.string().min(1), z.number().min(0).max(90)).optional(),
+  doors: z.record(z.string().min(1), z.number().min(0).max(180)).optional(),
   items: z.array(PlacedItem),
 });
 

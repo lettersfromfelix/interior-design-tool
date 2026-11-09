@@ -22,6 +22,6 @@
     "upholstery": { "label": "Upholstery", "default": "fabric.linen-grey", "allowed": ["fabric.*", "leather.*"] },
     "legs": { "label": "Legs", "default": "wood.oak-natural", "allowed": ["wood.*", "metal.black-matte", "metal.brass"] }
   },
-  "clearance": { "front": 60, "note": "Legroom in front of the seat" },
+  "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
   "notes": "Generic example with typical sizes, not a specific product."
 }

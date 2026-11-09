@@ -18,5 +18,5 @@
     "base": { "label": "Base", "default": "metal.brass", "allowed": ["metal.brass", "metal.black-matte", "metal.stainless", "ceramic.white"] },
     "shade": { "label": "Globe", "default": "glass.opal", "allowed": ["glass.opal", "glass.smoke"] }
   },
-  "notes": "Stands on furniture surfaces such as the sideboard top (stacking arrives in Phase 3)."
+  "notes": "Generic example with typical sizes, not a specific product. Stands on the surface of another item, such as the sideboard top or a table, and moves with it."
 }

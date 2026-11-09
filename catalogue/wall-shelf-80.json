@@ -23,5 +23,5 @@
     { "name": "upper shelf", "height": 19, "width": 76, "depth": 22, "maxItemHeight": 15 },
     { "name": "lower shelf", "height": 2, "width": 76, "depth": 22, "maxItemHeight": 15 }
   ],
-  "notes": "Hangs with its bottom 140 cm above the floor by default; change the height per placed shelf."
+  "notes": "Generic example with typical sizes, not a specific product. Hangs with its bottom 140 cm above the floor by default; change the height per placed shelf."
 }

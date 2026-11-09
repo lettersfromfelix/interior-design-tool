@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "coffee-table-round-80",
+  "name": "Coffee table, round Ø 80",
+  "category": "table",
+  "tags": ["living room", "lounge", "oak"],
+  "dimensions": { "width": 80, "depth": 80, "height": 42 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "legs", "shape": "cylinder", "radius": 1, "height": 39, "position": { "x": 22, "y": 19.5, "z": 22 }, "repeatAround": { "count": 4, "step": 90 }, "material": "legs" },
+      { "name": "top", "shape": "cylinder", "radius": 40, "height": 3, "position": { "x": 0, "y": 40.5, "z": 0 }, "material": "top" }
+    ]
+  },
+  "materialSlots": {
+    "top": { "label": "Table top", "default": "wood.oak-natural", "allowed": ["wood.*"] },
+    "legs": { "label": "Legs", "default": "metal.black-matte", "allowed": ["metal.black-matte", "metal.brass", "metal.stainless"] }
+  },
+  "surfaces": [{ "name": "top", "height": 42, "width": 56, "depth": 56 }],
+  "notes": "Generic example with typical sizes, not a specific product. Ø 80 cm and 42 cm high: a 3 cm solid oak top on four slim black metal legs (Ø 2 cm) that stand about 8 cm in from the edge. The surface for the table lamp and other small things is the largest square that fits on the round top (56 × 56 cm), so nothing put on it overhangs the edge. It has no clearance zone of its own; the seats around it carry their legroom."
+}

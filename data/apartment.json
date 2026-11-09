@@ -1600,7 +1600,8 @@
         "opensTo": "right",
         "leaves": 1,
         "leafWidth": 82.0,
-        "style": "solid"
+        "style": "solid",
+        "maxOpening": 180
       },
       "provenance": {
         "confidence": "high",
@@ -1616,6 +1617,11 @@
             "confidence": "medium",
             "source": "assumed",
             "note": "Assumed solid like the other room doors."
+          },
+          "door.maxOpening": {
+            "confidence": "high",
+            "source": "user",
+            "note": "Interior doors open up to 180° (you). The app stops a leaf earlier where it would meet a wall or a fixture."
           }
         }
       }
@@ -1633,7 +1639,8 @@
         "opensTo": "left",
         "leaves": 1,
         "leafWidth": 82.0,
-        "style": "glazed"
+        "style": "glazed",
+        "maxOpening": 180
       },
       "provenance": {
         "confidence": "high",
@@ -1649,6 +1656,11 @@
             "confidence": "high",
             "source": "user",
             "note": "Glass door (you)."
+          },
+          "door.maxOpening": {
+            "confidence": "high",
+            "source": "user",
+            "note": "Interior doors open up to 180° (you). The app stops a leaf earlier where it would meet a wall or a fixture."
           }
         }
       }
@@ -1666,7 +1678,8 @@
         "opensTo": "left",
         "leaves": 1,
         "leafWidth": 76.0,
-        "style": "solid"
+        "style": "solid",
+        "maxOpening": 180
       },
       "provenance": {
         "confidence": "high",
@@ -1682,6 +1695,11 @@
             "confidence": "high",
             "source": "user",
             "note": "Solid door (you)."
+          },
+          "door.maxOpening": {
+            "confidence": "high",
+            "source": "user",
+            "note": "Interior doors open up to 180° (you). The app stops a leaf earlier where it would meet a wall or a fixture."
           }
         }
       }
@@ -1699,7 +1717,8 @@
         "opensTo": "right",
         "leaves": 1,
         "leafWidth": 82.0,
-        "style": "solid"
+        "style": "solid",
+        "maxOpening": 180
       },
       "provenance": {
         "confidence": "high",
@@ -1715,6 +1734,11 @@
             "confidence": "high",
             "source": "user",
             "note": "Solid door (you)."
+          },
+          "door.maxOpening": {
+            "confidence": "high",
+            "source": "user",
+            "note": "Interior doors open up to 180° (you). The app stops a leaf earlier where it would meet a wall or a fixture."
           }
         }
       }
@@ -1732,7 +1756,8 @@
         "opensTo": "right",
         "leaves": 1,
         "leafWidth": 82.0,
-        "style": "solid"
+        "style": "solid",
+        "maxOpening": 180
       },
       "provenance": {
         "confidence": "high",
@@ -1748,6 +1773,11 @@
             "confidence": "medium",
             "source": "assumed",
             "note": "Assumed solid like the other room doors."
+          },
+          "door.maxOpening": {
+            "confidence": "high",
+            "source": "user",
+            "note": "Interior doors open up to 180° (you). The app stops a leaf earlier where it would meet a wall or a fixture."
           }
         }
       }

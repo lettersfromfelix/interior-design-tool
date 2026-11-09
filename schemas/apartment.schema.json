@@ -624,6 +624,11 @@
               },
               "isEntrance": {
                 "type": "boolean"
+              },
+              "maxOpening": {
+                "type": "number",
+                "minimum": 90,
+                "maximum": 180
               }
             },
             "required": [

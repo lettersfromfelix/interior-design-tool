@@ -8,7 +8,10 @@ const WALK_SPEED = 140;
 const RUN_SPEED = 400;
 /** Radians per second (arrow keys) and per pixel (mouse). */
 const TURN_SPEED = 1.8;
+const TILT_SPEED = 1.2;
 const LOOK_SPEED = 0.0025;
+/** How far you can look up or down (radians, about 83°). */
+const MAX_PITCH = 1.45;
 
 export interface WalkHost {
   /** Where a step from `from` by `delta` (plan cm) ends, after bumping into things. */
@@ -20,17 +23,18 @@ export interface WalkHost {
   onExit(): void;
 }
 
-type Action = "forward" | "back" | "left" | "right" | "turnLeft" | "turnRight";
+type Action = "forward" | "back" | "left" | "right" | "turnLeft" | "turnRight" | "lookUp" | "lookDown";
 
+/** W A S D walk; the arrow keys turn left and right and tilt the view up and down. */
 const KEYS: Record<string, Action> = {
   KeyW: "forward",
-  ArrowUp: "forward",
   KeyS: "back",
-  ArrowDown: "back",
   KeyA: "left",
   KeyD: "right",
   ArrowLeft: "turnLeft",
   ArrowRight: "turnRight",
+  ArrowUp: "lookUp",
+  ArrowDown: "lookDown",
 };
 
 /** Keys typed into a text field belong to it; a focused slider keeps its arrow keys. */
@@ -46,7 +50,7 @@ const ownsKey = (e: KeyboardEvent) => {
 
 /**
  * First-person controls: click to capture the mouse and look around (pointer lock; where that isn't available, drag
- * to look), W A S D or the arrow keys to walk, Shift to run, Esc to free the mouse.
+ * to look), W A S D to walk, the arrow keys to turn and to look up and down, Shift to run, Esc to free the mouse.
  */
 export class WalkControls {
   /** Plan position of your eyes. */
@@ -85,6 +89,7 @@ export class WalkControls {
   }
 
   set enabled(on: boolean) {
+    if (on && !this.on) this.takeKeys();
     this.on = on;
     if (!on) {
       this.release();
@@ -124,6 +129,8 @@ export class WalkControls {
     const has = (a: Action) => (this.held.has(a) ? 1 : 0);
     const turn = has("turnLeft") - has("turnRight");
     if (turn) this.yaw += turn * TURN_SPEED * dt;
+    const tilt = has("lookUp") - has("lookDown");
+    if (tilt) this.pitch = clamp(this.pitch + tilt * TILT_SPEED * dt, -MAX_PITCH, MAX_PITCH);
     const fwd = has("forward") - has("back");
     const side = has("right") - has("left");
     if (fwd || side) {
@@ -141,12 +148,13 @@ export class WalkControls {
 
   private look(dx: number, dy: number): void {
     this.yaw -= dx * LOOK_SPEED;
-    this.pitch = clamp(this.pitch - dy * LOOK_SPEED, -1.45, 1.45);
+    this.pitch = clamp(this.pitch - dy * LOOK_SPEED, -MAX_PITCH, MAX_PITCH);
     this.apply();
   }
 
   private onDown = (e: PointerEvent): void => {
     if (!this.on || e.button !== 0) return;
+    this.takeKeys();
     this.drag = { id: e.pointerId, x: e.clientX, y: e.clientY };
     try {
       this.dom.setPointerCapture(e.pointerId);
@@ -214,6 +222,15 @@ export class WalkControls {
     this.held.clear();
     this.run = false;
   };
+
+  /**
+   * Walking gets the keyboard: a slider or field that still has the focus from a panel (e.g. a door's slider) would
+   * otherwise keep the arrow keys. Called when walking starts and when you click into the view.
+   */
+  private takeKeys(): void {
+    const el = document.activeElement as HTMLElement | null;
+    if (el && (el.tagName === "INPUT" || el.tagName === "SELECT" || el.tagName === "TEXTAREA" || el.isContentEditable)) el.blur();
+  }
 
   dispose(): void {
     this.enabled = false;

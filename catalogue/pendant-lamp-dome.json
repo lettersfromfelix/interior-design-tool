@@ -32,5 +32,5 @@
     "fittings": { "label": "Cord and canopy", "default": "metal.black-matte", "allowed": ["metal.black-matte", "metal.brass", "lacquer.white"] },
     "bulb": { "label": "Bulb", "default": "glass.opal", "allowed": ["glass.opal"] }
   },
-  "notes": "Hangs from the ceiling: the 100 cm height includes the cord, so the shade's rim is 155 cm above the floor with a 255 cm ceiling."
+  "notes": "Generic example with typical sizes, not a specific product. Hangs from the ceiling: the 100 cm height includes the cord, so the shade's rim is 155 cm above the floor with a 255 cm ceiling."
 }

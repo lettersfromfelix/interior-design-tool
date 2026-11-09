@@ -31,6 +31,8 @@ FRENCH_HEIGHT = 230.0  # French windows and balcony doors (estimated from IMG_45
 LOCATION = {"latitude": 47.38, "longitude": 8.54, "timeZone": "Europe/Zurich"}  # city level, for the sun
 # Door leaf styles you confirmed (other interior doors are assumed solid; balcony doors are glazed)
 USER_DOOR_STYLES = {"d-entree-living": "glazed", "d-entree-zimmer-15-9": "solid", "d-living-zimmer-15-9": "solid"}
+# How far interior doors can be opened (you); balcony doors and the entrance door open 90° as drawn
+INTERIOR_DOOR_MAX_OPENING = 180
 
 ROOM_LABELS = {"Wohnen/Essen": ("living", "Wohnen/Essen"), "Bad": ("bath", "Bad"), "Entrée": ("entree", "Entrée")}
 
@@ -242,9 +244,11 @@ def _opening(o, w, K, plan, used, bal_centers):
             did = _unique("d-" + "-".join(sorted(rooms)), used)
         height = FRENCH_HEIGHT if balcony else ENTRANCE_HEIGHT if entrance else DOOR_HEIGHT
         style = "glazed" if balcony else USER_DOOR_STYLES.get(did, "solid")
+        interior = not balcony and not entrance
         entry = {"id": did, **entry, "height": height, "sill": 0,
                  "door": {"hinge": hinge, "opensTo": opens, "leaves": 1, "leafWidth": round(arc.radius * K * 2) / 2,
-                          "style": style, **({"isEntrance": True} if entrance else {})}}
+                          "style": style, **({"isEntrance": True} if entrance else {}),
+                          **({"maxOpening": INTERIOR_DOOR_MAX_OPENING} if interior else {})}}
         check = "{check:balcony-doors}" if balcony else f"{{check:door-width:{did}}}"
         height_check = "{check:balcony-doors}" if balcony else "{check:entrance-height}" if entrance else "{check:door-height}"
         fields = {"height": {"confidence": "low", "source": "photo",
@@ -252,9 +256,13 @@ def _opening(o, w, K, plan, used, bal_centers):
         if did in USER_DOOR_STYLES:
             kind = "Glass door" if style == "glazed" else "Solid door"
             fields["door.style"] = {"confidence": "high", "source": "user", "note": f"{kind} (you)."}
-        elif not balcony and not entrance:
+        elif interior:
             fields["door.style"] = {"confidence": "medium", "source": "assumed",
                                     "note": "Assumed solid like the other room doors."}
+        if interior:
+            fields["door.maxOpening"] = {"confidence": "high", "source": "user",
+                                         "note": "Interior doors open up to 180° (you). The app stops a leaf earlier "
+                                                 "where it would meet a wall or a fixture."}
         entry["provenance"] = prov("high" if not balcony else "medium", "plan",
                                    f"Opening between the wall reveals from the plan; leaf {arc.radius * K:.0f} cm and "
                                    f"swing from the door arc. Checklist {check}.", fields)

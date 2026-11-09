@@ -5,6 +5,7 @@
  */
 import { isModelItem, resolveSlot } from "../catalogue/materials";
 import { parentProblem, type ItemLookup } from "../layout/poses";
+import { indexApartment } from "../placement/apartment";
 import type { ApartmentFile } from "../schema/apartment";
 import { LayoutFile } from "../schema/layout";
 import { fromZod, issue, parseJson, type Issue } from "./issues";
@@ -88,9 +89,14 @@ function checkApartmentRefs(
 ): Issue[] {
   const issues: Issue[] = [];
   const warn = (path: string, message: string, hint?: string) => issues.push(issue("warning", file, path, message, hint));
-  const doors = new Set(ap.openings.filter((o) => o.kind === "door").map((o) => o.id));
-  for (const id of Object.keys(doc.doors ?? {})) {
-    if (!doors.has(id)) warn(`doors.${id}`, `there is no door "${id}" in data/apartment.json; the entry is ignored`);
+  const doors = indexApartment(ap).doors;
+  for (const [id, deg] of Object.entries(doc.doors ?? {})) {
+    const range = doors.get(id);
+    if (!range) warn(`doors.${id}`, `there is no door "${id}" in data/apartment.json; the entry is ignored`);
+    else if (deg > range.max) {
+      const why = range.stoppedBy ? `: "${range.stoppedBy}" is in the way` : "";
+      warn(`doors.${id}`, `the door opens at most ${range.max}°${why}; it is shown ${range.max}° open`, "maxOpening in data/apartment.json sets how far a door opens.");
+    }
   }
   const rooms = new Set(ap.rooms.map((r) => r.id));
   const walls = new Set(ap.walls.map((w) => w.id));

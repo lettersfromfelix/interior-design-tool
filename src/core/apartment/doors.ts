@@ -8,6 +8,9 @@ import type { Vec2 } from "../schema/common";
 /** Thickness of a door leaf (cm). */
 export const DOOR_LEAF_THICKNESS = 4;
 
+/** How far doors are open unless a layout says otherwise: 90°, as drawn on the plan. */
+export const DOOR_OPEN = 90;
+
 /** Wall-local [x, z] -> plan [x, z] (x along the centre line from the wall's start, +z = the wall's right side). */
 export function wallToPlan(w: Pick<Wall, "start" | "end">): (x: number, z: number) => Vec2 {
   const L = Math.hypot(w.end[0] - w.start[0], w.end[1] - w.start[1]) || 1;
@@ -57,13 +60,14 @@ export function doorGeometry(o: Opening): DoorGeometry | undefined {
 }
 
 /**
- * Outline of a leaf's swing (a quarter disc around the hinge) in wall-local [x, z], from the closed position to
- * open at 90°. `t` is the wall thickness.
+ * Outline of a leaf's swing (a disc sector around the hinge) in wall-local [x, z], from the closed position to open
+ * at `deg` degrees (default 90°, as on the plan; at most 180°, so the sector stays convex). `t` is the wall thickness.
  */
-export function swingOutline(leaf: DoorLeaf, g: DoorGeometry, t: number, segments = 12): [number, number][] {
+export function swingOutline(leaf: DoorLeaf, g: DoorGeometry, t: number, segments = 12, deg = DOOR_OPEN): [number, number][] {
   const pts: [number, number][] = [[leaf.x, (g.sgn * t) / 2]];
-  for (let i = 0; i <= segments; i++) {
-    const th = (i / segments) * (Math.PI / 2);
+  const n = Math.max(1, Math.ceil((segments * deg) / DOOR_OPEN));
+  for (let i = 0; i <= n; i++) {
+    const th = (i / n) * Math.min(deg, 180) * (Math.PI / 180);
     pts.push([leaf.x + leaf.dir * g.leafWidth * Math.cos(th), g.sgn * (t / 2 + g.leafWidth * Math.sin(th))]);
   }
   return pts;
@@ -71,7 +75,8 @@ export function swingOutline(leaf: DoorLeaf, g: DoorGeometry, t: number, segment
 
 /**
  * The leaf (wall-local [x, z] corners) when it is open `deg` degrees: 0 = closed, lying in the opening flush with the
- * face it swings to; 90 = open as drawn on the plan. It turns about its hinge at [leaf.x, sgn·t/2].
+ * face it swings to; 90 = open as drawn on the plan; 180 = folded back flat against that face. It turns about its
+ * hinge at [leaf.x, sgn·t/2].
  */
 export function leafOutline(leaf: DoorLeaf, g: DoorGeometry, t: number, deg: number): [number, number][] {
   const th = (deg * Math.PI) / 180;

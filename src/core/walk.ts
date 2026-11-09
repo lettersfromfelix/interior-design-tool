@@ -5,9 +5,8 @@
 import { doorGeometry, leafOutline, wallToPlan } from "./apartment/doors";
 import { pushCircleOut, rayToPolygon } from "./geometry/convex";
 import { area, direction, labelPoint } from "./geometry/polygon";
-import { DOOR_OPEN } from "./layout/commands";
 import type { ItemLookup, WorldPose } from "./layout/poses";
-import { indexApartment } from "./placement/apartment";
+import { indexApartment, shownOpening } from "./placement/apartment";
 import { bodiesOf } from "./placement/collisions";
 import { makeSolid, type Solid } from "./placement/shapes";
 import type { ApartmentFile } from "./schema/apartment";
@@ -84,15 +83,16 @@ export function walkSolids(
 ): Solid[] {
   const head = options.eyeHeight + 10;
   const inTheWay = (s: Solid) => s.y1 > STEP_HEIGHT && s.y0 < head;
+  const index = indexApartment(ap);
   // walls (open at doors, closed at windows) and fixtures
-  const out: Solid[] = indexApartment(ap).obstacles.filter(inTheWay);
+  const out: Solid[] = index.obstacles.filter(inTheWay);
   const walls = new Map(ap.walls.map((w) => [w.id, w]));
   for (const o of ap.openings) {
     const g = doorGeometry(o);
     const w = walls.get(o.wall);
     if (!g || !w) continue;
     const at = wallToPlan(w);
-    const deg = doc.doors?.[o.id] ?? DOOR_OPEN;
+    const deg = shownOpening(index, doc.doors, o.id);
     for (const leaf of g.leaves) {
       const poly = leafOutline(leaf, g, w.thickness, deg).map(([x, z]) => at(x, z));
       const s = makeSolid(poly, o.sill, o.sill + o.height);

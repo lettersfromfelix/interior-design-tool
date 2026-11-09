@@ -3,17 +3,16 @@
  * a prism of each overlaps the other by more than 0.5 cm, on the plan and in height. So a chair slides under a table
  * top, and a lamp can stand on a sideboard. Items standing on each other never collide with each other.
  */
-import { overlapDepth, rectsOverlap, unionRect, type Rect2 } from "../geometry/convex";
+import { rectsOverlap, unionRect, type Rect2 } from "../geometry/convex";
 import { parentProblem, type ItemLookup, type WorldPose } from "../layout/poses";
 import type { CatalogueItem } from "../schema/catalogue";
 import type { Vec2 } from "../schema/common";
 import type { LayoutFile, PlacedItem } from "../schema/layout";
-import type { ApartmentIndex, WallFace } from "./apartment";
+import { doorSwings, type ApartmentIndex, type WallFace } from "./apartment";
 import { angleDiff } from "./snap";
-import { frontDirection, makeSolid, rotationFacing, toWorld, worldSolids, type Solid } from "./shapes";
+import { COLLISION_TOLERANCE, frontDirection, makeSolid, rotationFacing, solidsOverlap, toWorld, worldSolids, type Solid } from "./shapes";
 
-/** Overlaps up to this much (cm) are ignored: touching is fine, and positions are stored to 0.1 cm. */
-export const COLLISION_TOLERANCE = 0.5;
+export { COLLISION_TOLERANCE, solidsOverlap };
 
 export type ConflictKind =
   /** overlaps another placed item */
@@ -64,12 +63,6 @@ export function bodiesOf(doc: Pick<LayoutFile, "items">, lookup: ItemLookup, pos
     out.push({ uid: placed.uid, placed, item, pose, solids, bounds: solids.length ? unionRect(solids.map((s) => s.bounds)) : undefined });
   }
   return out;
-}
-
-const yOverlap = (a: Pick<Solid, "y0" | "y1">, b: Pick<Solid, "y0" | "y1">) => Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0) > COLLISION_TOLERANCE;
-
-export function solidsOverlap(a: Solid, b: Solid): boolean {
-  return yOverlap(a, b) && rectsOverlap(a.bounds, b.bounds, COLLISION_TOLERANCE) && overlapDepth(a.poly, b.poly) > COLLISION_TOLERANCE;
 }
 
 function anyOverlap(as: readonly Solid[], bs: readonly Solid[]): boolean {
@@ -146,9 +139,10 @@ export interface ConflictOptions {
 
 /**
  * All conflicts of the layout, by uid. Item pairs are reported on both items. Unknown and hidden items are ignored.
+ * Door swings: the normal 90° swing of every door, and further where the layout shows a door opened further.
  */
 export function layoutConflicts(
-  doc: Pick<LayoutFile, "items">,
+  doc: Pick<LayoutFile, "items" | "doors">,
   lookup: ItemLookup,
   ap: ApartmentIndex,
   poses: ReadonlyMap<string, WorldPose>,
@@ -180,6 +174,7 @@ export function layoutConflicts(
   }
 
   const byUid = new Map(doc.items.map((p) => [p.uid, p]));
+  const swings = doorSwings(ap, doc.doors);
   for (const body of bodies) {
     if (!wanted(body.uid)) continue;
     const hit = new Set<string>();
@@ -191,7 +186,7 @@ export function layoutConflicts(
           add(body.uid, { kind: ob.kind === "wall" ? "wall" : "fixture", other: ob.id, hard: true });
         }
       }
-      for (const sw of ap.swings) {
+      for (const sw of swings) {
         if (hit.has(sw.id) || !rectsOverlap(body.bounds, sw.bounds, COLLISION_TOLERANCE)) continue;
         if (body.solids.some((s) => solidsOverlap(s, sw))) {
           hit.add(sw.id);

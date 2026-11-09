@@ -1,6 +1,6 @@
 /** Collision shapes of catalogue items: convex footprints with a height range, in the item's frame or the world. */
 import { partFootprints, type Footprint } from "../catalogue/bounds";
-import { boundsOf, type Rect2 } from "../geometry/convex";
+import { boundsOf, overlapDepth, rectsOverlap, type Rect2 } from "../geometry/convex";
 import { rotatePlan, type WorldPose } from "../layout/poses";
 import type { CatalogueItem } from "../schema/catalogue";
 import type { Vec2 } from "../schema/common";
@@ -14,6 +14,16 @@ export interface Solid {
 }
 
 export const makeSolid = (poly: Vec2[], y0: number, y1: number): Solid => ({ poly, y0, y1, bounds: boundsOf(poly) });
+
+/** Overlaps up to this much (cm) are ignored: touching is fine, and positions are stored to 0.1 cm. */
+export const COLLISION_TOLERANCE = 0.5;
+
+const yOverlap = (a: Pick<Solid, "y0" | "y1">, b: Pick<Solid, "y0" | "y1">) => Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0) > COLLISION_TOLERANCE;
+
+/** Two solids overlap by more than the tolerance, on the plan and in height. */
+export function solidsOverlap(a: Solid, b: Solid): boolean {
+  return yOverlap(a, b) && rectsOverlap(a.bounds, b.bounds, COLLISION_TOLERANCE) && overlapDepth(a.poly, b.poly) > COLLISION_TOLERANCE;
+}
 
 /** Rectangle of width × depth around the origin (x across, z deep), clockwise on the plan. */
 export const rectCorners = (width: number, depth: number): Vec2[] => [

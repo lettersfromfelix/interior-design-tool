@@ -1,11 +1,14 @@
 /**
  * Layout commands: pure functions that return a new layout document (Immer), or the same object if nothing changed.
- * Every scene change goes through one of these, so undo/redo (Phase 3) only has to keep the documents.
+ * Every scene change goes through one of these, so undo/redo only has to keep the documents.
  */
 import { produce, type Draft } from "immer";
+import { DOOR_OPEN } from "../apartment/doors";
 import type { Vec2 } from "../schema/common";
 import type { LayoutFile, PlacedItem } from "../schema/layout";
 import { descendants } from "./poses";
+
+export { DOOR_OPEN };
 
 export const LAYOUT_SCHEMA_REF = "../schemas/layout.schema.json";
 
@@ -181,12 +184,13 @@ export function renameLayout(doc: LayoutFile, name: string): LayoutFile {
   return !n || n === doc.name ? doc : produce(doc, (d) => void (d.name = n));
 }
 
-/** Doors are shown open this far (degrees) unless the layout says otherwise. */
-export const DOOR_OPEN = 90;
-
-/** How far the door is open (0–90°); `undefined` goes back to the default (90°, as on the plan). */
+/**
+ * How far the door is shown open: 0 (closed) to 180°, in whole degrees. `undefined` or 90 goes back to the default,
+ * open as on the plan. How far a door really opens (`maxOpening`, walls in the way) is up to the caller.
+ */
 export function setDoorOpening(doc: LayoutFile, doorId: string, degrees: number | undefined): LayoutFile {
-  const v = degrees === undefined || degrees >= DOOR_OPEN ? undefined : Math.max(0, Math.round(degrees));
+  const deg = degrees === undefined ? DOOR_OPEN : Math.min(180, Math.max(0, Math.round(degrees)));
+  const v = deg === DOOR_OPEN ? undefined : deg;
   if (doc.doors?.[doorId] === v) return doc;
   return produce(doc, (d) => {
     if (v === undefined) {

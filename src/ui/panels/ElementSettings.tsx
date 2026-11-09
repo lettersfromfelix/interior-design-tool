@@ -4,6 +4,7 @@
  */
 import { useRef } from "react";
 import { DOOR_OPEN, setDoorOpening, setSurface, type SurfaceTarget } from "../../core/layout/commands";
+import { indexApartment, shownOpening } from "../../core/placement/apartment";
 import type { Opening, Room, Wall } from "../../core/schema/apartment";
 import { materialGroup } from "../../core/schema/materials";
 import { swatchStyle } from "../components";
@@ -11,11 +12,16 @@ import { useApp, useAppStore } from "../store";
 
 export function DoorSettings({ door }: { door: Opening }) {
   const store = useAppStore();
-  const value = useApp((s) => s.layout.doc.doors?.[door.id] ?? DOOR_OPEN);
+  const apartment = useApp((s) => s.data.apartment);
+  const index = apartment ? indexApartment(apartment) : undefined;
+  const range = index?.doors.get(door.id);
+  const max = range?.max ?? DOOR_OPEN;
+  const value = useApp((s) => (index ? shownOpening(index, s.layout.doc.doors, door.id) : (s.layout.doc.doors?.[door.id] ?? DOOR_OPEN)));
   const ready = useApp((s) => s.layout.status === "ready");
   /** Each drag of the slider is one undo step. */
   const gesture = useRef(0);
   const set = (deg: number | undefined, merge?: string) => store.getState().edit((d) => setDoorOpening(d, door.id, deg), merge === undefined ? undefined : { merge });
+  const stopper = range?.stoppedBy && (apartment?.fixtures.find((f) => f.id === range.stoppedBy)?.name ?? "the wall");
   return (
     <section>
       <h3>Door</h3>
@@ -24,7 +30,7 @@ export function DoorSettings({ door }: { door: Opening }) {
         <input
           type="range"
           min={0}
-          max={DOOR_OPEN}
+          max={max}
           step={1}
           value={value}
           disabled={!ready}
@@ -45,13 +51,19 @@ export function DoorSettings({ door }: { door: Opening }) {
         <button onClick={() => set(45)} disabled={!ready || value === 45}>
           Half open
         </button>
-        <button onClick={() => set(undefined)} disabled={!ready || value === DOOR_OPEN}>
+        <button onClick={() => set(undefined)} disabled={!ready || value === DOOR_OPEN} title="90°, as drawn on the plan">
           Open
         </button>
+        {max > DOOR_OPEN && (
+          <button onClick={() => set(max)} disabled={!ready || value === max} title={`${max}°`}>
+            Fully open
+          </button>
+        )}
       </div>
       <p className="muted small">
+        {max > DOOR_OPEN && <>Opens up to {max}°{stopper ? `, where it meets ${stopper}` : ""}. </>}
         Only how the door is shown, saved with this layout (the door itself is defined in <code>data/apartment.json</code>). Furniture in the door's
-        full 90° swing is still flagged, so the door can always open all the way. While walking, a closed door is in the way.
+        90° swing is always flagged, so the door can open; opened further, its whole swing is checked. While walking, a closed door is in the way.
       </p>
     </section>
   );

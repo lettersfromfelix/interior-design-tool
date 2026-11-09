@@ -1,4 +1,7 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { indexApartment } from "../placement/apartment";
+import { ApartmentFile } from "../schema/apartment";
 import type { CatalogueItem } from "../schema/catalogue";
 import { checkLayout, parseLayout } from "./layout";
 
@@ -46,5 +49,19 @@ describe("layout validation", () => {
       "items[2].parent: sofa-2: the base item has no surface with this index; it is placed on its own",
     ]);
     expect(issues.every((i) => i.severity === "warning")).toBe(true);
+  });
+
+  it("warns about doors the apartment doesn't have or that don't open that far", () => {
+    const ap = ApartmentFile.parse(JSON.parse(readFileSync(new URL("../../../data/apartment.json", import.meta.url), "utf8")));
+    const full = [...indexApartment(ap).doors].find(([, r]) => r.max === 180)![0];
+    const { layout } = parseLayout(
+      JSON.stringify({ schemaVersion: 1, name: "x", items: [], doors: { [full]: 180, "d-living-balcony-n": 120, "d-nowhere": 0 } }),
+      file,
+    );
+    expect(checkLayout(layout!, file, () => undefined, presets, ap).map((i) => `${i.path}: ${i.message}`)).toEqual([
+      "doors.d-living-balcony-n: the door opens at most 90°; it is shown 90° open",
+      'doors.d-nowhere: there is no door "d-nowhere" in data/apartment.json; the entry is ignored',
+    ]);
+    expect(parseLayout(JSON.stringify({ schemaVersion: 1, name: "x", items: [], doors: { [full]: 181 } }), file).layout).toBeUndefined();
   });
 });

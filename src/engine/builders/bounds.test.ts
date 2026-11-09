@@ -13,6 +13,7 @@ describe("partsBounds matches the rendered parts", () => {
     "tilted cone": [{ shape: "cylinder", radius: 12, radiusTop: 3, height: 50, position: at(0, 25, 0), rotation: { x: 20, y: 70 }, material: "m" }],
     "scaled tilted sphere": [{ shape: "sphere", radius: 10, scale: { x: 1.5, y: 0.6, z: 1 }, position: at(0, 10, 0), rotation: { z: 30, y: 15 }, material: "m" }],
     "partial torus": [{ shape: "torus", radius: 40, tube: 3, arc: 140, position: at(0, 50, 0), rotation: { y: 25 }, material: "m" }],
+    "upright torus arc (CATALOGUE.md recipe)": [{ shape: "torus", radius: 50, tube: 1, arc: 90, position: at(0, 60, 0), rotation: { x: 45, y: -90, z: -90 }, material: "m" }],
     "partial lathe": [{ shape: "lathe", profile: [[30, 0], [35, 0], [35, 4], [30, 4]], arc: 200, position: at(), rotation: { y: 136 }, material: "m" }],
     "full lathe shade": [{ shape: "lathe", profile: [[3, 0], [20, 18], [22, 25]], position: at(0, 120, 0), material: "m" }],
     extrusion: [{ shape: "extrusion", points: [[-20, -10], [25, -10], [10, 15]], height: 3, position: at(0, 40, 0), rotation: { y: -30 }, material: "m" }],

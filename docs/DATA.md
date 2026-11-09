@@ -106,7 +106,8 @@ appears as `<part name>` and its fields as `<part name>.<field>`, e.g. `wall cab
   height: number, sill: number,
   door?: { hinge: "start" | "end",        // jamb with the hinges
            opensTo: "left" | "right",     // wall side the leaf swings into
-           leaves: 1 | 2, leafWidth?, style: "solid" | "glazed", isEntrance? },
+           leaves: 1 | 2, leafWidth?, style: "solid" | "glazed", isEntrance?,
+           maxOpening?: number },         // 90…180°, how far the leaf can open (default 90, as on the plan)
   window?: { sashes: number, operation: "casement" | "tilt-turn" | "fixed",
              opensTo?: "left" | "right",
              railing?: { height, barSpacing, barWidth, barThickness } },   // Juliet railing, see below
@@ -115,6 +116,12 @@ appears as `<part name>` and its fields as `<part name>.<field>`, e.g. `wall cab
 
 Validation checks that every opening fits into its wall, doesn't overlap another opening, and that
 `sill + height` stays below the wall height.
+
+`maxOpening` is how far a layout can show the door open (the slider in **Inspect**): 90° is open as drawn on the
+plan, 180° is folded back flat against the wall. The five interior doors have 180; the balcony doors and the entrance
+door keep the default 90. A leaf never goes through a wall or a fixture: the app opens it degree by degree and stops
+it where it would touch one. With the current geometry, the door from the entrée to Zimmer 15.9 stops at 93° and the
+bathroom door at 100°; **Inspect** shows each door's range.
 
 `railing` is a Juliet railing outside the window: vertical flat bars (`barWidth` across the railing line ×
 `barThickness` along it, `barSpacing` centre to centre) between a top rail at `height` and a bottom rail whose top
@@ -237,8 +244,9 @@ shows and can be renamed at any time.
     },
     floors?: { [roomId]: presetId }
   },
-  doors?: { [doorId]: number },    // how far a door is shown open: 0 = closed … 90 = open as on the plan (the
-                                   // default, not stored). Display only: the door is defined in apartment.json
+  doors?: { [doorId]: number },    // how far a door is shown open: 0 = closed, 90 = open as on the plan (the
+                                   // default, not stored), up to the door's maxOpening (at most 180).
+                                   // Display only: the door is defined in apartment.json
   items: [{
     uid: string,                   // unique in the layout, e.g. "sofa-3-seater-1"
     item: string,                  // catalogue id
@@ -266,7 +274,11 @@ Example of the apartment-related parts:
 ```
 
 Wall colours use `paint.*` presets and floors `floor.*` presets from `data/materials.json`. Glass walls keep their
-frame colour. Ids that don't exist in the apartment or in the presets are reported as warnings in **Issues**.
+frame colour. Ids that don't exist in the apartment or in the presets are reported as warnings in **Issues**, and so
+is a door opened further than it can go (it is shown at its limit).
+
+Furniture standing in a door's swing gets a warning (it never blocks): always in the normal 90° swing, so a door can
+be opened even when the layout shows it closed, and in the whole sweep when a layout opens the door further than 90°.
 
 How the app treats the files:
 

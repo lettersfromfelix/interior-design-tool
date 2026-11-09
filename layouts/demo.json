@@ -1,0 +1,50 @@
+{
+  "$schema": "../schemas/layout.schema.json",
+  "schemaVersion": 1,
+  "name": "Demo",
+  "description": "Example layout with every kind of catalogue item: floor, wall, stacked (onTop), ceiling and a GLB model.",
+  "surfaces": {
+    "walls": { "rooms": { "zimmer-15-9": "paint.sage" }, "faces": { "w-living-exterior:left": "paint.greige" } },
+    "floors": { "zimmer-13-0": "floor.oak-parquet", "zimmer-15-9": "floor.oak-parquet" }
+  },
+  "doors": { "d-living-zimmer-15-9": 180, "d-bath-entree": 0 },
+  "items": [
+    { "uid": "tv-55-1", "item": "tv-55", "position": [520.4, 163.1], "rotation": 346.1 },
+    { "uid": "sofa-3-seater-1", "item": "sofa-3-seater", "position": [579.8, 402.8], "rotation": 166.1 },
+    { "uid": "rug-200x300-1", "item": "rug-200x300", "position": [555.7, 305.7], "rotation": 76.1 },
+    {
+      "uid": "coffee-table-round-80-1",
+      "item": "coffee-table-round-80",
+      "position": [547.8, 273.7],
+      "rotation": 346.1
+    },
+    {
+      "uid": "armchair-1",
+      "item": "armchair",
+      "position": [790, 400],
+      "rotation": 132,
+      "materials": { "upholstery": "fabric.velvet-green" }
+    },
+    { "uid": "dining-table-160-1", "item": "dining-table-160", "position": [1100, 390], "rotation": 90 },
+    { "uid": "pendant-lamp-dome-1", "item": "pendant-lamp-dome", "position": [1100, 390], "rotation": 0 },
+    { "uid": "dining-chair-1", "item": "dining-chair", "position": [1044, 350], "rotation": 270 },
+    { "uid": "dining-chair-2", "item": "dining-chair", "position": [1156, 350], "rotation": 90 },
+    { "uid": "dining-chair-3", "item": "dining-chair", "position": [1044, 430], "rotation": 270 },
+    { "uid": "dining-chair-4", "item": "dining-chair", "position": [1156, 430], "rotation": 90 },
+    { "uid": "bed-160x200-1", "item": "bed-160x200", "position": [1010, 762.2], "rotation": 180 },
+    { "uid": "wardrobe-150-1", "item": "wardrobe-150", "position": [791.4, 788.4], "rotation": 270 },
+    { "uid": "wall-shelf-80-1", "item": "wall-shelf-80", "position": [1010, 579.2], "rotation": 0 },
+    { "uid": "bookshelf-80-1", "item": "bookshelf-80", "position": [885, 584.2], "rotation": 0 },
+    { "uid": "sideboard-180-1", "item": "sideboard-180", "position": [364.9, 513.3], "rotation": 76.1 },
+    {
+      "uid": "table-lamp-globe-1",
+      "item": "table-lamp-globe",
+      "position": [-72, -1.7],
+      "rotation": 0,
+      "parent": { "uid": "sideboard-180-1", "surface": 0 }
+    },
+    { "uid": "armchair-2", "item": "armchair", "position": [95.8, 377.6], "rotation": 256.1 },
+    { "uid": "floor-lamp-arc-1", "item": "floor-lamp-arc", "position": [112.6, 445.6], "rotation": 256.1 },
+    { "uid": "example-stool-glb-1", "item": "example-stool-glb", "position": [58.6, 325.1], "rotation": 256.1 }
+  ]
+}

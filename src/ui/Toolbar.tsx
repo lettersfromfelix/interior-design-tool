@@ -50,7 +50,7 @@ function Hint() {
   const view = useApp((s) => s.view);
   const itemSelected = useApp((s) => s.selection?.kind === "item");
   let text: string;
-  if (view === "walk") text = "Click: look around (Esc frees the mouse) · W A S D / arrows: walk · Shift: run · F: back to the entrance";
+  if (view === "walk") text = "W A S D: walk · Arrows: turn / look up and down · Shift: run · Click: mouse look (Esc frees it) · F: back to the entrance";
   else if (itemSelected) text = "Drag: move · Ring: rotate (Shift 90°, Alt free) · R/Q/E: rotate · Del: delete · Ctrl+D: duplicate · Ctrl+Z: undo";
   else text = `${view === "2d" ? "Drag: pan · Wheel: zoom" : "Drag: orbit · Right-drag: pan · Wheel: zoom"} · Click: select · Tab: 2D/3D · M: measure`;
   return <span className="hint">{text}</span>;
