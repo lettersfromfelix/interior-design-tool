@@ -17,8 +17,8 @@ import re
 import sys
 from pathlib import Path
 
-from checklist import build_checklist
-from fixtures import balconies, bathroom, built_in_wardrobe, column, kitchen, prov, r1
+from checklist import build_checklist, resolve_check_refs
+from fixtures import RAILING, balconies, bathroom, built_in_wardrobe, column, kitchen, prov, r1
 from geom2d import Region, add, dot, left_normal, mul, polygon_area, sub
 from pdfgeom import ORIGIN_PT, REPO, load_plan
 from walls import attach_doors, sample_room_edges
@@ -29,6 +29,8 @@ DOOR_HEIGHT = 205.0  # interior doors (not in plan; estimated)
 ENTRANCE_HEIGHT = 210.0
 FRENCH_HEIGHT = 230.0  # French windows and balcony doors (estimated from IMG_4508)
 LOCATION = {"latitude": 47.38, "longitude": 8.54, "timeZone": "Europe/Zurich"}  # city level, for the sun
+# Door leaf styles you confirmed (other interior doors are assumed solid; balcony doors are glazed)
+USER_DOOR_STYLES = {"d-entree-living": "glazed", "d-entree-zimmer-15-9": "solid", "d-living-zimmer-15-9": "solid"}
 
 ROOM_LABELS = {"Wohnen/Essen": ("living", "Wohnen/Essen"), "Bad": ("bath", "Bad"), "Entrée": ("entree", "Entrée")}
 
@@ -145,8 +147,10 @@ def build(force=False):
         "underlay": json.loads((REPO / "tools" / "floorplan" / "out" / "underlay.json").read_text())
         if (REPO / "tools" / "floorplan" / "out" / "underlay.json").exists() else None,
         "provenance": prov("high", "plan", "Geometry extracted from the vector floor plan (1:100).", {
-            "ceilingHeight": {"confidence": "high", "source": "user", "note": "Given by you (255 cm). Checklist M01."},
-            "north": {"confidence": "medium", "source": "plan", "note": "From the plan's north arrow. Checklist M30."},
+            "ceilingHeight": {"confidence": "high", "source": "user",
+                              "note": "Given by you (255 cm). Checklist {check:ceiling}."},
+            "north": {"confidence": "medium", "source": "plan",
+                      "note": "From the plan's north arrow. Checklist {check:north}."},
             "location": {"confidence": "medium", "source": "assumed", "note": "City-level coordinates (Zurich)."},
         }),
         "rooms": room_json,
@@ -156,7 +160,8 @@ def build(force=False):
     }
     if apartment["underlay"] is None:
         del apartment["underlay"]
-    apartment["checks"] = build_checklist(apartment)
+    apartment["checks"], check_keys = build_checklist(apartment)
+    apartment = resolve_check_refs(apartment, check_keys)
 
     target = REPO / "data" / "apartment.json"
     if target.exists() and not force and '"measured"' in target.read_text(encoding="utf-8"):
@@ -208,7 +213,7 @@ def _wall_prov(w, K):
     if w.kind == "glazing":
         return prov("medium", "plan", "Glazing line from the plan; frame depth 12 cm assumed.",
                     {"thickness": {"confidence": "low", "source": "assumed", "note": "Window frame depth not in plan."}})
-    return prov("high", "plan", f"{t:.0f} cm wall from the plan's wall poche. Checklist M28 (reveal depth).")
+    return prov("high", "plan", f"{t:.0f} cm wall from the plan's wall poche. Checklist {{check:wall-thickness}} (reveal depth).")
 
 
 def _opening(o, w, K, plan, used, bal_centers):
@@ -236,17 +241,23 @@ def _opening(o, w, K, plan, used, bal_centers):
         else:
             did = _unique("d-" + "-".join(sorted(rooms)), used)
         height = FRENCH_HEIGHT if balcony else ENTRANCE_HEIGHT if entrance else DOOR_HEIGHT
-        style = "glazed" if balcony or did == "d-entree-zimmer-15-9" else "solid"
+        style = "glazed" if balcony else USER_DOOR_STYLES.get(did, "solid")
         entry = {"id": did, **entry, "height": height, "sill": 0,
                  "door": {"hinge": hinge, "opensTo": opens, "leaves": 1, "leafWidth": round(arc.radius * K * 2) / 2,
                           "style": style, **({"isEntrance": True} if entrance else {})}}
+        check = "{check:balcony-doors}" if balcony else f"{{check:door-width:{did}}}"
+        height_check = "{check:balcony-doors}" if balcony else "{check:entrance-height}" if entrance else "{check:door-height}"
         fields = {"height": {"confidence": "low", "source": "photo",
-                             "note": "Door height not in plan; estimated from the photos."}}
-        if style == "glazed" and not balcony:
-            fields["door.style"] = {"confidence": "medium", "source": "photo", "note": "Glass panel visible in IMG_4514."}
+                             "note": f"Door height not in plan; estimated from the photos. Checklist {height_check}."}}
+        if did in USER_DOOR_STYLES:
+            kind = "Glass door" if style == "glazed" else "Solid door"
+            fields["door.style"] = {"confidence": "high", "source": "user", "note": f"{kind} (you)."}
+        elif not balcony and not entrance:
+            fields["door.style"] = {"confidence": "medium", "source": "assumed",
+                                    "note": "Assumed solid like the other room doors."}
         entry["provenance"] = prov("high" if not balcony else "medium", "plan",
                                    f"Opening between the wall reveals from the plan; leaf {arc.radius * K:.0f} cm and "
-                                   "swing from the door arc.", fields)
+                                   f"swing from the door arc. Checklist {check}.", fields)
     else:
         room = w.left or w.right
         n_win = used.get(f"#win-{room}", 0) + 1
@@ -257,14 +268,20 @@ def _opening(o, w, K, plan, used, bal_centers):
                "operation": "fixed" if fixed else "casement"}
         if not fixed:
             win["opensTo"] = "left" if w.left else "right"
-        win["railing"] = {"height": 100}
+        win["railing"] = dict(RAILING)
+        bars = (f"Vertical flat bars {RAILING['barWidth']:.0f} x {RAILING['barThickness']:.0f} cm about every "
+                f"{RAILING['barSpacing']:.0f} cm, same style as the balcony railings (you); bar size and spacing "
+                "assumed. Checklist {check:railing-bars}.")
         entry = {"id": wid, **entry, "height": FRENCH_HEIGHT, "sill": 0, "window": win,
                  "provenance": prov("medium", "plan", "French window (floor to almost ceiling) as drawn; "
                                     f"{win['sashes']} sash(es) from the plan.", {
                                         "height": {"confidence": "low", "source": "photo",
-                                                   "note": "Window height estimated from IMG_4508. Checklist M19."},
+                                                   "note": "Window height estimated from IMG_4508. "
+                                                           "Checklist {check:window-height}."},
                                         "window.railing.height": {"confidence": "low", "source": "photo",
-                                                                  "note": "Juliet railing outside. Checklist M20."}})}
+                                                                  "note": "Juliet railing outside; height estimated "
+                                                                          "from IMG_4508. Checklist {check:railing-height}."},
+                                        "window.railing.bar*": {"confidence": "low", "source": "assumed", "note": bars}})}
     return entry
 
 

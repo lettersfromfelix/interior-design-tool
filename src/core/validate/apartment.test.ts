@@ -34,6 +34,71 @@ describe("data/apartment.json", () => {
     expect(ap.checks?.length).toBeGreaterThanOrEqual(30);
   });
 
+  it("keeps the door styles you confirmed", () => {
+    const style = (id: string) => res.apartment!.openings.find((o) => o.id === id)?.door?.style;
+    expect(style("d-entree-living")).toBe("glazed");
+    expect(style("d-entree-zimmer-15-9")).toBe("solid");
+    expect(style("d-living-zimmer-15-9")).toBe("solid");
+  });
+
+  it("has kitchen wall cabinets level with the tall units", () => {
+    const parts = res.apartment!.fixtures.find((f) => f.id === "kitchen")!.parts;
+    const box = (name: string) => {
+      const p = parts.find((x) => x.name === name);
+      if (p?.shape !== "box") throw new Error(`kitchen part "${name}" missing`);
+      return p;
+    };
+    const top = (name: string) => box(name).position.y + box(name).size.y / 2;
+    expect(top("wall cabinets")).toBeCloseTo(top("tall unit 42"), 5);
+    expect(box("wall cabinets").size.x).toBeCloseTo(box("base cabinets").size.x, 5);
+    // overhead: dashed in the plan, so the worktop, sink and hob below stay visible
+    expect(box("wall cabinets").plan).toBe("dashed");
+  });
+
+  it("runs the balcony railings along the open edge only, leaving the balcony doors clear", () => {
+    const ap = res.apartment!;
+    const walls = new Map(ap.walls.map((w) => [w.id, w]));
+    const railings = ap.fixtures.filter((f) => f.kind === "railing");
+    expect(railings).toHaveLength(2);
+    for (const f of railings) {
+      const rail = f.parts.find((p) => p.name === "top rail");
+      if (rail?.shape !== "lathe") throw new Error(`${f.id}: top rail missing`);
+      const start = rail.rotation?.y ?? 0;
+      const sweep = rail.arc ?? 360;
+      expect(sweep, f.id).toBeLessThan(300);
+      const covered = (deg: number) => (((deg - start) % 360) + 360) % 360 <= sweep;
+      const balcony = f.id.replace(/-railing$/, "");
+      const doors = ap.openings.filter((o) => o.id.endsWith(balcony));
+      expect(doors, f.id).toHaveLength(2);
+      for (const o of doors) {
+        const w = walls.get(o.wall)!;
+        const len = Math.hypot(w.end[0] - w.start[0], w.end[1] - w.start[1]);
+        const t = o.centerFromStart / len;
+        const x = w.start[0] + (w.end[0] - w.start[0]) * t - f.position[0];
+        const z = w.start[1] + (w.end[1] - w.start[1]) * t - f.position[1];
+        expect(covered((Math.atan2(z, x) * 180) / Math.PI), `${o.id} is behind the railing`).toBe(false);
+      }
+    }
+  });
+
+  it("only references existing checklist items in provenance notes", () => {
+    const ids = new Set((res.apartment!.checks ?? []).map((c) => c.id));
+    const notes: string[] = [];
+    const walk = (v: unknown): void => {
+      if (Array.isArray(v)) v.forEach(walk);
+      else if (v && typeof v === "object") {
+        for (const [k, x] of Object.entries(v)) {
+          if (k === "note" && typeof x === "string") notes.push(x);
+          else walk(x);
+        }
+      }
+    };
+    walk(res.apartment);
+    const refs = notes.flatMap((n) => n.match(/\bM\d{2}\b/g) ?? []);
+    expect(refs.length).toBeGreaterThan(20);
+    expect(refs.filter((r) => !ids.has(r))).toEqual([]);
+  });
+
   it("flags every value that is not read directly from the plan", () => {
     const ap = res.apartment!;
     for (const o of ap.openings) {

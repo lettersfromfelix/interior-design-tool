@@ -31,7 +31,7 @@
     { "id": "metal.stainless", "name": "Stainless steel", "color": "#B8BBBE", "roughness": 0.35, "metalness": 0.85 },
     { "id": "metal.black-matte", "name": "Black, matte", "color": "#1E1E1E", "roughness": 0.5, "metalness": 0.6 },
     { "id": "metal.brass", "name": "Brass", "color": "#B8954F", "roughness": 0.35, "metalness": 0.9 },
-    { "id": "metal.railing", "name": "Railing (dark metal bars)", "color": "#2A2A2A", "roughness": 0.5, "metalness": 0.6, "opacity": 0.4 },
+    { "id": "metal.railing", "name": "Railing, dark metal flat bars", "color": "#2A2A2A", "roughness": 0.5, "metalness": 0.6 },
 
     { "id": "wood.oak-natural", "name": "Oak, natural", "color": "#C8A27A", "roughness": 0.6,
       "pattern": { "type": "wood-grain", "color2": "#A9825B", "scale": 40, "strength": 0.5 } },

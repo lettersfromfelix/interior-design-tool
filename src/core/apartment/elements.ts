@@ -76,7 +76,8 @@ export function elementFacts(ap: ApartmentFile, ref: ElementRef): [string, strin
       }
       if (o.window) {
         facts.push(["Sashes", `${o.window.sashes} (${o.window.operation})`]);
-        if (o.window.railing) facts.push(["Railing", cm(o.window.railing.height)]);
+        const r = o.window.railing;
+        if (r) facts.push(["Railing", `${cm(r.height)}, flat bars ${r.barWidth} × ${r.barThickness} cm every ${r.barSpacing} cm`]);
       }
       return facts;
     }
@@ -105,19 +106,28 @@ export interface UncertainValue {
   note?: string;
 }
 
-/** Every element and field whose provenance is not "high" — the values to verify with a tape measure. */
+/** Every element, part and field whose provenance is not "high" — the values to verify with a tape measure. */
 export function uncertainValues(ap: ApartmentFile): UncertainValue[] {
   const out: UncertainValue[] = [];
-  const add = (id: string, title: string, p: Provenance) => {
-    if (p.confidence !== "high") out.push({ id, title, confidence: p.confidence, source: p.source, note: p.note });
+  /** `prefix` names a fixture part; its own provenance is reported as field `prefix`, its fields as `prefix.field`. */
+  const add = (id: string, title: string, p: Provenance, prefix?: string) => {
+    const path = (field?: string) => (prefix && field ? `${prefix}.${field}` : (prefix ?? field));
+    if (p.confidence !== "high") out.push({ id, title, field: path(), confidence: p.confidence, source: p.source, note: p.note });
     for (const [field, f] of Object.entries(p.fields ?? {})) {
-      if (f.confidence !== "high") out.push({ id, title, field, confidence: f.confidence, source: f.source, note: f.note });
+      if (f.confidence !== "high") {
+        out.push({ id, title, field: path(field), confidence: f.confidence, source: f.source, note: f.note });
+      }
     }
   };
   for (const r of ap.rooms) add(r.id, r.name, r.provenance);
   for (const w of ap.walls) add(w.id, elementTitle({ kind: "wall", element: w }), w.provenance);
   for (const o of ap.openings) add(o.id, elementTitle({ kind: "opening", element: o }), o.provenance);
-  for (const f of ap.fixtures) add(f.id, f.name, f.provenance);
+  for (const f of ap.fixtures) {
+    add(f.id, f.name, f.provenance);
+    f.parts.forEach((part, i) => {
+      if (part.provenance) add(f.id, f.name, part.provenance, part.name ?? `parts[${i}]`);
+    });
+  }
   const rank = { low: 0, medium: 1 };
   return out.sort((a, b) => rank[a.confidence] - rank[b.confidence]);
 }

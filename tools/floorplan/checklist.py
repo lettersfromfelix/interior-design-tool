@@ -3,12 +3,47 @@
 Every check has a plan value (what the model currently uses) and, where it makes sense, a
 dimension line (from/to, model cm) so the app can show exactly what to measure.
 When you measure, put the value into `measured` and tell GHCP, who updates the geometry.
+
+Provenance notes refer to checks as "{check:<key>}"; resolve_check_refs() replaces these with the ids, so the
+notes can't point to the wrong item when checks are added or renumbered.
 """
 from __future__ import annotations
 
 import math
+import re
 
 Y_MEAS = 100.0  # horizontal measurements are drawn 1 m above the floor
+CHECK_REF = re.compile(r"\{check:([a-z0-9:-]+)\}")
+
+
+def resolve_check_refs(obj, keys):
+    """Replace "{check:<key>}" in every string of `obj` with the check id; unknown keys are an error."""
+    if isinstance(obj, dict):
+        return {k: resolve_check_refs(v, keys) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [resolve_check_refs(v, keys) for v in obj]
+    if isinstance(obj, str):
+        def repl(m):
+            if m.group(1) not in keys:
+                raise KeyError(f"unknown checklist reference {m.group(0)}")
+            return keys[m.group(1)]
+        return CHECK_REF.sub(repl, obj)
+    return obj
+
+
+def _railing(f):
+    """Geometry of a balcony railing fixture (angles in degrees, clockwise on the plan from +x)."""
+    top = next(p for p in f["parts"] if p["name"] == "top rail")
+    bars = next(p for p in f["parts"] if p["name"] == "bars")
+    prof = top["profile"]
+    return {"center": tuple(f["position"]), "rc": (prof[0][0] + prof[1][0]) / 2, "inner": prof[0][0],
+            "start": top["rotation"]["y"], "sweep": top["arc"], "height": top["position"]["y"] + prof[2][1],
+            "first": bars["rotation"]["y"], "step": bars["repeatAround"]["step"]}
+
+
+def _polar(c, r, deg):
+    a = math.radians(deg)
+    return (c[0] + r * math.cos(a), c[1] + r * math.sin(a))
 
 
 def _w(ap, wid):
@@ -89,9 +124,10 @@ def _opening_points(ap, oid):
 
 
 def build_checklist(ap):
-    checks = []
+    """Returns (checks, keys); keys maps the names used in "{check:<key>}" references to check ids."""
+    checks, keys = [], {}
 
-    def add(cid, title, how, value, priority="must", line=None, refs=(), unit="cm"):
+    def add(cid, title, how, value, priority="must", line=None, refs=(), unit="cm", key=None):
         c = {"id": cid, "title": title, "how": how, "priority": priority, "unit": unit,
              "planValue": round(value, 1)}
         if line:
@@ -99,6 +135,8 @@ def build_checklist(ap):
         if refs:
             c["refs"] = list(refs)
         checks.append(c)
+        if key:
+            keys[key] = cid
 
     def dist(a, b):
         return math.dist(a, b)
@@ -107,7 +145,7 @@ def build_checklist(ap):
     add("M01", "Ceiling height",
         "Floor to ceiling in the living room; repeat in Zimmer 15.9 and the Entrée to confirm it is the same everywhere.",
         ap["ceilingHeight"], line=([round(living_c[0], 1), 0, round(living_c[1], 1)],
-                                   [round(living_c[0], 1), ap["ceilingHeight"], round(living_c[1], 1)]))
+                                   [round(living_c[0], 1), ap["ceilingHeight"], round(living_c[1], 1)]), key="ceiling")
 
     part = _find_wall(ap, "interior", ["entree", "zimmer-15-9"])
     east = _find_wall(ap, "exterior", ["zimmer-15-9"])
@@ -147,7 +185,7 @@ def build_checklist(ap):
     cpos = tuple(col["position"])
     a = _project(cpos, pk, dk)
     add("M07", "Column - distance to the kitchen wall", "From the kitchen wall (living side) to the centre of the column.",
-        dist(a, cpos), line=_seg(a, cpos), refs=["column"])
+        dist(a, cpos), line=_seg(a, cpos), refs=["column"], key="column-wall")
     best = None
     for w in ap["walls"]:
         if w["kind"] != "glazing" or "living" not in w["sides"].values():
@@ -157,8 +195,9 @@ def build_checklist(ap):
         if best is None or dist(q, cpos) < best[0]:
             best = (dist(q, cpos), q, w["id"])
     add("M08", "Column - distance to the window", "From the centre of the column to the glass/frame of the nearest window.",
-        best[0], line=_seg(cpos, best[1]), refs=["column", best[2]])
-    add("M09", "Column - diameter", "Diameter of the round column.", col["parts"][0]["radius"] * 2, refs=["column"])
+        best[0], line=_seg(cpos, best[1]), refs=["column", best[2]], key="column-window")
+    add("M09", "Column - diameter", "Diameter of the round column.", col["parts"][0]["radius"] * 2, refs=["column"],
+        key="column-diameter")
 
     ewest = next(w for w in ap["walls"] if w["kind"] == "party" and "entree" in w["sides"].values()
                  and abs(_dir(w)[0]) < 0.1 and w["start"][0] < 700)
@@ -193,52 +232,77 @@ def build_checklist(ap):
         o, w, a, b = _opening_points(ap, oid)
         add(cid, f"{title} - opening width",
             "Clear width between the wall reveals (left and right of the door frame), and check the swing direction.",
-            o["width"], line=_seg(a, b, 150), refs=[oid])
+            o["width"], line=_seg(a, b, 150), refs=[oid], key=f"door-width:{oid}")
     o, w, a, b = _opening_points(ap, "d-entree-living")
     add("M19", "Interior doors - opening height", "Floor to the underside of the door frame (all interior doors).",
         o["height"], line=([round(a[0], 1), 0, round(a[1], 1)], [round(a[0], 1), o["height"], round(a[1], 1)]),
-        refs=[x["id"] for x in ap["openings"] if x["kind"] == "door" and x["height"] == o["height"]])
+        refs=[x["id"] for x in ap["openings"] if x["kind"] == "door" and x["height"] == o["height"]], key="door-height")
     o, w, a, b = _opening_points(ap, "d-entrance")
     add("M20", "Entrance door - opening height", "Floor to the underside of the door frame.", o["height"],
-        line=([round(a[0], 1), 0, round(a[1], 1)], [round(a[0], 1), o["height"], round(a[1], 1)]), refs=["d-entrance"])
+        line=([round(a[0], 1), 0, round(a[1], 1)], [round(a[0], 1), o["height"], round(a[1], 1)]), refs=["d-entrance"],
+        key="entrance-height")
 
     wins = [x for x in ap["openings"] if x["kind"] == "window" and x["window"]["operation"] != "fixed"]
     two = next(x for x in wins if x["window"]["sashes"] == 2)
     o, w, a, b = _opening_points(ap, two["id"])
     add("M21", "French window (2 sashes) - width", "Glass/frame width of one double French window unit (between the dark posts).",
-        o["width"], line=_seg(a, b, 150), refs=[two["id"]])
+        o["width"], line=_seg(a, b, 150), refs=[two["id"]], key="window-width")
     add("M22", "French windows - opening height", "Floor to the top of the window frame; confirm there is no sill.",
         o["height"], line=([round(a[0], 1), 0, round(a[1], 1)], [round(a[0], 1), o["height"], round(a[1], 1)]),
-        refs=[x["id"] for x in wins])
-    add("M23", "Juliet railing - height", "Floor to the top of the railing outside the French windows.", 100.0,
-        priority="nice", refs=[x["id"] for x in wins])
+        refs=[x["id"] for x in wins], key="window-height")
+    juliet = [x for x in ap["openings"] if x["kind"] == "window" and x["window"].get("railing")]
+    rails = [f for f in ap["fixtures"] if f["kind"] == "railing"]
+    rail_refs = [x["id"] for x in juliet] + [f["id"] for f in rails]
+    br = _railing(rails[0])
+    mid = _polar(br["center"], br["rc"], br["start"] + br["sweep"] / 2)
+    add("M23", "Railings - height",
+        "Floor to the top of the railing, outside the French windows and on both balconies.",
+        juliet[0]["window"]["railing"]["height"], priority="nice", refs=rail_refs, key="railing-height",
+        line=([round(mid[0], 1), 0, round(mid[1], 1)], [round(mid[0], 1), round(br["height"], 1), round(mid[1], 1)]))
     bd = next(x for x in ap["openings"] if x["kind"] == "door" and x["door"]["style"] == "glazed" and "balcony" in x["id"])
     o, w, a, b = _opening_points(ap, bd["id"])
     add("M24", "Balcony doors - width and height", "Clear width between the reveals; height floor to the top of the frame.",
-        o["width"], line=_seg(a, b, 150), refs=[x["id"] for x in ap["openings"] if "balcony" in x["id"]])
-    bal = next(r for r in ap["rooms"] if r["kind"] == "balcony")
-    xs = [p[0] for p in bal["outline"]]
-    add("M25", "Balcony - inner diameter", "Across the round balcony, railing to railing (inside).",
-        max(xs) - min(xs), priority="nice", refs=[r["id"] for r in ap["rooms"] if r["kind"] == "balcony"])
+        o["width"], line=_seg(a, b, 150), refs=[x["id"] for x in ap["openings"] if "balcony" in x["id"]],
+        key="balcony-doors")
+    # inner diameter parallel to the façade: perpendicular to the axis of the open side (towards the doors)
+    axis = br["start"] - (360 - br["sweep"]) / 2
+    a, b = _polar(br["center"], br["inner"], axis + 90), _polar(br["center"], br["inner"], axis - 90)
+    add("M25", "Balcony - inner diameter",
+        "Across the round balcony, from the inside of the railing to the inside of the railing, parallel to the façade.",
+        dist(a, b), priority="nice", line=_seg(a, b, 50),
+        refs=[r["id"] for r in ap["rooms"] if r["kind"] == "balcony"] + [f["id"] for f in rails], key="balcony-diameter")
 
     k = next(f for f in ap["fixtures"] if f["id"] == "kitchen")
     top_part = next(p for p in k["parts"] if p["name"] == "worktop")
     tall = next(p for p in k["parts"] if p["name"] == "tall unit 42")
     add("M26", "Kitchen - worktop height", "Floor to the top of the worktop.",
-        top_part["position"]["y"] + top_part["size"]["y"] / 2, refs=["kitchen"])
+        top_part["position"]["y"] + top_part["size"]["y"] / 2, refs=["kitchen"], key="kitchen-worktop-height")
     add("M27", "Kitchen - worktop depth and run length",
         "Depth: wall to the front edge of the worktop (sink area). Length: tall units + counter, wall-side.",
-        top_part["size"]["z"], refs=["kitchen"])
+        top_part["size"]["z"], refs=["kitchen"], key="kitchen-worktop-depth")
     add("M28", "Kitchen - tall units height and widths", "Height of the tall units (floor to top) and the width of each.",
-        tall["size"]["y"], refs=["kitchen"])
+        tall["size"]["y"], refs=["kitchen"], key="kitchen-tall-units")
     ward_box = next(p for p in ward["parts"] if p["name"] == "carcass")
     add("M29", "Built-in wardrobe - width, depth, height", "Outer size of the built-in wardrobe at the end of the Entrée.",
-        ward_box["size"]["x"], refs=["built-in-wardrobe"])
+        ward_box["size"]["x"], refs=["built-in-wardrobe"], key="wardrobe")
     add("M30", "Wall thickness at door reveals",
         "Reveal depth at an interior door (expected 18 cm) and at a balcony door (outer wall).", part["thickness"],
-        priority="nice", refs=[part["id"]])
+        priority="nice", refs=[part["id"]], key="wall-thickness")
     add("M31", "North direction", "Optional: compass bearing of the kitchen wall direction (phone compass).",
-        ap["north"]["planUpBearing"] + 90.0, priority="nice", unit="deg")
+        ap["north"]["planUpBearing"] + 90.0, priority="nice", unit="deg", key="north")
     add("M32", "Bathroom fixtures", "Optional: positions and sizes of shower, washbasin, WC and washer/dryer.",
-        0.0, priority="nice", refs=[f["id"] for f in ap["fixtures"] if f["id"].startswith("bath-")])
-    return checks
+        0.0, priority="nice", refs=[f["id"] for f in ap["fixtures"] if f["id"].startswith("bath-")], key="bathroom")
+
+    b0 = _polar(br["center"], br["rc"], br["first"])
+    b1 = _polar(br["center"], br["rc"], br["first"] + br["step"])
+    add("M33", "Railings - bar spacing and bar size",
+        "Centre-to-centre distance between two neighbouring vertical bars, and the size of one flat bar "
+        "(width × thickness). Check a French window and a balcony; are they the same?",
+        juliet[0]["window"]["railing"]["barSpacing"], priority="nice", line=_seg(b0, b1, 50), refs=rail_refs,
+        key="railing-bars")
+    wall_cab = next(p for p in k["parts"] if p["name"] == "wall cabinets")
+    add("M34", "Kitchen - wall cabinets: underside height and depth",
+        "Floor to the underside of the wall cabinets, and their depth from the wall to the front of the doors. "
+        "Also confirm that their top is level with the top of the tall units.",
+        wall_cab["position"]["y"] - wall_cab["size"]["y"] / 2, refs=["kitchen"], key="kitchen-wall-cabinets")
+    return checks, keys

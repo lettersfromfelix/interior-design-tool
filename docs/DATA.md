@@ -47,9 +47,12 @@ Values that are not certain carry a `provenance` object so they can be checked w
 
 | Field | Values |
 |---|---|
-| `confidence` | `high`: read from the plan's vector geometry, or measured. `medium`: interpreted from plan symbols. `low`: estimated. |
+| `confidence` | `high`: read from the plan's vector geometry, given by you, or measured. `medium`: interpreted from plan symbols. `low`: estimated. |
 | `source` | `plan`, `photo`, `assumed`, `user`, `measured` |
-| `fields` | Overrides for single properties (dot paths), e.g. `height` or `door.leafWidth` |
+| `fields` | Overrides for single properties (dot paths), e.g. `height` or `door.leafWidth`; on a part, e.g. `size.y` |
+
+Fixture **parts** can carry their own `provenance` too. The Verify panel lists everything that is not `high`; a part
+appears as `<part name>` and its fields as `<part name>.<field>`, e.g. `wall cabinets.size.z`.
 
 ## `data/apartment.json`
 
@@ -105,12 +108,18 @@ Values that are not certain carry a `provenance` object so they can be checked w
            opensTo: "left" | "right",     // wall side the leaf swings into
            leaves: 1 | 2, leafWidth?, style: "solid" | "glazed", isEntrance? },
   window?: { sashes: number, operation: "casement" | "tilt-turn" | "fixed",
-             opensTo?: "left" | "right", railing?: { height } },
+             opensTo?: "left" | "right",
+             railing?: { height, barSpacing, barWidth, barThickness } },   // Juliet railing, see below
   provenance }
 ```
 
 Validation checks that every opening fits into its wall, doesn't overlap another opening, and that
 `sill + height` stays below the wall height.
+
+`railing` is a Juliet railing outside the window: vertical flat bars (`barWidth` across the railing line ×
+`barThickness` along it, `barSpacing` centre to centre) between a top rail at `height` and a bottom rail whose top
+edge is 10 cm above the floor. The rails use the same flat-bar section, lying flat. The balcony railings are fixtures
+in the same style (see below).
 
 ### Fixtures (kitchen, built-ins, sanitary, column, railings)
 
@@ -132,16 +141,26 @@ an optional `rotation` (`{ x?, y?, z? }` in degrees, y clockwise from above), a 
 optionally:
 
 - `mirror: ["x"]`, `["z"]` or `["x", "z"]`, which adds mirrored copies (e.g. four table legs from one);
-- `repeat: { count, step: {x, y, z} }`, which adds evenly spaced copies.
+- `repeat: { count, step: {x, y, z} }`, which adds evenly spaced copies;
+- `repeatAround: { count, step }`, which adds copies rotated by a further `step` degrees each (clockwise from
+  above) around the vertical axis through the item's origin (e.g. the bars of a round railing, chairs around a
+  round table);
+- `plan: "solid" | "dashed"`, which sets how the part shows in the 2D plan. `solid` (the default) shows it as seen
+  from above. `dashed` shows only a dashed outline of its footprint, the drawing convention for things overhead
+  such as wall cabinets, so it doesn't hide what's below. In 3D it looks the same either way.
 
 | `shape` | Fields |
 |---|---|
 | `box` | `size: {x, y, z}`, `cornerRadius?` |
 | `cylinder` | `radius`, `radiusTop?` (cone / taper), `height` |
 | `sphere` | `radius`, `scale?: {x, y, z}` |
-| `torus` | `radius`, `tube`, `arc?` (degrees). Lies flat. |
+| `torus` | `radius`, `tube`, `arc?`. Lies flat. |
 | `extrusion` | `points: [x, z][]` (footprint), `height` (extruded upwards) |
-| `lathe` | `profile: [radius, y][]`, revolved around the vertical axis |
+| `lathe` | `profile: [radius, y][]`, revolved around the vertical axis, `arc?` |
+
+`arc` is a partial ring in degrees (default 360). It starts at the part's local +x axis and runs clockwise seen from
+above, so `rotation.y` sets where it starts. The balcony railings use this: a lathe top and bottom rail along the
+open edge of the balcony, and one bar part with `repeatAround`.
 
 ### Checks (tape-measure checklist)
 
@@ -165,6 +184,12 @@ optionally:
 4. Measured values always win. If a value deviates more than 3 cm from the plan, review the neighbouring values
    for a systematic offset. Room areas may then drift from the printed areas; that is reported as a warning only.
 5. Run `npm run validate`, `npm test` and `npm run checklist`, and check the result in the app with the plan underlay.
+
+Railing bars: for the Juliet railings, set `barSpacing` / `barWidth` / `barThickness` in each window's `railing`. For a
+balcony railing, change the `bars` part (it is the first bar; `repeatAround` adds the others). Its `size` is the bar
+section, `repeatAround.count` = round(arc length at the bar radius r ÷ spacing) and `repeatAround.step` = the rails'
+`arc` ÷ `count`. The first bar's angle is a = the rails' `rotation.y` + `step` / 2. Set the part's `rotation.y` = a
+and its `position` x / z = r·cos a / r·sin a.
 
 `tools/floorplan/build_apartment.py` regenerates the file from the PDF, but it refuses to overwrite measured data
 without `--force`. After measuring, edit `data/apartment.json` directly.

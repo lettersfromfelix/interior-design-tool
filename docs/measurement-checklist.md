@@ -41,14 +41,16 @@ Measure clear dimensions, finished wall surface to finished wall surface, at abo
 | **M27** | Kitchen - worktop depth and run length | Depth: wall to the front edge of the worktop (sink area). Length: tall units + counter, wall-side. | 72.5 cm |  |
 | **M28** | Kitchen - tall units height and widths | Height of the tall units (floor to top) and the width of each. | 240.0 cm |  |
 | **M29** | Built-in wardrobe - width, depth, height | Outer size of the built-in wardrobe at the end of the Entrée. | 140.0 cm |  |
+| **M34** | Kitchen - wall cabinets: underside height and depth | Floor to the underside of the wall cabinets, and their depth from the wall to the front of the doors. Also confirm that their top is level with the top of the tall units. | 145.0 cm |  |
 
 ## Nice to have
 
 | # | What | How | Model now | Measured |
 |---|---|---|---|---|
 | **M12** | Bad - clear length | From the wall to the living room to the wall behind washbasin/WC. | 206.1 cm |  |
-| **M23** | Juliet railing - height | Floor to the top of the railing outside the French windows. | 100.0 cm |  |
-| **M25** | Balcony - inner diameter | Across the round balcony, railing to railing (inside). | 213.5 cm |  |
+| **M23** | Railings - height | Floor to the top of the railing, outside the French windows and on both balconies. | 100.0 cm |  |
+| **M25** | Balcony - inner diameter | Across the round balcony, from the inside of the railing to the inside of the railing, parallel to the façade. | 201.6 cm |  |
 | **M30** | Wall thickness at door reveals | Reveal depth at an interior door (expected 18 cm) and at a balcony door (outer wall). | 18.0 cm |  |
 | **M31** | North direction | Optional: compass bearing of the kitchen wall direction (phone compass). | 139° |  |
 | **M32** | Bathroom fixtures | Optional: positions and sizes of shower, washbasin, WC and washer/dryer. | – |  |
+| **M33** | Railings - bar spacing and bar size | Centre-to-centre distance between two neighbouring vertical bars, and the size of one flat bar (width × thickness). Check a French window and a balcony; are they the same? | 11.0 cm |  |

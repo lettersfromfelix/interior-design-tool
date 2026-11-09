@@ -188,23 +188,31 @@ export function buildWindow(o: Opening, c: OpeningContext): Group {
   symbol.add(new LineSegments(lineGeometry(glassPts), c.style.glassLine));
   g.add(setLayer(symbol, Layer.ONLY_2D));
 
-  if (w.railing) g.add(buildRailing(a, b, w.railing.height, t, c));
+  if (w.railing) g.add(buildRailing(a, b, w.railing, t, c));
   return g;
 }
 
-/** Juliet railing on the outside face of the wall. */
-function buildRailing(a: number, b: number, height: number, t: number, c: OpeningContext): Group {
+type Railing = NonNullable<NonNullable<Opening["window"]>["railing"]>;
+
+/** Top edge of a railing's bottom rail above the floor (the balcony railings in data/apartment.json use the same). */
+const BOTTOM_RAIL = 10;
+
+/** Juliet railing on the outside face of the wall: vertical flat bars between a top and a bottom rail. */
+function buildRailing(a: number, b: number, r: Railing, t: number, c: OpeningContext): Group {
   const mat = c.mats.get(c.defaults.railingMaterial);
   const so = c.outside === "right" ? 1 : -1;
-  const z0 = Math.min(so * (t / 2 + 3), so * (t / 2 + 6));
-  const z1 = Math.max(so * (t / 2 + 3), so * (t / 2 + 6));
+  const inner = so * (t / 2 + 2);
+  const outer = so * (t / 2 + 2 + r.barWidth);
+  const z0 = Math.min(inner, outer);
+  const z1 = Math.max(inner, outer);
+  const th = r.barThickness;
   const g = new Group();
-  g.add(box(a, b, height - 4, height, z0, z1, mat), box(a, b, 8, 11, z0, z1, mat));
-  const count = Math.max(1, Math.floor((b - a) / 11));
+  g.add(box(a, b, r.height - th, r.height, z0, z1, mat), box(a, b, BOTTOM_RAIL - th, BOTTOM_RAIL, z0, z1, mat));
+  const count = Math.max(1, Math.round((b - a) / r.barSpacing));
   const step = (b - a) / count;
   for (let i = 0; i < count; i++) {
     const x = a + (i + 0.5) * step;
-    g.add(box(x - 0.8, x + 0.8, 11, height - 4, (z0 + z1) / 2 - 0.8, (z0 + z1) / 2 + 0.8, mat));
+    g.add(box(x - th / 2, x + th / 2, BOTTOM_RAIL, r.height - th, z0, z1, mat));
   }
   return g;
 }

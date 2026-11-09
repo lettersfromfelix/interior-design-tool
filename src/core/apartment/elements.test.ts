@@ -32,6 +32,15 @@ describe("apartment element helpers", () => {
     expect(groups.reduce((n, g) => n + g.items.length, 0)).toBe(list.length);
   });
 
+  it("includes the provenance of fixture parts", () => {
+    const list = uncertainValues(ap);
+    expect(list).toContainEqual(expect.objectContaining({ id: "kitchen", field: "wall cabinets", confidence: "medium" }));
+    expect(list).toContainEqual(expect.objectContaining({ id: "kitchen", field: "wall cabinets.size.z", confidence: "low" }));
+    expect(list).toContainEqual(expect.objectContaining({ id: "kitchen", field: "wall cabinets.size.y", confidence: "low" }));
+    expect(list).toContainEqual(expect.objectContaining({ id: "kitchen", field: "tall unit 42.size.y" }));
+    expect(list).toContainEqual(expect.objectContaining({ id: "balcony-se-railing", field: "bars" }));
+  });
+
   it("finds the checks that refer to an element", () => {
     const withRefs = (ap.checks ?? []).find((c) => c.refs?.length);
     expect(withRefs).toBeDefined();

@@ -54,6 +54,18 @@ const PartBase = z.strictObject({
   mirror: z.array(z.enum(["x", "z"])).max(2).optional(),
   /** Add `count - 1` further copies, each offset by `step`. */
   repeat: z.strictObject({ count: z.number().int().min(1).max(200), step: Vec3 }).optional(),
+  /**
+   * Add `count - 1` further copies, each rotated by a further `step` degrees (clockwise seen from above) around the
+   * vertical axis through the item's origin, e.g. the bars of a round railing or chairs around a round table.
+   */
+  repeatAround: z
+    .strictObject({ count: z.number().int().min(1).max(360), step: z.number().min(-360).max(360) })
+    .optional(),
+  /**
+   * How the part shows in the 2D plan. "solid" (default): as seen from above. "dashed": only as a dashed outline of its
+   * footprint, the drawing convention for things overhead (e.g. wall cabinets), so it doesn't hide what is below it.
+   */
+  plan: z.enum(["solid", "dashed"]).optional(),
   provenance: Provenance.optional(),
 });
 
@@ -73,11 +85,14 @@ export const SpherePart = PartBase.extend({
   radius: PositiveCm,
   scale: Vec3.optional(),
 });
+/** Partial ring or revolution: degrees, starting at the local +x axis and running clockwise seen from above. */
+const Arc = z.number().gt(0).max(360);
+
 export const TorusPart = PartBase.extend({
   shape: z.literal("torus"),
   radius: PositiveCm,
   tube: PositiveCm,
-  arc: z.number().gt(0).max(360).optional(),
+  arc: Arc.optional(),
 });
 export const ExtrusionPart = PartBase.extend({
   shape: z.literal("extrusion"),
@@ -89,6 +104,7 @@ export const LathePart = PartBase.extend({
   shape: z.literal("lathe"),
   /** Profile points [radius, y] (cm, relative to `position`), revolved around the vertical axis. */
   profile: z.array(z.tuple([z.number().min(0), z.number()])).min(2),
+  arc: Arc.optional(),
 });
 
 export const Part = z.discriminatedUnion("shape", [

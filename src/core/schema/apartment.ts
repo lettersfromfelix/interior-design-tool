@@ -73,8 +73,18 @@ export const Opening = z
         sashes: z.number().int().min(1),
         operation: z.enum(["casement", "tilt-turn", "fixed"]),
         opensTo: Side.optional(),
-        /** Juliet railing outside the window. */
-        railing: z.strictObject({ height: PositiveCm }).optional(),
+        /** Juliet railing outside the window: vertical flat bars between a top and a bottom rail. */
+        railing: z
+          .strictObject({
+            /** Floor to the top of the railing. */
+            height: PositiveCm,
+            /** Centre-to-centre distance of the vertical bars. */
+            barSpacing: PositiveCm,
+            /** Flat-bar section: width across the railing line × thickness along it. The rails use the same section, lying flat. */
+            barWidth: PositiveCm,
+            barThickness: PositiveCm,
+          })
+          .optional(),
       })
       .optional(),
     provenance: Provenance,

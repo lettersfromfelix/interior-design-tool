@@ -154,7 +154,8 @@ function buildWall(w: Wall, openings: readonly Opening[], c: WallContext): Group
   let cursor = 0;
   for (const { o, a, b } of placed) {
     if (a > cursor + 0.01) g.add(piece(cursor, a, 0, h, c.mats.poche));
-    if (o.sill > 0.01) g.add(piece(a, b, 0, o.sill, right));
+    // the wall below an opening (sill) is not cut by the plan's section plane: 3D only, so the 2D symbol stays visible
+    if (o.sill > 0.01) g.add(setLayer(piece(a, b, 0, o.sill, right), Layer.ONLY_3D));
     const top = o.sill + o.height;
     if (top < h - 0.01) g.add(setLayer(piece(a, b, top, h, c.mats.poche), Layer.ONLY_3D));
     const ctx: OpeningContext = { wall: w, wallHeight: h, a, outside, defaults: c.ap.defaults, mats: c.mats, style: c.style };

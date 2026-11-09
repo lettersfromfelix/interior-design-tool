@@ -12,6 +12,15 @@ from pdfgeom import W_MEDIUM, path_to_polylines
 
 WING_ANGLE = -13.93  # rotation of the west wing (Zimmer 13.0 / Bad) on the sheet, degrees
 
+# Vertical flat-bar railings: Juliet railings and balconies share the style (you). Height, bar size and spacing are
+# assumptions (low confidence, see the checklist). The engine draws Juliet railings with the same bottom rail.
+RAILING = {"height": 100.0, "barSpacing": 11.0, "barWidth": 4.0, "barThickness": 1.0}
+BOTTOM_RAIL = 10.0  # top edge of the bottom rail above the floor
+
+# Kitchen wall cabinets: above the whole base run, top level with the tall units (you); depth and underside assumed.
+WALL_CABINET_DEPTH = 35.0
+WALL_CABINET_BOTTOM = 145.0  # worktop 90 cm + 55 cm
+
 
 def r1(v):
     return round(v + 0.0, 1)
@@ -39,7 +48,7 @@ class Frame:
         wx, wz = p[0] - self.o[0], p[1] - self.o[1]
         return (wx * self.c + wz * self.s, -wx * self.s + wz * self.c)
 
-    def box(self, name, p_min, p_max, y0, y1, material, provenance=None):
+    def box(self, name, p_min, p_max, y0, y1, material, provenance=None, plan=None):
         """Axis-aligned (in fixture frame) box from two opposite plan corners (cm)."""
         a, b = self.local(p_min), self.local(p_max)
         part = {
@@ -49,6 +58,8 @@ class Frame:
             "size": {"x": r1(abs(a[0] - b[0])), "y": r1(y1 - y0), "z": r1(abs(a[1] - b[1]))},
             "material": material,
         }
+        if plan:
+            part["plan"] = plan
         if provenance:
             part["provenance"] = provenance
         return part
@@ -71,7 +82,9 @@ def kitchen(plan):
     origin = ((lo[0] + hi[0]) / 2, hi[1] - 36.25)  # centre of the 72.5 cm deep footprint
     f = Frame(origin, 180)
     tall_h, base_h, top_t = 240.0, 87.0, 3.0
-    low_h = prov("low", "photo", "Height estimated from IMG_4508 (black side panel almost reaches the ceiling). Checklist M24.")
+    low_h = prov("low", "photo", "Height estimated from IMG_4508 (black side panel almost reaches the ceiling). "
+                 "Checklist {check:kitchen-tall-units}.")
+    run_a, run_b = cm((x_tall2, y_wall)), cm((x_run_end, y_wall))
     parts = [
         f.box("tall unit 42", cm((x_tall0, y_tall_front)), cm((x_tall1, y_wall)), 0, tall_h, "fronts",
               prov("medium", "plan", fields={"size.y": low_h})),
@@ -81,10 +94,22 @@ def kitchen(plan):
         f.box("base cabinets", cm((x_tall2, y_tall_front)), cm((x_run_end, y_wall)), 10, base_h, "fronts"),
         f.box("plinth", cm((x_tall2, y_tall_front + 1.5)), cm((x_run_end, y_wall)), 0, 10, "plinth"),
         f.box("worktop", cm((x_tall2, y_top_deep)), cm((x_step, y_wall)), base_h, base_h + top_t, "worktop",
-              prov("medium", "plan", "72.5 cm deep worktop as drawn (overhang to the living room?). Checklist M23.")),
+              prov("medium", "plan", "72.5 cm deep worktop as drawn (overhang to the living room?). "
+                   "Checklist {check:kitchen-worktop-depth}.")),
         f.box("worktop end", cm((x_step, y_top_shallow)), cm((x_run_end, y_wall)), base_h, base_h + top_t, "worktop"),
         f.box("sink", cm((sink[0], sink[1])), cm((sink[2], sink[3])), base_h + top_t - 0.2, base_h + top_t + 0.4, "steel"),
         f.box("hob", cm((hob[0], hob[1])), cm((hob[2], hob[3])), base_h + top_t - 0.2, base_h + top_t + 0.5, "hob"),
+        # top level with the tall units: both use tall_h. Overhead, so the plan shows it dashed (worktop stays visible).
+        f.box("wall cabinets", (run_a[0], run_a[1] - WALL_CABINET_DEPTH), run_b, WALL_CABINET_BOTTOM, tall_h, "fronts",
+              prov("medium", "user",
+                   "Wall cabinets above the whole base run, top level with the tall units (you); not in the plan.",
+                   fields={
+                       "size.z": prov("low", "assumed", f"Depth {WALL_CABINET_DEPTH:.0f} cm assumed. "
+                                      "Checklist {check:kitchen-wall-cabinets}."),
+                       "size.y": prov("low", "assumed", f"Underside {WALL_CABINET_BOTTOM:.0f} cm above the floor "
+                                      "assumed (the top follows the tall units). Checklist {check:kitchen-wall-cabinets}."),
+                   }),
+              plan="dashed"),
     ]
     return {
         "id": "kitchen",
@@ -104,8 +129,10 @@ def kitchen(plan):
         "provenance": prov(
             "medium", "plan",
             "Footprint exact from the plan: tall units 42 + 62 cm (60 deep), counter run 261 cm "
-            "(214 cm at 72.5 cm depth, 47 cm at 62.5 cm), sink, 4-zone hob. Heights and colours from photo "
-            "IMG_4508 and Swiss standard (worktop 90 cm). Checklist M23-M26.",
+            "(214 cm at 72.5 cm depth, 47 cm at 62.5 cm), sink, 4-zone hob. Wall cabinets above the whole counter "
+            "run, top level with the tall units (you). Heights and colours from photo IMG_4508 and Swiss standard "
+            "(worktop 90 cm). Checklist {check:kitchen-worktop-height}-{check:kitchen-tall-units}, "
+            "{check:kitchen-wall-cabinets}.",
         ),
     }
 
@@ -135,7 +162,8 @@ def built_in_wardrobe(plan, ceiling):
         "provenance": prov(
             "medium", "plan",
             "Footprint exact from the plan: 140 x 64 cm, two ~57.5 cm doors + ~20 cm side compartment. "
-            "Not visible in the photos: height (assumed floor-to-ceiling) and colour are guesses. Checklist M27.",
+            "Not visible in the photos: height (assumed floor-to-ceiling) and colour are guesses. "
+            "Checklist {check:wardrobe}.",
             {"parts.*.size.y": {"confidence": "low", "source": "assumed", "note": "Assumed floor-to-ceiling."}},
         ),
     }
@@ -161,7 +189,8 @@ def column(plan, poche_paths, ceiling):
                 }],
                 "materials": {"body": "paint.white"},
                 "provenance": prov("medium", "plan", f"Round column, diameter {2 * r_cm:.0f} cm from the plan "
-                                   "(drawn outline adds ~3 cm). Checklist M10."),
+                                   "(drawn outline adds ~3 cm). Checklist {check:column-wall}, {check:column-window}, "
+                                   "{check:column-diameter}."),
             }
     raise RuntimeError("column not found")
 
@@ -190,9 +219,10 @@ def bathroom(plan, ceiling):
         })
 
     fixture("bath-washer-dryer", "Washer/dryer stack", "appliance", [656, 657, 658, 659], 0, 170,
-            "body", "paint.white", "WM/TU stack as drawn (about 60 x 57 cm). Checklist M29.")
+            "body", "paint.white", "WM/TU stack as drawn (about 60 x 57 cm). Checklist {check:bathroom}.")
     fixture("bath-shower-tray", "Shower tray", "sanitary", [586, 660] + list(range(489, 586)), 0, 6,
-            "body", "ceramic.white", "Tray about 80 x 100 cm as drawn; shower assumed (not a bathtub). Checklist M29.")
+            "body", "ceramic.white",
+            "Tray about 80 x 100 cm as drawn; shower assumed (not a bathtub). Checklist {check:bathroom}.")
     fixture("bath-washbasin", "Washbasin", "sanitary", [1167] + list(range(1280, 1290)), 70, 86,
             "body", "ceramic.white", "Washbasin as drawn; mounting height assumed 86 cm.")
     fixture("bath-wc", "WC", "sanitary", list(range(1147, 1167)), 0, 42,
@@ -298,38 +328,90 @@ def balconies(plan, rooms_pt, poche: Region, glazing_edges_pt):
             "floorMaterial": "floor.wood-decking",
             "provenance": prov("medium", "plan",
                                f"Round balcony from the railing circle (inner radius {r_in * K:.0f} cm); "
-                               f"floor area {area:.2f} m2 (plan: 6.6 m2 for both balconies). Checklist M22."),
+                               f"floor area {area:.2f} m2 (plan: 6.6 m2 for both balconies). "
+                               "Checklist {check:balcony-diameter}."),
         })
-        # railing: annulus sector outside the building, as an extruded polygon
-        visible = []
-        for k in range(180):
-            a = 2 * math.pi * k / 180
-            p = (c[0] + (r_in + r_out) / 2 * math.cos(a), c[1] + (r_in + r_out) / 2 * math.sin(a))
-            visible.append(not poche.contains(p) and not any(point_in_polygon(p, q) for q in rooms_pt.values())
-                           and not _near_any(p, glazing_edges_pt, 2.0))
-        arcs = _true_runs(visible)
-        cc = plan.to_cm(c)
-        for n_arc, (k0, k1) in enumerate(arcs):
-            angs = [2 * math.pi * k / 180 for k in range(k0, k1 + 1)]
-            outer = [(cc[0] + r_out * K * math.cos(a), cc[1] + r_out * K * math.sin(a)) for a in angs]
-            inner = [(cc[0] + r_in * K * math.cos(a), cc[1] + r_in * K * math.sin(a)) for a in reversed(angs)]
-            poly = outer + inner
-            out_fixtures.append({
-                "id": f"{bid}-railing" + (f"-{n_arc + 1}" if len(arcs) > 1 else ""),
-                "name": "Balcony railing",
-                "kind": "railing",
-                "position": [r1(cc[0]), r1(cc[1])],
-                "rotation": 0,
-                "parts": [{"name": "railing", "shape": "extrusion", "height": 100,
-                           "points": [[r1(x - cc[0]), r1(z - cc[1])] for x, z in poly],
-                           "position": {"x": 0, "y": 0, "z": 0}, "material": "bars"}],
-                "materials": {"bars": "metal.railing"},
-                "collides": True,
-                "provenance": prov("medium", "plan", "Railing ring as drawn; height 100 cm assumed (photo IMG_4509).",
-                                   {"parts.0.height": {"confidence": "low", "source": "photo",
-                                                       "note": "Railing height estimated. Checklist M22."}}),
-            })
+        start, sweep = _ring_extent(plan, bb, c, r_in, r_out)
+        out_fixtures.append(_balcony_railing(bid, plan.to_cm(c), (r_in + r_out) / 2 * K, start, sweep))
     return out_rooms, out_fixtures
+
+
+def _ring_extent(plan, bb, c, r_in, r_out, tol=0.35):
+    """Angular extent of the railing as drawn: the polylines whose vertices all lie on the double ring.
+
+    The plan draws the railing only along the open edge of the balcony, from wall to wall; the largest angular gap
+    is the open side towards the balcony doors. Returns (start, sweep) in degrees, measured from +x and clockwise
+    on the plan (the sheet's y and the model's z point down).
+    """
+    angles = []
+    for _, d in plan.paths(kind="s", width=W_MEDIUM, bbox=bb):
+        for poly in path_to_polylines(d["items"], 8):
+            on_ring = len(poly) >= 2 and all(
+                min(abs(math.dist(p, c) - r_in), abs(math.dist(p, c) - r_out)) < tol for p in poly)
+            if not on_ring:
+                continue
+            for k in range(len(poly) - 1):
+                a, b = poly[k], poly[k + 1]
+                n = max(1, int(math.dist(a, b) / 0.5))
+                for j in range(n + 1):
+                    p = add(a, mul(sub(b, a), j / n))
+                    angles.append(math.degrees(math.atan2(p[1] - c[1], p[0] - c[0])) % 360)
+    if len(angles) < 10:
+        raise RuntimeError("railing ring not found")
+    angles.sort()
+    gap, i = max(((angles[(i + 1) % len(angles)] - angles[i]) % 360, i) for i in range(len(angles)))
+    if gap < 30:
+        raise RuntimeError("railing ring has no open side (balcony doors)")
+    return angles[(i + 1) % len(angles)], 360 - gap
+
+
+def _balcony_railing(bid, center, rc, start, sweep):
+    """Vertical flat-bar railing along an arc (centre radius rc), same style as the Juliet railings."""
+    h, s, w, t = RAILING["height"], RAILING["barSpacing"], RAILING["barWidth"], RAILING["barThickness"]
+    n = max(1, round(rc * math.radians(sweep) / s))
+    step = sweep / n
+    first = start + step / 2
+    a = math.radians(first)
+    profile = [[r1(rc - w / 2), 0], [r1(rc + w / 2), 0], [r1(rc + w / 2), t], [r1(rc - w / 2), t], [r1(rc - w / 2), 0]]
+
+    def rail(name, y, provenance=None):
+        part = {"name": name, "shape": "lathe", "profile": profile, "arc": round(sweep, 1),
+                "position": {"x": 0, "y": y, "z": 0}, "rotation": {"y": round(start, 2)}, "material": "bars"}
+        if provenance:
+            part["provenance"] = provenance
+        return part
+
+    bars = {
+        "name": "bars", "shape": "box",
+        "size": {"x": w, "y": r1(h - t - BOTTOM_RAIL), "z": t},
+        "position": {"x": round(rc * math.cos(a), 2), "y": r1((BOTTOM_RAIL + h - t) / 2), "z": round(rc * math.sin(a), 2)},
+        "rotation": {"y": round(first, 3)},
+        "repeatAround": {"count": n, "step": round(step, 4)},
+        "material": "bars",
+        "provenance": prov("low", "assumed",
+                           f"Vertical flat bars {w:.0f} x {t:.0f} cm about every {s:.0f} cm (centre to centre), "
+                           "same style as the Juliet railings (you); bar size and spacing assumed. "
+                           "Checklist {check:railing-bars}."),
+    }
+    return {
+        "id": f"{bid}-railing",
+        "name": "Balcony railing",
+        "kind": "railing",
+        "position": [r1(center[0]), r1(center[1])],
+        "rotation": 0,
+        "parts": [
+            rail("top rail", h - t, prov("low", "photo", f"Railing height {h:.0f} cm estimated from IMG_4509. "
+                                         "Checklist {check:railing-height}.")),
+            rail("bottom rail", BOTTOM_RAIL - t),
+            bars,
+        ],
+        "materials": {"bars": "metal.railing"},
+        "collides": True,
+        "provenance": prov("medium", "plan",
+                           f"Railing along the open edge of the round balcony, from wall to wall ({sweep:.0f} degrees "
+                           "of the circle, as drawn in the plan); the balcony doors stay clear (you). Vertical flat-bar "
+                           "railing like the Juliet railings in front of the living-room windows (you)."),
+    }
 
 
 def _two_modes(values):
@@ -340,33 +422,3 @@ def _two_modes(values):
     g, i = max(gaps)
     a, b = values[: i + 1], values[i + 1:]
     return [a[len(a) // 2], b[len(b) // 2]]
-
-
-def _near_any(p, segments, tol):
-    from geom2d import point_segment_distance
-    return any(point_segment_distance(p, a, b) < tol for a, b in segments)
-
-
-def _true_runs(flags):
-    runs = []
-    n = len(flags)
-    # rotate so that we start at a False (if any)
-    start = next((i for i in range(n) if not flags[i]), None)
-    if start is None:
-        return [(0, n - 1)]
-    k = 0
-    cur = None
-    while k < n:
-        i = (start + k) % n
-        if flags[i]:
-            if cur is None:
-                cur = [start + k, start + k]
-            else:
-                cur[1] = start + k
-        elif cur is not None:
-            runs.append(tuple(cur))
-            cur = None
-        k += 1
-    if cur is not None:
-        runs.append(tuple(cur))
-    return [r for r in runs if r[1] - r[0] >= 3]
