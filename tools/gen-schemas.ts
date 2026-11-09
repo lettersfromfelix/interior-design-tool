@@ -7,6 +7,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { z } from "zod";
 import { ApartmentFile } from "../src/core/schema/apartment";
+import { CatalogueItem } from "../src/core/schema/catalogue";
+import { LayoutFile } from "../src/core/schema/layout";
 import { MaterialsFile } from "../src/core/schema/materials";
 
 const root = resolve(import.meta.dirname, "..");
@@ -16,6 +18,8 @@ mkdirSync(out, { recursive: true });
 const schemas: Record<string, z.ZodType> = {
   "apartment.schema.json": ApartmentFile,
   "materials.schema.json": MaterialsFile,
+  "catalogue-item.schema.json": CatalogueItem,
+  "layout.schema.json": LayoutFile,
 };
 
 for (const [file, schema] of Object.entries(schemas)) {

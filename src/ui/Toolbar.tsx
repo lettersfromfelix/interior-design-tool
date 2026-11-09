@@ -1,5 +1,31 @@
 import { useApp } from "./store";
 
+function SaveStatus() {
+  const layout = useApp((s) => s.layout);
+  const setSidePanel = useApp((s) => s.setSidePanel);
+  if (layout.status === "loading") return null;
+  if (layout.status === "invalid") {
+    return (
+      <button className="save save--error" onClick={() => setSidePanel("issues")} title={`${layout.file} has errors. Fix the file; it reloads automatically.`}>
+        ⚠ Layout not saved: file has errors
+      </button>
+    );
+  }
+  if (layout.saveError) {
+    return (
+      <span className="save save--error" title={layout.saveError}>
+        ⚠ Could not save, retrying…
+      </span>
+    );
+  }
+  const dirty = layout.revision !== layout.savedRevision || layout.pendingText !== undefined;
+  return (
+    <span className="save" title={`Saved automatically to ${layout.file}`}>
+      {dirty ? "Saving…" : layout.diskText === undefined ? "Nothing placed yet" : "✓ Saved"}
+    </span>
+  );
+}
+
 export function Toolbar() {
   const name = useApp((s) => s.data.apartment?.name);
   const hasUnderlay = useApp((s) => !!s.data.apartment?.underlay);
@@ -10,9 +36,15 @@ export function Toolbar() {
   const labels = useApp((s) => s.labels);
   const setLabels = useApp((s) => s.setLabels);
   const requestFit = useApp((s) => s.requestFit);
+  const catalogueOpen = useApp((s) => s.catalogueOpen);
+  const setCatalogueOpen = useApp((s) => s.setCatalogueOpen);
+  const itemSelected = useApp((s) => s.selection?.kind === "item");
 
   return (
     <header className="toolbar">
+      <button className={catalogueOpen ? "active" : ""} onClick={() => setCatalogueOpen(!catalogueOpen)} aria-pressed={catalogueOpen} title="Show or hide the furniture catalogue">
+        ☰ Furniture
+      </button>
       <div className="brand">{name ?? "Apartment planner"}</div>
       <div className="segmented" role="group" aria-label="View">
         <button className={view === "2d" ? "active" : ""} onClick={() => setView("2d")} title="Top-down plan (Tab)">
@@ -50,8 +82,11 @@ export function Toolbar() {
       </button>
       <div className="spacer" />
       <span className="hint">
-        {view === "2d" ? "Drag: pan · Wheel: zoom" : "Drag: orbit · Right-drag: pan · Wheel: zoom"} · Click: inspect · Tab: 2D/3D
+        {itemSelected
+          ? "Drag: move · Ring: rotate · R/Q/E: rotate · Del: delete · Ctrl+D: duplicate · Esc: deselect"
+          : `${view === "2d" ? "Drag: pan · Wheel: zoom" : "Drag: orbit · Right-drag: pan · Wheel: zoom"} · Click: select · Tab: 2D/3D`}
       </span>
+      <SaveStatus />
     </header>
   );
 }

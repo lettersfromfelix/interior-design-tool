@@ -1,17 +1,26 @@
 import { checksFor, elementFacts, elementTitle, findElement } from "../../core/apartment/elements";
 import { ConfidenceBadge } from "../components";
 import { useApp } from "../store";
+import { ItemPanel } from "./ItemPanel";
 
+/** Properties of the selection: a placed furniture item, or an apartment element (read-only, with provenance). */
 export function InspectPanel() {
+  const sel = useApp((s) => s.selection);
+  if (sel?.kind === "item") return <ItemPanel uid={sel.uid} />;
+  return <ElementPanel id={sel?.kind === "element" ? sel.id : null} />;
+}
+
+function ElementPanel({ id }: { id: string | null }) {
   const ap = useApp((s) => s.data.apartment);
-  const id = useApp((s) => s.selection);
   const select = useApp((s) => s.select);
   const setActiveCheck = useApp((s) => s.setActiveCheck);
   const ref = ap && id ? findElement(ap, id) : undefined;
   if (!ap || !ref) {
     return (
       <div className="panel">
-        <p className="muted">Click a room, wall, door, window or fixture in the view to see its data and how certain it is.</p>
+        <p className="muted">
+          Click a piece of furniture to change it, or a room, wall, door, window or fixture to see its data and how certain it is.
+        </p>
       </div>
     );
   }

@@ -8,7 +8,7 @@ import { useApp } from "../store";
 function CheckRow({ check }: { check: Check }) {
   const active = useApp((s) => s.activeCheck === check.id);
   const setActiveCheck = useApp((s) => s.setActiveCheck);
-  const select = useApp((s) => s.select);
+  const select = useApp((s) => s.selectElement);
   return (
     <li className={`check ${active ? "check--active" : ""}`}>
       <button className="check__head" onClick={() => setActiveCheck(active ? null : check.id)} aria-expanded={active}>
@@ -43,7 +43,7 @@ function CheckRow({ check }: { check: Check }) {
 export function VerifyPanel() {
   const ap = useApp((s) => s.data.apartment);
   const areaChecks = useApp((s) => s.data.areaChecks);
-  const select = useApp((s) => s.select);
+  const select = useApp((s) => s.selectElement);
   const uncertain = useMemo(() => (ap ? groupUncertain(uncertainValues(ap)) : []), [ap]);
   if (!ap) return null;
   const checks = ap.checks ?? [];

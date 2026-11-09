@@ -21,6 +21,8 @@ export interface MaterialLibraryOptions {
 export class MaterialLibrary {
   private readonly cache = new Map<string, Material>();
   private readonly textures: Texture[] = [];
+  /** Preset id -> its image textures have loaded (or failed). */
+  private readonly loading = new Map<string, Promise<void>>();
   /** Dark fill for cut walls in the plan ("poche"), unlit. */
   readonly poche = new MeshBasicMaterial({ color: "#3a3c40" });
   readonly fallback = new MeshStandardMaterial({ color: "#9a9a9a", roughness: 0.85 });
@@ -45,6 +47,17 @@ export class MaterialLibrary {
     return m;
   }
 
+  /** Resolves when the image textures of these presets have loaded (or failed), e.g. before rendering a thumbnail. */
+  async whenLoaded(ids: Iterable<string>): Promise<void> {
+    const waits: Promise<void>[] = [];
+    for (const id of ids) {
+      this.get(id); // starts loading
+      const p = this.loading.get(id);
+      if (p) waits.push(p);
+    }
+    await Promise.all(waits);
+  }
+
   private create(p: MaterialPreset): Material {
     const opacity = p.opacity ?? 1;
     const m = new MeshStandardMaterial({
@@ -62,8 +75,15 @@ export class MaterialLibrary {
     }
     if (p.texture) {
       const repeat = p.texture.repeat;
-      m.map = this.load(p.texture.map, repeat, true);
-      if (p.texture.normalMap) m.normalMap = this.load(p.texture.normalMap, repeat, false);
+      const map = this.load(p.texture.map, repeat, true);
+      const loads = [map.loaded];
+      m.map = map.texture;
+      if (p.texture.normalMap) {
+        const normal = this.load(p.texture.normalMap, repeat, false);
+        m.normalMap = normal.texture;
+        loads.push(normal.loaded);
+      }
+      this.loading.set(p.id, Promise.all(loads).then(() => undefined));
       m.color.set("#ffffff");
     } else if (p.pattern) {
       const { texture } = patternTexture(p.id, p.color, p.pattern, this.options.anisotropy);
@@ -74,15 +94,26 @@ export class MaterialLibrary {
     return m;
   }
 
-  private load(path: string, repeatCm: number, color: boolean): Texture {
-    const t = new TextureLoader().load(assetUrl(path), () => this.options.onLoad?.());
+  /** `loaded` resolves when the image has loaded or failed (a failed texture renders without its image). */
+  private load(path: string, repeatCm: number, color: boolean): { texture: Texture; loaded: Promise<void> } {
+    let done = () => {};
+    const loaded = new Promise<void>((resolve) => (done = resolve));
+    const t = new TextureLoader().load(
+      assetUrl(path),
+      () => {
+        done();
+        this.options.onLoad?.();
+      },
+      undefined,
+      () => done(),
+    );
     if (color) t.colorSpace = SRGBColorSpace;
     t.wrapS = RepeatWrapping;
     t.wrapT = RepeatWrapping;
     t.anisotropy = this.options.anisotropy;
     t.repeat.set(1 / repeatCm, 1 / repeatCm);
     this.textures.push(t);
-    return t;
+    return { texture: t, loaded };
   }
 
   dispose(): void {

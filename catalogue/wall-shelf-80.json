@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "wall-shelf-80",
+  "name": "Wall shelf 80",
+  "category": "storage",
+  "tags": ["wall"],
+  "dimensions": { "width": 80, "depth": 22, "height": 36 },
+  "placement": { "type": "wall", "defaultElevation": 140, "minElevation": 30, "maxElevation": 200 },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "bottom and top", "shape": "box", "size": { "x": 80, "y": 2, "z": 22 }, "position": { "x": 0, "y": 1, "z": 0 }, "repeat": { "count": 2, "step": { "x": 0, "y": 34, "z": 0 } }, "material": "body" },
+      { "name": "middle shelf", "shape": "box", "size": { "x": 76, "y": 2, "z": 22 }, "position": { "x": 0, "y": 18, "z": 0 }, "material": "body" },
+      { "name": "sides", "shape": "box", "size": { "x": 2, "y": 32, "z": 22 }, "position": { "x": 39, "y": 18, "z": 0 }, "mirror": ["x"], "material": "body" }
+    ]
+  },
+  "materialSlots": {
+    "body": { "label": "Wood", "default": "wood.oak-natural", "allowed": ["wood.*", "lacquer.*"] }
+  },
+  "surfaces": [
+    { "name": "top", "height": 36, "width": 80, "depth": 22 },
+    { "name": "upper shelf", "height": 19, "width": 76, "depth": 22, "maxItemHeight": 15 },
+    { "name": "lower shelf", "height": 2, "width": 76, "depth": 22, "maxItemHeight": 15 }
+  ],
+  "notes": "Hangs with its bottom 140 cm above the floor by default; change the height per placed shelf."
+}

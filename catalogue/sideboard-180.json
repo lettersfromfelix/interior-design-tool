@@ -1,0 +1,28 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "sideboard-180",
+  "name": "Sideboard 180",
+  "category": "storage",
+  "tags": ["living room", "dining"],
+  "dimensions": { "width": 180, "depth": 45, "height": 75 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "legs", "shape": "cylinder", "radius": 1.6, "radiusTop": 2.2, "height": 14, "position": { "x": 84, "y": 7, "z": 17 }, "mirror": ["x", "z"], "material": "body" },
+      { "name": "carcass", "shape": "box", "size": { "x": 180, "y": 61, "z": 41.5 }, "position": { "x": 0, "y": 44.5, "z": -1.75 }, "material": "body" },
+      { "name": "doors", "shape": "box", "size": { "x": 44, "y": 57, "z": 2 }, "position": { "x": -66.75, "y": 44.5, "z": 20 }, "repeat": { "count": 4, "step": { "x": 44.5, "y": 0, "z": 0 } }, "material": "fronts" },
+      { "name": "handles", "shape": "box", "size": { "x": 1.2, "y": 14, "z": 1.5 }, "position": { "x": 41.5, "y": 52, "z": 21.75 }, "repeat": { "count": 2, "step": { "x": 6, "y": 0, "z": 0 } }, "mirror": ["x"], "material": "handles" }
+    ]
+  },
+  "materialSlots": {
+    "body": { "label": "Body and legs", "default": "wood.oak-natural", "allowed": ["wood.*", "lacquer.*"] },
+    "fronts": { "label": "Doors", "default": "wood.oak-natural", "allowed": ["wood.*", "lacquer.*"] },
+    "handles": { "label": "Handles", "default": "metal.brass", "allowed": ["metal.brass", "metal.black-matte", "metal.stainless"] }
+  },
+  "surfaces": [{ "name": "top", "height": 75, "width": 180, "depth": 41.5, "center": [0, -1.75] }],
+  "clearance": { "front": 60, "note": "Room to open the doors" },
+  "price": { "amount": 890, "currency": "CHF" },
+  "notes": "Generic example with typical sizes, not a specific product. The price is a placeholder."
+}

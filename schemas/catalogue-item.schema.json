@@ -1,0 +1,3032 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "category": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "centimetres (> 0)"
+        },
+        "depth": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "centimetres (> 0)"
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "centimetres (> 0)"
+        }
+      },
+      "required": [
+        "width",
+        "depth",
+        "height"
+      ],
+      "additionalProperties": false
+    },
+    "placement": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "floor"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "wall"
+            },
+            "defaultElevation": {
+              "type": "number",
+              "minimum": 0
+            },
+            "minElevation": {
+              "type": "number",
+              "minimum": 0
+            },
+            "maxElevation": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "type",
+            "defaultElevation"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "onTop"
+            },
+            "alsoOnFloor": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "ceiling"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "geometry": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "parametric"
+            },
+            "parts": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "position": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "rotation": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "material": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "mirror": {
+                        "maxItems": 2,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "x",
+                            "z"
+                          ]
+                        }
+                      },
+                      "repeat": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 200
+                          },
+                          "step": {
+                            "type": "object",
+                            "properties": {
+                              "x": {
+                                "type": "number"
+                              },
+                              "y": {
+                                "type": "number"
+                              },
+                              "z": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "x",
+                              "y",
+                              "z"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "step"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "repeatAround": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 360
+                          },
+                          "step": {
+                            "type": "number",
+                            "minimum": -360,
+                            "maximum": 360
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "step"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "plan": {
+                        "type": "string",
+                        "enum": [
+                          "solid",
+                          "dashed"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "confidence": {
+                            "type": "string",
+                            "enum": [
+                              "high",
+                              "medium",
+                              "low"
+                            ]
+                          },
+                          "source": {
+                            "type": "string",
+                            "enum": [
+                              "plan",
+                              "photo",
+                              "assumed",
+                              "user",
+                              "measured"
+                            ]
+                          },
+                          "note": {
+                            "type": "string"
+                          },
+                          "fields": {
+                            "type": "object",
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "additionalProperties": {
+                              "type": "object",
+                              "properties": {
+                                "confidence": {
+                                  "type": "string",
+                                  "enum": [
+                                    "high",
+                                    "medium",
+                                    "low"
+                                  ]
+                                },
+                                "source": {
+                                  "type": "string",
+                                  "enum": [
+                                    "plan",
+                                    "photo",
+                                    "assumed",
+                                    "user",
+                                    "measured"
+                                  ]
+                                },
+                                "note": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "confidence",
+                                "source"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "confidence",
+                          "source"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "shape": {
+                        "type": "string",
+                        "const": "box"
+                      },
+                      "size": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "centimetres (> 0)"
+                          },
+                          "y": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "centimetres (> 0)"
+                          },
+                          "z": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "centimetres (> 0)"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "cornerRadius": {
+                        "type": "number",
+                        "minimum": 0
+                      }
+                    },
+                    "required": [
+                      "position",
+                      "material",
+                      "shape",
+                      "size"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "position": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "rotation": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "material": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "mirror": {
+                        "maxItems": 2,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "x",
+                            "z"
+                          ]
+                        }
+                      },
+                      "repeat": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 200
+                          },
+                          "step": {
+                            "type": "object",
+                            "properties": {
+                              "x": {
+                                "type": "number"
+                              },
+                              "y": {
+                                "type": "number"
+                              },
+                              "z": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "x",
+                              "y",
+                              "z"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "step"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "repeatAround": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 360
+                          },
+                          "step": {
+                            "type": "number",
+                            "minimum": -360,
+                            "maximum": 360
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "step"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "plan": {
+                        "type": "string",
+                        "enum": [
+                          "solid",
+                          "dashed"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "confidence": {
+                            "type": "string",
+                            "enum": [
+                              "high",
+                              "medium",
+                              "low"
+                            ]
+                          },
+                          "source": {
+                            "type": "string",
+                            "enum": [
+                              "plan",
+                              "photo",
+                              "assumed",
+                              "user",
+                              "measured"
+                            ]
+                          },
+                          "note": {
+                            "type": "string"
+                          },
+                          "fields": {
+                            "type": "object",
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "additionalProperties": {
+                              "type": "object",
+                              "properties": {
+                                "confidence": {
+                                  "type": "string",
+                                  "enum": [
+                                    "high",
+                                    "medium",
+                                    "low"
+                                  ]
+                                },
+                                "source": {
+                                  "type": "string",
+                                  "enum": [
+                                    "plan",
+                                    "photo",
+                                    "assumed",
+                                    "user",
+                                    "measured"
+                                  ]
+                                },
+                                "note": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "confidence",
+                                "source"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "confidence",
+                          "source"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "shape": {
+                        "type": "string",
+                        "const": "cylinder"
+                      },
+                      "radius": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "radiusTop": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "height": {
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "description": "centimetres (> 0)"
+                      }
+                    },
+                    "required": [
+                      "position",
+                      "material",
+                      "shape",
+                      "radius",
+                      "height"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "position": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "rotation": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "material": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "mirror": {
+                        "maxItems": 2,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "x",
+                            "z"
+                          ]
+                        }
+                      },
+                      "repeat": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 200
+                          },
+                          "step": {
+                            "type": "object",
+                            "properties": {
+                              "x": {
+                                "type": "number"
+                              },
+                              "y": {
+                                "type": "number"
+                              },
+                              "z": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "x",
+                              "y",
+                              "z"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "step"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "repeatAround": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 360
+                          },
+                          "step": {
+                            "type": "number",
+                            "minimum": -360,
+                            "maximum": 360
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "step"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "plan": {
+                        "type": "string",
+                        "enum": [
+                          "solid",
+                          "dashed"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "confidence": {
+                            "type": "string",
+                            "enum": [
+                              "high",
+                              "medium",
+                              "low"
+                            ]
+                          },
+                          "source": {
+                            "type": "string",
+                            "enum": [
+                              "plan",
+                              "photo",
+                              "assumed",
+                              "user",
+                              "measured"
+                            ]
+                          },
+                          "note": {
+                            "type": "string"
+                          },
+                          "fields": {
+                            "type": "object",
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "additionalProperties": {
+                              "type": "object",
+                              "properties": {
+                                "confidence": {
+                                  "type": "string",
+                                  "enum": [
+                                    "high",
+                                    "medium",
+                                    "low"
+                                  ]
+                                },
+                                "source": {
+                                  "type": "string",
+                                  "enum": [
+                                    "plan",
+                                    "photo",
+                                    "assumed",
+                                    "user",
+                                    "measured"
+                                  ]
+                                },
+                                "note": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "confidence",
+                                "source"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "confidence",
+                          "source"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "shape": {
+                        "type": "string",
+                        "const": "sphere"
+                      },
+                      "radius": {
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "description": "centimetres (> 0)"
+                      },
+                      "scale": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "position",
+                      "material",
+                      "shape",
+                      "radius"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "position": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "rotation": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "material": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "mirror": {
+                        "maxItems": 2,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "x",
+                            "z"
+                          ]
+                        }
+                      },
+                      "repeat": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 200
+                          },
+                          "step": {
+                            "type": "object",
+                            "properties": {
+                              "x": {
+                                "type": "number"
+                              },
+                              "y": {
+                                "type": "number"
+                              },
+                              "z": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "x",
+                              "y",
+                              "z"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "step"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "repeatAround": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 360
+                          },
+                          "step": {
+                            "type": "number",
+                            "minimum": -360,
+                            "maximum": 360
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "step"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "plan": {
+                        "type": "string",
+                        "enum": [
+                          "solid",
+                          "dashed"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "confidence": {
+                            "type": "string",
+                            "enum": [
+                              "high",
+                              "medium",
+                              "low"
+                            ]
+                          },
+                          "source": {
+                            "type": "string",
+                            "enum": [
+                              "plan",
+                              "photo",
+                              "assumed",
+                              "user",
+                              "measured"
+                            ]
+                          },
+                          "note": {
+                            "type": "string"
+                          },
+                          "fields": {
+                            "type": "object",
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "additionalProperties": {
+                              "type": "object",
+                              "properties": {
+                                "confidence": {
+                                  "type": "string",
+                                  "enum": [
+                                    "high",
+                                    "medium",
+                                    "low"
+                                  ]
+                                },
+                                "source": {
+                                  "type": "string",
+                                  "enum": [
+                                    "plan",
+                                    "photo",
+                                    "assumed",
+                                    "user",
+                                    "measured"
+                                  ]
+                                },
+                                "note": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "confidence",
+                                "source"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "confidence",
+                          "source"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "shape": {
+                        "type": "string",
+                        "const": "torus"
+                      },
+                      "radius": {
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "description": "centimetres (> 0)"
+                      },
+                      "tube": {
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "description": "centimetres (> 0)"
+                      },
+                      "arc": {
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "maximum": 360
+                      }
+                    },
+                    "required": [
+                      "position",
+                      "material",
+                      "shape",
+                      "radius",
+                      "tube"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "position": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "rotation": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "material": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "mirror": {
+                        "maxItems": 2,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "x",
+                            "z"
+                          ]
+                        }
+                      },
+                      "repeat": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 200
+                          },
+                          "step": {
+                            "type": "object",
+                            "properties": {
+                              "x": {
+                                "type": "number"
+                              },
+                              "y": {
+                                "type": "number"
+                              },
+                              "z": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "x",
+                              "y",
+                              "z"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "step"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "repeatAround": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 360
+                          },
+                          "step": {
+                            "type": "number",
+                            "minimum": -360,
+                            "maximum": 360
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "step"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "plan": {
+                        "type": "string",
+                        "enum": [
+                          "solid",
+                          "dashed"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "confidence": {
+                            "type": "string",
+                            "enum": [
+                              "high",
+                              "medium",
+                              "low"
+                            ]
+                          },
+                          "source": {
+                            "type": "string",
+                            "enum": [
+                              "plan",
+                              "photo",
+                              "assumed",
+                              "user",
+                              "measured"
+                            ]
+                          },
+                          "note": {
+                            "type": "string"
+                          },
+                          "fields": {
+                            "type": "object",
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "additionalProperties": {
+                              "type": "object",
+                              "properties": {
+                                "confidence": {
+                                  "type": "string",
+                                  "enum": [
+                                    "high",
+                                    "medium",
+                                    "low"
+                                  ]
+                                },
+                                "source": {
+                                  "type": "string",
+                                  "enum": [
+                                    "plan",
+                                    "photo",
+                                    "assumed",
+                                    "user",
+                                    "measured"
+                                  ]
+                                },
+                                "note": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "confidence",
+                                "source"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "confidence",
+                          "source"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "shape": {
+                        "type": "string",
+                        "const": "extrusion"
+                      },
+                      "points": {
+                        "minItems": 3,
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "prefixItems": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "items": false,
+                          "minItems": 2,
+                          "maxItems": 2,
+                          "description": "[x, z] in cm (plan coordinates)"
+                        }
+                      },
+                      "height": {
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "description": "centimetres (> 0)"
+                      }
+                    },
+                    "required": [
+                      "position",
+                      "material",
+                      "shape",
+                      "points",
+                      "height"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "position": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "rotation": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "material": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "mirror": {
+                        "maxItems": 2,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "x",
+                            "z"
+                          ]
+                        }
+                      },
+                      "repeat": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 200
+                          },
+                          "step": {
+                            "type": "object",
+                            "properties": {
+                              "x": {
+                                "type": "number"
+                              },
+                              "y": {
+                                "type": "number"
+                              },
+                              "z": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "x",
+                              "y",
+                              "z"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "step"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "repeatAround": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 360
+                          },
+                          "step": {
+                            "type": "number",
+                            "minimum": -360,
+                            "maximum": 360
+                          }
+                        },
+                        "required": [
+                          "count",
+                          "step"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "plan": {
+                        "type": "string",
+                        "enum": [
+                          "solid",
+                          "dashed"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "confidence": {
+                            "type": "string",
+                            "enum": [
+                              "high",
+                              "medium",
+                              "low"
+                            ]
+                          },
+                          "source": {
+                            "type": "string",
+                            "enum": [
+                              "plan",
+                              "photo",
+                              "assumed",
+                              "user",
+                              "measured"
+                            ]
+                          },
+                          "note": {
+                            "type": "string"
+                          },
+                          "fields": {
+                            "type": "object",
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "additionalProperties": {
+                              "type": "object",
+                              "properties": {
+                                "confidence": {
+                                  "type": "string",
+                                  "enum": [
+                                    "high",
+                                    "medium",
+                                    "low"
+                                  ]
+                                },
+                                "source": {
+                                  "type": "string",
+                                  "enum": [
+                                    "plan",
+                                    "photo",
+                                    "assumed",
+                                    "user",
+                                    "measured"
+                                  ]
+                                },
+                                "note": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "confidence",
+                                "source"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "confidence",
+                          "source"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "shape": {
+                        "type": "string",
+                        "const": "lathe"
+                      },
+                      "profile": {
+                        "minItems": 2,
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "prefixItems": [
+                            {
+                              "type": "number",
+                              "minimum": 0
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "items": false,
+                          "minItems": 2,
+                          "maxItems": 2
+                        }
+                      },
+                      "arc": {
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "maximum": 360
+                      }
+                    },
+                    "required": [
+                      "position",
+                      "material",
+                      "shape",
+                      "profile"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "type",
+            "parts"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "model"
+            },
+            "src": {
+              "type": "string",
+              "pattern": "^[^\\\\:]+\\.(glb|gltf)$"
+            },
+            "fit": {
+              "type": "string",
+              "enum": [
+                "stretch",
+                "uniform"
+              ]
+            },
+            "rotation": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "z": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            },
+            "materialMap": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "minLength": 1
+              },
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "type",
+            "src"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "materialSlots": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "default": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+\\.[a-z0-9-]+$"
+              },
+              {
+                "type": "string",
+                "const": "@original"
+              }
+            ]
+          },
+          "allowed": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^(@original|[a-z0-9-]+\\.([a-z0-9-]+|\\*))$"
+            }
+          }
+        },
+        "required": [
+          "default"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "surfaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "height": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "centimetres (> 0)"
+          },
+          "width": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "centimetres (> 0)"
+          },
+          "depth": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "centimetres (> 0)"
+          },
+          "center": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2,
+            "description": "[x, z] in cm (plan coordinates)"
+          },
+          "maxItemHeight": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "centimetres (> 0)"
+          }
+        },
+        "required": [
+          "height",
+          "width",
+          "depth"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "clearance": {
+      "type": "object",
+      "properties": {
+        "front": {
+          "type": "number",
+          "minimum": 0
+        },
+        "back": {
+          "type": "number",
+          "minimum": 0
+        },
+        "left": {
+          "type": "number",
+          "minimum": 0
+        },
+        "right": {
+          "type": "number",
+          "minimum": 0
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "collision": {
+      "type": "string",
+      "enum": [
+        "parts",
+        "box",
+        "none"
+      ]
+    },
+    "collisionParts": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y",
+                  "z"
+                ],
+                "additionalProperties": false
+              },
+              "rotation": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "material": {
+                "type": "string",
+                "minLength": 1
+              },
+              "mirror": {
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "x",
+                    "z"
+                  ]
+                }
+              },
+              "repeat": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 200
+                  },
+                  "step": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      },
+                      "z": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "count",
+                  "step"
+                ],
+                "additionalProperties": false
+              },
+              "repeatAround": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 360
+                  },
+                  "step": {
+                    "type": "number",
+                    "minimum": -360,
+                    "maximum": 360
+                  }
+                },
+                "required": [
+                  "count",
+                  "step"
+                ],
+                "additionalProperties": false
+              },
+              "plan": {
+                "type": "string",
+                "enum": [
+                  "solid",
+                  "dashed"
+                ]
+              },
+              "provenance": {
+                "type": "object",
+                "properties": {
+                  "confidence": {
+                    "type": "string",
+                    "enum": [
+                      "high",
+                      "medium",
+                      "low"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "plan",
+                      "photo",
+                      "assumed",
+                      "user",
+                      "measured"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  },
+                  "fields": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "confidence": {
+                          "type": "string",
+                          "enum": [
+                            "high",
+                            "medium",
+                            "low"
+                          ]
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "plan",
+                            "photo",
+                            "assumed",
+                            "user",
+                            "measured"
+                          ]
+                        },
+                        "note": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "confidence",
+                        "source"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "confidence",
+                  "source"
+                ],
+                "additionalProperties": false
+              },
+              "shape": {
+                "type": "string",
+                "const": "box"
+              },
+              "size": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "centimetres (> 0)"
+                  },
+                  "y": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "centimetres (> 0)"
+                  },
+                  "z": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "centimetres (> 0)"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y",
+                  "z"
+                ],
+                "additionalProperties": false
+              },
+              "cornerRadius": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "position",
+              "material",
+              "shape",
+              "size"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y",
+                  "z"
+                ],
+                "additionalProperties": false
+              },
+              "rotation": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "material": {
+                "type": "string",
+                "minLength": 1
+              },
+              "mirror": {
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "x",
+                    "z"
+                  ]
+                }
+              },
+              "repeat": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 200
+                  },
+                  "step": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      },
+                      "z": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "count",
+                  "step"
+                ],
+                "additionalProperties": false
+              },
+              "repeatAround": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 360
+                  },
+                  "step": {
+                    "type": "number",
+                    "minimum": -360,
+                    "maximum": 360
+                  }
+                },
+                "required": [
+                  "count",
+                  "step"
+                ],
+                "additionalProperties": false
+              },
+              "plan": {
+                "type": "string",
+                "enum": [
+                  "solid",
+                  "dashed"
+                ]
+              },
+              "provenance": {
+                "type": "object",
+                "properties": {
+                  "confidence": {
+                    "type": "string",
+                    "enum": [
+                      "high",
+                      "medium",
+                      "low"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "plan",
+                      "photo",
+                      "assumed",
+                      "user",
+                      "measured"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  },
+                  "fields": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "confidence": {
+                          "type": "string",
+                          "enum": [
+                            "high",
+                            "medium",
+                            "low"
+                          ]
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "plan",
+                            "photo",
+                            "assumed",
+                            "user",
+                            "measured"
+                          ]
+                        },
+                        "note": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "confidence",
+                        "source"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "confidence",
+                  "source"
+                ],
+                "additionalProperties": false
+              },
+              "shape": {
+                "type": "string",
+                "const": "cylinder"
+              },
+              "radius": {
+                "type": "number",
+                "minimum": 0
+              },
+              "radiusTop": {
+                "type": "number",
+                "minimum": 0
+              },
+              "height": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "centimetres (> 0)"
+              }
+            },
+            "required": [
+              "position",
+              "material",
+              "shape",
+              "radius",
+              "height"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y",
+                  "z"
+                ],
+                "additionalProperties": false
+              },
+              "rotation": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "material": {
+                "type": "string",
+                "minLength": 1
+              },
+              "mirror": {
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "x",
+                    "z"
+                  ]
+                }
+              },
+              "repeat": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 200
+                  },
+                  "step": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      },
+                      "z": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "count",
+                  "step"
+                ],
+                "additionalProperties": false
+              },
+              "repeatAround": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 360
+                  },
+                  "step": {
+                    "type": "number",
+                    "minimum": -360,
+                    "maximum": 360
+                  }
+                },
+                "required": [
+                  "count",
+                  "step"
+                ],
+                "additionalProperties": false
+              },
+              "plan": {
+                "type": "string",
+                "enum": [
+                  "solid",
+                  "dashed"
+                ]
+              },
+              "provenance": {
+                "type": "object",
+                "properties": {
+                  "confidence": {
+                    "type": "string",
+                    "enum": [
+                      "high",
+                      "medium",
+                      "low"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "plan",
+                      "photo",
+                      "assumed",
+                      "user",
+                      "measured"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  },
+                  "fields": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "confidence": {
+                          "type": "string",
+                          "enum": [
+                            "high",
+                            "medium",
+                            "low"
+                          ]
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "plan",
+                            "photo",
+                            "assumed",
+                            "user",
+                            "measured"
+                          ]
+                        },
+                        "note": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "confidence",
+                        "source"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "confidence",
+                  "source"
+                ],
+                "additionalProperties": false
+              },
+              "shape": {
+                "type": "string",
+                "const": "sphere"
+              },
+              "radius": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "centimetres (> 0)"
+              },
+              "scale": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y",
+                  "z"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "position",
+              "material",
+              "shape",
+              "radius"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y",
+                  "z"
+                ],
+                "additionalProperties": false
+              },
+              "rotation": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "material": {
+                "type": "string",
+                "minLength": 1
+              },
+              "mirror": {
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "x",
+                    "z"
+                  ]
+                }
+              },
+              "repeat": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 200
+                  },
+                  "step": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      },
+                      "z": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "count",
+                  "step"
+                ],
+                "additionalProperties": false
+              },
+              "repeatAround": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 360
+                  },
+                  "step": {
+                    "type": "number",
+                    "minimum": -360,
+                    "maximum": 360
+                  }
+                },
+                "required": [
+                  "count",
+                  "step"
+                ],
+                "additionalProperties": false
+              },
+              "plan": {
+                "type": "string",
+                "enum": [
+                  "solid",
+                  "dashed"
+                ]
+              },
+              "provenance": {
+                "type": "object",
+                "properties": {
+                  "confidence": {
+                    "type": "string",
+                    "enum": [
+                      "high",
+                      "medium",
+                      "low"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "plan",
+                      "photo",
+                      "assumed",
+                      "user",
+                      "measured"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  },
+                  "fields": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "confidence": {
+                          "type": "string",
+                          "enum": [
+                            "high",
+                            "medium",
+                            "low"
+                          ]
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "plan",
+                            "photo",
+                            "assumed",
+                            "user",
+                            "measured"
+                          ]
+                        },
+                        "note": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "confidence",
+                        "source"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "confidence",
+                  "source"
+                ],
+                "additionalProperties": false
+              },
+              "shape": {
+                "type": "string",
+                "const": "torus"
+              },
+              "radius": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "centimetres (> 0)"
+              },
+              "tube": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "centimetres (> 0)"
+              },
+              "arc": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 360
+              }
+            },
+            "required": [
+              "position",
+              "material",
+              "shape",
+              "radius",
+              "tube"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y",
+                  "z"
+                ],
+                "additionalProperties": false
+              },
+              "rotation": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "material": {
+                "type": "string",
+                "minLength": 1
+              },
+              "mirror": {
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "x",
+                    "z"
+                  ]
+                }
+              },
+              "repeat": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 200
+                  },
+                  "step": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      },
+                      "z": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "count",
+                  "step"
+                ],
+                "additionalProperties": false
+              },
+              "repeatAround": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 360
+                  },
+                  "step": {
+                    "type": "number",
+                    "minimum": -360,
+                    "maximum": 360
+                  }
+                },
+                "required": [
+                  "count",
+                  "step"
+                ],
+                "additionalProperties": false
+              },
+              "plan": {
+                "type": "string",
+                "enum": [
+                  "solid",
+                  "dashed"
+                ]
+              },
+              "provenance": {
+                "type": "object",
+                "properties": {
+                  "confidence": {
+                    "type": "string",
+                    "enum": [
+                      "high",
+                      "medium",
+                      "low"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "plan",
+                      "photo",
+                      "assumed",
+                      "user",
+                      "measured"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  },
+                  "fields": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "confidence": {
+                          "type": "string",
+                          "enum": [
+                            "high",
+                            "medium",
+                            "low"
+                          ]
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "plan",
+                            "photo",
+                            "assumed",
+                            "user",
+                            "measured"
+                          ]
+                        },
+                        "note": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "confidence",
+                        "source"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "confidence",
+                  "source"
+                ],
+                "additionalProperties": false
+              },
+              "shape": {
+                "type": "string",
+                "const": "extrusion"
+              },
+              "points": {
+                "minItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "description": "[x, z] in cm (plan coordinates)"
+                }
+              },
+              "height": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "centimetres (> 0)"
+              }
+            },
+            "required": [
+              "position",
+              "material",
+              "shape",
+              "points",
+              "height"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y",
+                  "z"
+                ],
+                "additionalProperties": false
+              },
+              "rotation": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "material": {
+                "type": "string",
+                "minLength": 1
+              },
+              "mirror": {
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "x",
+                    "z"
+                  ]
+                }
+              },
+              "repeat": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 200
+                  },
+                  "step": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      },
+                      "z": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "count",
+                  "step"
+                ],
+                "additionalProperties": false
+              },
+              "repeatAround": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 360
+                  },
+                  "step": {
+                    "type": "number",
+                    "minimum": -360,
+                    "maximum": 360
+                  }
+                },
+                "required": [
+                  "count",
+                  "step"
+                ],
+                "additionalProperties": false
+              },
+              "plan": {
+                "type": "string",
+                "enum": [
+                  "solid",
+                  "dashed"
+                ]
+              },
+              "provenance": {
+                "type": "object",
+                "properties": {
+                  "confidence": {
+                    "type": "string",
+                    "enum": [
+                      "high",
+                      "medium",
+                      "low"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "plan",
+                      "photo",
+                      "assumed",
+                      "user",
+                      "measured"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  },
+                  "fields": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "confidence": {
+                          "type": "string",
+                          "enum": [
+                            "high",
+                            "medium",
+                            "low"
+                          ]
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "plan",
+                            "photo",
+                            "assumed",
+                            "user",
+                            "measured"
+                          ]
+                        },
+                        "note": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "confidence",
+                        "source"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "confidence",
+                  "source"
+                ],
+                "additionalProperties": false
+              },
+              "shape": {
+                "type": "string",
+                "const": "lathe"
+              },
+              "profile": {
+                "minItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              },
+              "arc": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 360
+              }
+            },
+            "required": [
+              "position",
+              "material",
+              "shape",
+              "profile"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "price": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "minimum": 0
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        }
+      },
+      "required": [
+        "amount",
+        "currency"
+      ],
+      "additionalProperties": false
+    },
+    "productUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "category",
+    "dimensions",
+    "placement",
+    "geometry",
+    "materialSlots"
+  ],
+  "additionalProperties": false
+}

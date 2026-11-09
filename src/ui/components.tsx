@@ -7,17 +7,20 @@ export function ConfidenceBadge({ value }: { value: Confidence }) {
 
 const severityIcon: Record<Issue["severity"], string> = { error: "✖", warning: "⚠", info: "ℹ" };
 
-export function IssueLine({ issue }: { issue: Issue }) {
+export function IssueLine({ issue, showFile = true }: { issue: Issue; showFile?: boolean }) {
   return (
     <li className={`issue issue--${issue.severity}`}>
       <span className="issue__icon" aria-label={issue.severity}>
         {severityIcon[issue.severity]}
       </span>
       <div>
-        <div className="issue__where">
-          {issue.file}
-          {issue.path && <> › {issue.path}</>}
-        </div>
+        {(showFile || issue.path) && (
+          <div className="issue__where">
+            {showFile && issue.file}
+            {showFile && issue.path && " › "}
+            {issue.path}
+          </div>
+        )}
         <div>{issue.message}</div>
         {issue.hint && <div className="muted">{issue.hint}</div>}
       </div>

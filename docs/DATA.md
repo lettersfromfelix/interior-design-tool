@@ -13,8 +13,8 @@ in its **Issues** panel.
 | `data/apartment.json` | The fixed apartment: rooms, walls, doors, windows, kitchen, built-ins, checklist |
 | `data/materials.json` | Material presets (colours, wood, fabric, metal, paint, floors, …) |
 | `data/underlay/floorplan.png` | The original plan, cropped (no address), for the 2D underlay |
-| `catalogue/**` | Furniture (Phase 2, see `CATALOGUE.md` then) |
-| `layouts/*.json` | Saved layouts (Phase 4) |
+| `catalogue/**` | Furniture, one item per file; the format is in [`CATALOGUE.md`](../CATALOGUE.md) |
+| `layouts/*.json` | Placed furniture; `default.json` is the autosaved current layout (named layouts: Phase 4) |
 
 ## Units and coordinate system
 
@@ -123,7 +123,7 @@ in the same style (see below).
 
 ### Fixtures (kitchen, built-ins, sanitary, column, railings)
 
-Fixed elements are built from the same parametric **parts** that catalogue items will use:
+Fixed elements are built from the same parametric **parts** that catalogue items use (see `CATALOGUE.md`):
 
 ```ts
 { id, name, kind: "kitchen" | "built-in" | "sanitary" | "appliance" | "column" | "railing" | "other",
@@ -211,6 +211,64 @@ without `--force`. After measuring, edit `data/apartment.json` directly.
 ```
 
 Patterns are generated in the browser at real-world scale (a 60 cm tile is 60 cm), so no image files are needed.
-Groups in use: `paint`, `floor`, `kitchen`, `door`, `frame`, `glass`, `ceramic`, `metal`, `wood`, `fabric`,
-`leather`. New presets and groups can be added freely. Unknown ids show an issue with suggestions and fall back to
-neutral grey.
+Groups in use: `paint`, `floor`, `kitchen`, `door`, `frame`, `glass`, `ceramic`, `metal`, `wood`, `lacquer`,
+`fabric`, `leather`. New presets and groups can be added freely. Unknown ids show an issue with suggestions and fall
+back to neutral grey. Catalogue items offer presets per material slot, by id or by group (`"fabric.*"`).
+
+## `layouts/*.json`
+
+A layout is the furniture placed in the apartment. The app writes it; you (or GHCP) can read and edit it too.
+
+```ts
+{
+  $schema?: "../schemas/layout.schema.json",
+  schemaVersion: 1,
+  name: string,
+  description?: string,
+  createdFrom?: string,            // the layout this one was duplicated from (Phase 4)
+  updatedAt?: string,              // ISO time, set by the app on every save
+  surfaces?: {                     // wall colours and floors (Phase 4)
+    walls?: { rooms?: { [roomId]: presetId }, faces?: { ["<wallId>:left|right"]: presetId } },
+    floors?: { [roomId]: presetId }
+  },
+  items: [{
+    uid: string,                   // unique in the layout, e.g. "sofa-3-seater-1"
+    item: string,                  // catalogue id
+    label?: string,
+    position: [x, z],              // plan position of the item's origin (bottom centre), cm
+    rotation: number,              // degrees, clockwise seen from above; 0 = front faces +z (down the plan)
+    elevation?: number,            // wall items: floor to the bottom edge (default: the item's defaultElevation)
+    parent?: { uid, surface },     // stands on surface #surface of another item (Phase 3); position and
+                                   // rotation are then relative to that item
+    materials?: { [slot]: presetId | "@original" },   // only slots that differ from the catalogue default
+    locked?: boolean,              // can't be moved, rotated or deleted
+    hidden?: boolean
+  }]
+}
+```
+
+How the app treats the file:
+
+- **Autosave.** Every change is written about half a second later. `default.json` is created by the first change.
+  The file is formatted for reading and diffing: stable key order, values rounded to 0.1 cm and 0.1°, and each
+  placed item on a single line when it fits into 120 characters.
+- **Edited outside the app.** The app reloads it within about a second. Local changes that weren't saved yet are
+  dropped in favour of the file. This also holds if the file changes just before an autosave: every save names the
+  version of the file it is based on, and the server refuses it (409) if the file on disk is a different one.
+- **Broken file.** The app reports it in **Issues** and pauses editing until the file is valid again, so it never
+  overwrites your edit.
+- **Unknown item or material.** A placed item whose catalogue id doesn't exist (any more) is kept and shown as a red
+  box. A material that isn't allowed (any more) falls back to the slot's default. Both are listed as warnings.
+
+## Local file API
+
+`server/localFsApi.ts` is the only code that touches the disk. It runs inside the Vite dev server.
+
+| Request | Result |
+|---|---|
+| `GET /api/files?dir=data\|catalogue\|layouts` | All `.json` files in the folder (recursive) with their text and modification time, plus `assets`: the other files (models, textures) with size and time |
+| `PUT /api/layouts/<name>.json` | Writes a layout atomically (temporary file, then rename). Only layout file names, at most 1 MB, not from other websites. With the `x-layout-base` header (the app always sends it) only if the file on disk is one of the listed versions, otherwise `409`. Writes to the same file are applied one after another |
+| `GET /vendor/draco/…`, `/vendor/basis/…` | The Draco and KTX2 decoders that ship with three.js, for compressed GLB models |
+
+Images and 3D models (`/data/…`, `/catalogue/…`) are served by Vite itself from the repository folder. Changes on
+disk are pushed to the app as `fs:change` events over Vite's HMR connection; the app then re-reads the folder.

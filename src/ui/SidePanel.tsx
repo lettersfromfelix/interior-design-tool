@@ -1,4 +1,5 @@
 import type { SidePanel as PanelId } from "../state/store";
+import { countIssues, useAllIssues } from "./issues";
 import { InspectPanel } from "./panels/InspectPanel";
 import { IssuesPanel } from "./panels/IssuesPanel";
 import { VerifyPanel } from "./panels/VerifyPanel";
@@ -13,17 +14,17 @@ const TABS: { id: PanelId; label: string }[] = [
 export function SidePanel() {
   const panel = useApp((s) => s.sidePanel);
   const setPanel = useApp((s) => s.setSidePanel);
-  const errors = useApp((s) => s.data.issues.filter((i) => i.severity === "error").length + (s.data.loadError ? 1 : 0));
-  const warnings = useApp((s) => s.data.issues.filter((i) => i.severity === "warning").length);
+  const loadError = useApp((s) => !!s.data.loadError);
+  const counts = countIssues(useAllIssues());
+  const errors = counts.errors + (loadError ? 1 : 0);
+  const total = errors + counts.warnings;
   return (
     <aside className="side">
       <nav className="tabs">
         {TABS.map((t) => (
           <button key={t.id} className={panel === t.id ? "active" : ""} onClick={() => setPanel(t.id)}>
             {t.label}
-            {t.id === "issues" && errors + warnings > 0 && (
-              <span className={`count ${errors ? "count--error" : "count--warning"}`}>{errors + warnings}</span>
-            )}
+            {t.id === "issues" && total > 0 && <span className={`count ${errors ? "count--error" : "count--warning"}`}>{total}</span>}
           </button>
         ))}
       </nav>

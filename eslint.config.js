@@ -11,8 +11,14 @@ import tseslint from "typescript-eslint";
  * - src/engine does not import React or the UI.
  */
 const noDataImports = [
-  { regex: "\\.json$", message: "Data files are loaded at runtime through the file API (src/data). Never import JSON in src/." },
-  { regex: "(^|/)(catalogue|layouts)(/|$)", message: "Catalogue and layout files are loaded at runtime. Never import them." },
+  {
+    regex: "\\.json(\\?.*)?$",
+    message: "Data files are loaded at runtime through the file API (src/data). Never import JSON in src/.",
+  },
+  {
+    regex: "\\.(glb|gltf|bin|ktx2|png|jpe?g|webp)(\\?.*)?$",
+    message: "Models and images in data/ and catalogue/ are loaded at runtime through the file API. Never import them.",
+  },
 ];
 
 export default defineConfig(

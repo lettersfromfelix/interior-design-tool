@@ -1,6 +1,6 @@
 /**
  * The 3D engine facade. Owns the renderer, the scene and both views (2D plan, 3D orbit).
- * It reads everything from the store and writes back only user intents (selection).
+ * It reads everything from the store and writes back only user intents (selection, layout commands).
  */
 import {
   Color,
@@ -8,6 +8,7 @@ import {
   OrthographicCamera,
   PCFShadowMap,
   PerspectiveCamera,
+  Plane,
   Raycaster,
   Scene,
   Vector2,
@@ -19,18 +20,25 @@ import {
 } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
+import type { Vec2 } from "../core/schema/common";
 import type { DataSnapshot } from "../data/snapshot";
 import type { AppState, AppStore, ViewMode } from "../state/store";
 import { buildApartment, type ApartmentBuild } from "./builders/apartment";
+import { Interaction } from "./interaction";
+import { UNKNOWN_SIZE } from "./items/buildItem";
+import { FurnitureLayer } from "./items/FurnitureLayer";
+import type { ModelLibrary } from "./items/models";
 import { configureCameraLayers } from "./layers";
 import { Lights } from "./lighting";
 import { isSeeThrough, MaterialLibrary } from "./materials/MaterialLibrary";
 import { DimensionOverlay } from "./overlays/dimension";
 import { Highlight } from "./overlays/highlight";
+import { SelectionOverlay } from "./overlays/selection";
 import { UnderlayOverlay } from "./overlays/underlay";
 import { PlanControls } from "./views/PlanControls";
 
 const BACKGROUND: Record<ViewMode, string> = { "2d": "#f4f3ef", "3d": "#dde2e7" };
+const DEG = Math.PI / 180;
 
 export class Engine {
   private readonly renderer: WebGLRenderer;
@@ -43,7 +51,10 @@ export class Engine {
   private readonly lights = new Lights();
   private readonly highlight = new Highlight();
   private readonly dimension = new DimensionOverlay();
+  private readonly selection = new SelectionOverlay();
   private readonly underlay: UnderlayOverlay;
+  private readonly furniture: FurnitureLayer;
+  private readonly interaction: Interaction;
   private readonly resizeObserver: ResizeObserver;
   private readonly unsubscribe: () => void;
   private mats?: MaterialLibrary;
@@ -55,11 +66,11 @@ export class Engine {
   private dirty = true;
   private frame = 0;
   private labelsOn = true;
-  private pointerDown: { x: number; y: number } | null = null;
 
   constructor(
     private readonly container: HTMLElement,
     private readonly store: AppStore,
+    models: ModelLibrary,
   ) {
     const r = new WebGLRenderer({ antialias: true });
     r.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -70,12 +81,40 @@ export class Engine {
     this.labels.domElement.className = "viewport-labels";
     container.append(r.domElement, this.labels.domElement);
     this.renderer = r;
+    models.attachRenderer(r);
 
     this.underlay = new UnderlayOverlay(() => this.requestRender());
-    this.scene.add(this.lights.group, this.highlight.group, this.dimension.group, this.underlay.group);
+    this.furniture = new FurnitureLayer(models, () => {
+      this.applySelection(this.store.getState());
+      this.requestRender();
+    });
+    this.scene.add(
+      this.lights.group,
+      this.furniture.group,
+      this.highlight.group,
+      this.dimension.group,
+      this.selection.group,
+      this.underlay.group,
+    );
     configureCameraLayers(this.planCamera, "2d");
     configureCameraLayers(this.orbitCamera, "3d");
 
+    // furniture interaction first: its capture-phase listener keeps presses on items away from the camera controls
+    this.interaction = new Interaction({
+      canvas: r.domElement,
+      container,
+      store,
+      scene: this.scene,
+      furniture: this.furniture,
+      overlay: this.selection,
+      models,
+      view: () => this.view,
+      ray: (x, y) => this.ray(x, y),
+      planPoint: (x, y, h) => this.planPoint(x, y, h),
+      apartmentRoot: () => this.build?.root,
+      materials: () => this.mats,
+      requestRender: () => this.requestRender(),
+    });
     this.plan = new PlanControls(
       this.planCamera,
       r.domElement,
@@ -91,8 +130,6 @@ export class Engine {
     this.orbit.addEventListener("change", () => this.requestRender());
     this.orbit.addEventListener("start", () => this.adjusted.add("3d"));
 
-    r.domElement.addEventListener("pointerdown", this.onPointerDown);
-    r.domElement.addEventListener("pointerup", this.onPointerUp);
     this.resizeObserver = new ResizeObserver(() => this.resize());
     this.resizeObserver.observe(container);
     this.resize();
@@ -101,8 +138,10 @@ export class Engine {
     this.view = s.view;
     this.applyView();
     this.applyData(s.data);
+    this.syncFurniture(s);
     this.applyDisplay(s);
     this.applySelection(s);
+    this.interaction.setPlacing(s.placing);
     this.unsubscribe = store.subscribe((next, prev) => this.onState(next, prev));
     if (import.meta.env.DEV) (window as unknown as { __engine?: Engine }).__engine = this; // for debugging in the browser console
     this.loop();
@@ -117,19 +156,34 @@ export class Engine {
   }
 
   private onState(s: AppState, prev: AppState): void {
-    if (s.data !== prev.data) this.applyData(s.data);
+    const dataChanged = s.data !== prev.data;
+    if (dataChanged) this.applyData(s.data);
     if (s.view !== prev.view) {
       this.view = s.view;
       this.applyView();
     }
+    if (dataChanged || s.layout.doc !== prev.layout.doc || s.catalogue !== prev.catalogue) this.syncFurniture(s);
+    if (dataChanged || s.placing !== prev.placing || s.catalogue !== prev.catalogue) {
+      this.interaction.setPlacing(s.placing, dataChanged || s.catalogue !== prev.catalogue);
+    }
     if (s.underlay !== prev.underlay || s.labels !== prev.labels || s.view !== prev.view) this.applyDisplay(s);
-    if (s.data !== prev.data || s.selection !== prev.selection || s.activeCheck !== prev.activeCheck) this.applySelection(s);
+    if (
+      dataChanged ||
+      s.selection !== prev.selection ||
+      s.activeCheck !== prev.activeCheck ||
+      s.layout !== prev.layout ||
+      s.catalogue !== prev.catalogue ||
+      s.view !== prev.view
+    ) {
+      this.applySelection(s);
+    }
     if (s.fitRequest !== prev.fitRequest) this.fit();
     this.requestRender();
   }
 
   private applyData(data: DataSnapshot): void {
     this.build?.dispose();
+    this.furniture.setMaterials(undefined);
     this.mats?.dispose();
     this.build = undefined;
     this.mats = undefined;
@@ -142,11 +196,21 @@ export class Engine {
       anisotropy: this.renderer.capabilities.getMaxAnisotropy(),
       onLoad: this.requestRender,
     });
+    this.furniture.setMaterials(this.mats);
     this.build = buildApartment(ap, this.mats);
     this.scene.add(this.build.root);
     this.lights.fit(this.build.bounds);
     this.underlay.set(ap.underlay, data.version, ap.ceilingHeight + 20);
     if (!this.fitted.has(this.view)) this.fit();
+  }
+
+  private syncFurniture(s: AppState): void {
+    this.furniture.sync({
+      doc: s.layout.doc,
+      catalogue: s.catalogue,
+      presets: s.data.materials,
+      ceilingHeight: s.data.apartment?.ceilingHeight ?? 250,
+    });
   }
 
   private applyView(): void {
@@ -185,14 +249,32 @@ export class Engine {
     }
   }
 
+  /** Highlight the selection and the active check's elements; show the selected item's outline and rotate ring. */
   private applySelection(s: AppState): void {
-    const find = (id: string | null | undefined): Object3D[] => {
+    const element = (id: string | null | undefined): Object3D[] => {
       const o = id ? this.build?.elements.get(id) : undefined;
       return o ? [o] : [];
     };
+    const sel = s.selection;
+    const selected = sel?.kind === "element" ? element(sel.id) : [];
+    // furniture isn't tinted (that would hide the material you just picked); the selection box marks it instead
+    const item = sel?.kind === "item" ? this.furniture.object(sel.uid) : undefined;
     const check = s.data.apartment?.checks?.find((c) => c.id === s.activeCheck);
-    this.highlight.set(find(s.selection), (check?.refs ?? []).flatMap(find));
+    this.highlight.set(selected, (check?.refs ?? []).flatMap(element));
     this.dimension.show(check);
+
+    const placed = sel?.kind === "item" ? s.layout.doc.items.find((p) => p.uid === sel.uid) : undefined;
+    // room labels sit on top of the canvas: fade them so they don't hide the selected item and its handles
+    this.labels.domElement.classList.toggle("viewport-labels--faded", !!(item && placed));
+    if (!item || !placed) {
+      this.selection.hide();
+      return;
+    }
+    const size = s.catalogue.entries.get(placed.item)?.item.dimensions ?? { width: UNKNOWN_SIZE, depth: UNKNOWN_SIZE, height: UNKNOWN_SIZE };
+    // the object's current transform: follows previews while dragging or rotating
+    const pose = { x: item.position.x, y: item.position.y, z: item.position.z, rotation: -item.rotation.y / DEG };
+    const rotatable = !placed.locked && s.layout.status === "ready";
+    this.selection.show(pose, size, rotatable, this.view === "2d" ? this.plan.cmPerPx : 0);
   }
 
   /** Frame the whole apartment in the active view. */
@@ -231,32 +313,26 @@ export class Engine {
     this.requestRender();
   }
 
-  private onPointerDown = (e: PointerEvent): void => {
-    this.pointerDown = { x: e.clientX, y: e.clientY };
-  };
-
-  private onPointerUp = (e: PointerEvent): void => {
-    const down = this.pointerDown;
-    this.pointerDown = null;
-    if (!down || e.button !== 0 || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 4) return;
-    this.store.getState().select(this.pick(e.clientX, e.clientY));
-  };
-
-  /** Id of the apartment element under the pointer. */
-  private pick(clientX: number, clientY: number): string | null {
-    if (!this.build) return null;
+  /** Ray from the active camera through a point on the screen. */
+  private ray(clientX: number, clientY: number): Raycaster {
     const rect = this.renderer.domElement.getBoundingClientRect();
     const ndc = new Vector2(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
     const rc = new Raycaster();
     rc.setFromCamera(ndc, this.camera);
     rc.layers.mask = this.camera.layers.mask;
     rc.params.Line.threshold = this.view === "2d" ? 3 * this.plan.cmPerPx : 3;
-    for (const hit of rc.intersectObject(this.build.root, true)) {
-      let o: Object3D | null = hit.object;
-      while (o && !o.userData.elementId) o = o.parent;
-      if (o) return o.userData.elementId as string;
+    return rc;
+  }
+
+  /** Plan point under the pointer on the horizontal plane at height `y`. */
+  private planPoint(clientX: number, clientY: number, y: number): Vec2 | null {
+    if (this.view === "2d") {
+      const p = this.plan.toPlan(clientX, clientY);
+      return [p.x, p.y];
     }
-    return null;
+    const hit = this.ray(clientX, clientY).ray.intersectPlane(new Plane(new Vector3(0, 1, 0), -y), new Vector3());
+    if (!hit || hit.distanceTo(this.orbitCamera.position) > 20_000) return null; // towards the horizon
+    return [hit.x, hit.z];
   }
 
   private loop = (): void => {
@@ -264,6 +340,7 @@ export class Engine {
     if (!this.dirty) return;
     this.dirty = false;
     try {
+      if (this.view === "2d") this.selection.setScale(this.plan.cmPerPx);
       this.updateLabels();
       this.renderer.render(this.scene, this.camera);
       this.labels.render(this.scene, this.camera);
@@ -278,15 +355,16 @@ export class Engine {
     if (w.__engine === this) delete w.__engine;
     this.unsubscribe();
     this.resizeObserver.disconnect();
-    this.renderer.domElement.removeEventListener("pointerdown", this.onPointerDown);
-    this.renderer.domElement.removeEventListener("pointerup", this.onPointerUp);
+    this.interaction.dispose();
     this.plan.dispose();
     this.orbit.dispose();
+    this.furniture.dispose();
     this.build?.dispose();
     this.mats?.dispose();
     this.underlay.dispose();
     this.highlight.dispose();
     this.dimension.dispose();
+    this.selection.dispose();
     this.renderer.dispose();
     this.renderer.domElement.remove();
     this.labels.domElement.remove();

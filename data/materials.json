@@ -26,6 +26,9 @@
     { "id": "frame.white", "name": "Frame, white", "color": "#F1F1EE", "roughness": 0.4 },
     { "id": "glass.clear", "name": "Clear glass", "color": "#DCEBEF", "roughness": 0.05, "opacity": 0.18 },
     { "id": "glass.black", "name": "Black glass (hob)", "color": "#111214", "roughness": 0.15 },
+    { "id": "glass.opal", "name": "Opal glass (lamp shades)", "color": "#F2EFE8", "roughness": 0.3,
+      "emissive": "#FFF0D2", "emissiveIntensity": 0.3 },
+    { "id": "glass.smoke", "name": "Smoked glass", "color": "#5E5A55", "roughness": 0.12 },
     { "id": "ceramic.white", "name": "White ceramic", "color": "#F6F6F3", "roughness": 0.2 },
 
     { "id": "metal.stainless", "name": "Stainless steel", "color": "#B8BBBE", "roughness": 0.35, "metalness": 0.85 },
@@ -39,6 +42,10 @@
       "pattern": { "type": "wood-grain", "color2": "#553826", "scale": 40, "strength": 0.5 } },
     { "id": "wood.ash-white", "name": "Ash, white oiled", "color": "#E3D7C4", "roughness": 0.6,
       "pattern": { "type": "wood-grain", "color2": "#CDBEA6", "scale": 35, "strength": 0.45 } },
+
+    { "id": "lacquer.white", "name": "Lacquer, white matt", "color": "#F0EFEA", "roughness": 0.45 },
+    { "id": "lacquer.anthracite", "name": "Lacquer, anthracite matt", "color": "#383B3F", "roughness": 0.45 },
+    { "id": "lacquer.sage", "name": "Lacquer, sage green matt", "color": "#9AA58F", "roughness": 0.5 },
 
     { "id": "fabric.boucle-cream", "name": "Bouclé, cream", "color": "#EDE6DA", "roughness": 0.97,
       "pattern": { "type": "weave", "color2": "#DCD3C4", "scale": 2, "strength": 0.5 } },

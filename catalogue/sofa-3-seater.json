@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "sofa-3-seater",
+  "name": "Sofa, 3-seater",
+  "category": "seating",
+  "tags": ["living room"],
+  "dimensions": { "width": 220, "depth": 92, "height": 80 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "legs", "shape": "cylinder", "radius": 2.5, "radiusTop": 3, "height": 12, "position": { "x": 100, "y": 6, "z": 38 }, "mirror": ["x", "z"], "material": "legs" },
+      { "name": "base", "shape": "box", "size": { "x": 220, "y": 18, "z": 92 }, "cornerRadius": 2, "position": { "x": 0, "y": 21, "z": 0 }, "material": "upholstery" },
+      { "name": "arms", "shape": "box", "size": { "x": 18, "y": 32, "z": 92 }, "cornerRadius": 5, "position": { "x": 101, "y": 46, "z": 0 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "back", "shape": "box", "size": { "x": 184, "y": 42, "z": 12 }, "cornerRadius": 2, "position": { "x": 0, "y": 51, "z": -40 }, "material": "upholstery" },
+      { "name": "back cushions", "shape": "box", "size": { "x": 61, "y": 46, "z": 14 }, "cornerRadius": 5, "position": { "x": -61.5, "y": 55, "z": -27 }, "rotation": { "x": -7 }, "repeat": { "count": 3, "step": { "x": 61.5, "y": 0, "z": 0 } }, "material": "upholstery" },
+      { "name": "seat cushions", "shape": "box", "size": { "x": 61, "y": 14, "z": 64 }, "cornerRadius": 4, "position": { "x": -61.5, "y": 37, "z": 13 }, "repeat": { "count": 3, "step": { "x": 61.5, "y": 0, "z": 0 } }, "material": "upholstery" }
+    ]
+  },
+  "materialSlots": {
+    "upholstery": { "label": "Upholstery", "default": "fabric.linen-grey", "allowed": ["fabric.*", "leather.*"] },
+    "legs": { "label": "Legs", "default": "wood.oak-natural", "allowed": ["wood.*", "metal.black-matte", "metal.brass"] }
+  },
+  "clearance": { "front": 60, "note": "Legroom in front of the seat" },
+  "notes": "Generic example with typical sizes, not a specific product."
+}

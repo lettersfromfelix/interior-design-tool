@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "createdFrom": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "surfaces": {
+      "type": "object",
+      "properties": {
+        "walls": {
+          "type": "object",
+          "properties": {
+            "rooms": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "minLength": 1
+              },
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+\\.[a-z0-9-]+$"
+              }
+            },
+            "faces": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "minLength": 1
+              },
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+\\.[a-z0-9-]+$"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "floors": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1
+          },
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+\\.[a-z0-9-]+$"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "uid": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
+          },
+          "item": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "position": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2,
+            "description": "[x, z] in cm (plan coordinates)"
+          },
+          "rotation": {
+            "type": "number"
+          },
+          "elevation": {
+            "type": "number",
+            "minimum": 0
+          },
+          "parent": {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string",
+                "minLength": 1
+              },
+              "surface": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "uid",
+              "surface"
+            ],
+            "additionalProperties": false
+          },
+          "materials": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1
+            },
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z0-9-]+\\.[a-z0-9-]+$"
+                },
+                {
+                  "type": "string",
+                  "const": "@original"
+                }
+              ]
+            }
+          },
+          "locked": {
+            "type": "boolean"
+          },
+          "hidden": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "uid",
+          "item",
+          "position",
+          "rotation"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "name",
+    "items"
+  ],
+  "additionalProperties": false
+}
