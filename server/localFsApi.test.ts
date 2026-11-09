@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
 import { contentTag } from "../src/core/files";
-import { baseTags, isLocalRequest, isSameOrigin, listDir, MAX_LAYOUT_BYTES, toDataPath, vendorFile, writeLayout } from "./localFsApi";
+import { baseTags, isLocalRequest, isSameOrigin, listDir, MAX_LAYOUT_BYTES, toDataPath, trashLayout, vendorFile, writeLayout } from "./localFsApi";
 
 describe("local file API", () => {
   const root = mkdtempSync(path.join(tmpdir(), "idt-"));
@@ -99,6 +99,19 @@ describe("local file API", () => {
   it("reads the base versions from the request header", () => {
     expect(baseTags({ headers: {} })).toBeUndefined();
     expect(baseTags({ headers: { "x-layout-base": "none, 5-0a1b2c3d" } })).toEqual(["none", "5-0a1b2c3d"]);
+  });
+
+  it("moves deleted layouts to the trash, only the version the app knows", async () => {
+    const file = path.join(root, "layouts", "gone.json");
+    writeFileSync(file, '{"v":1}');
+    await expect(trashLayout(root, "gone.json", [contentTag('{"v":0}')])).rejects.toMatchObject({ status: 409 });
+    expect(existsSync(file)).toBe(true);
+    const res = await trashLayout(root, "gone.json", [contentTag('{"v":1}')]);
+    expect(existsSync(file)).toBe(false);
+    expect(res.trashed).toMatch(/^layouts\/\.trash\/gone\..+\.json$/);
+    expect(readFileSync(path.join(root, res.trashed), "utf8")).toBe('{"v":1}');
+    await expect(trashLayout(root, "gone.json")).rejects.toMatchObject({ status: 404 });
+    await expect(trashLayout(root, "../x.json")).rejects.toMatchObject({ status: 400 });
   });
 
   it("serves only the three.js decoder files", () => {

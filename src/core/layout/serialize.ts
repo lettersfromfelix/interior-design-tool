@@ -5,7 +5,7 @@
 import type { LayoutFile, PlacedItem } from "../schema/layout";
 import { normalizeRotation, round1 } from "./commands";
 
-const LAYOUT_KEYS = ["$schema", "schemaVersion", "name", "description", "createdFrom", "updatedAt", "surfaces", "items"];
+const LAYOUT_KEYS = ["$schema", "schemaVersion", "name", "description", "createdFrom", "updatedAt", "surfaces", "doors", "items"];
 const ITEM_KEYS = ["uid", "item", "label", "position", "rotation", "elevation", "parent", "materials", "locked", "hidden"];
 
 const isPlainObject = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);

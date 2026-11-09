@@ -125,9 +125,25 @@ function evaluate(m: Mover, solution: Solution, target: Target, ctx: PlacementCo
 
 const isBlocked = (a: Attempt, m: Mover) => [...m.moving].some((uid) => newHardConflicts(a.conflicts.get(uid), m.before.get(uid)).length > 0);
 
+/** Block mode refuses this attempt: a moving item runs into something it didn't overlap at the start. */
+export const refused = (a: Attempt, m: Mover, ctx: Pick<PlacementContext, "aids">): boolean => ctx.aids.collisions === "block" && isBlocked(a, m);
+
+/**
+ * The item where it stands now (no snapping). Gestures start from it, so a first step that is blocked keeps the
+ * item in place instead of falling back to the blocked target.
+ */
+export function currentAttempt(m: Mover, ctx: PlacementContext): Attempt | undefined {
+  const p = ctx.doc.items.find((x) => x.uid === m.uid);
+  const pose = ctx.poses.get(m.uid);
+  if (m.isNew || !p || !pose) return undefined;
+  const placement: PlacementChange = { position: p.position, rotation: p.rotation, ...(p.parent ? { parent: p.parent } : {}) };
+  return evaluate(m, { placement }, { point: [pose.x, pose.z], rotation: pose.rotation }, ctx);
+}
+
 /**
  * Solve a pointer target. In block mode a target that runs into something new is replaced by the nearest free one
- * that keeps one axis of `last` (sliding along the obstacle), or by `last` itself; `blocked` is then true.
+ * that keeps one axis of `last` (sliding along the obstacle), or by `last` itself; `blocked` is then true. Without
+ * `last` (a new item) the blocked attempt is returned, marked `blocked`, and must not be committed.
  */
 export function moveTo(m: Mover, target: Target, ctx: PlacementContext, last?: Attempt): Attempt {
   const first = tryTarget(m, target, ctx);

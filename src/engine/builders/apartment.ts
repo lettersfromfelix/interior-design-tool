@@ -4,9 +4,10 @@ import { CSS2DObject } from "three/addons/renderers/CSS2DRenderer.js";
 import { area, direction, labelPoint, length } from "../../core/geometry/polygon";
 import type { ApartmentFile, Opening, Room, Wall } from "../../core/schema/apartment";
 import type { Vec2 } from "../../core/schema/common";
+import type { LayoutSurfaces } from "../../core/schema/layout";
 import { Layer, setLayer } from "../layers";
 import type { MaterialLibrary } from "../materials/MaterialLibrary";
-import { box, buildDoor, buildWindow, createPlanStyle, type OpeningContext, type PlanStyle, type Side } from "./openings";
+import { box, buildDoor, buildWindow, createPlanStyle, type DoorLeafPivot, type OpeningContext, type PlanStyle, type Side } from "./openings";
 import { buildParts } from "./parts";
 
 const DEG = Math.PI / 180;
@@ -18,6 +19,10 @@ export interface ApartmentBuild {
   /** Top-level object of every element, by id (rooms, walls, openings, fixtures). */
   elements: Map<string, Object3D>;
   labels: CSS2DObject[];
+  /** Ceiling meshes: they cast shadows only in daylight (otherwise the default light would leave the rooms dark). */
+  ceilings: Mesh[];
+  /** Door leaves' hinges, by door id. */
+  doors: Map<string, DoorLeafPivot[]>;
   bounds: Box3;
   dispose(): void;
 }
@@ -46,7 +51,10 @@ function roomLabel(room: Room): CSS2DObject {
   return label;
 }
 
-export function buildApartment(ap: ApartmentFile, mats: MaterialLibrary): ApartmentBuild {
+/**
+ * @param surfaces the working layout's wall colours and floors; they win over the finishes in apartment.json.
+ */
+export function buildApartment(ap: ApartmentFile, mats: MaterialLibrary, surfaces?: LayoutSurfaces): ApartmentBuild {
   const root = new Group();
   root.name = "apartment";
   const elements = new Map<string, Object3D>();
@@ -60,16 +68,19 @@ export function buildApartment(ap: ApartmentFile, mats: MaterialLibrary): Apartm
   const style = createPlanStyle();
   const rooms = new Map(ap.rooms.map((r) => [r.id, r]));
   const H = ap.ceilingHeight;
+  const ceilings: Mesh[] = [];
+  const leaves: DoorLeafPivot[] = [];
 
   // rooms: floor + ceiling
   for (const r of ap.rooms) {
     const g = new Group();
-    const floor = new Mesh(floorGeometry(r.outline), mats.get(r.floorMaterial ?? ap.defaults.floorMaterial));
+    const floor = new Mesh(floorGeometry(r.outline), mats.get(surfaces?.floors?.[r.id] ?? r.floorMaterial ?? ap.defaults.floorMaterial));
     floor.receiveShadow = true;
     g.add(floor);
     if (r.kind === "indoor" && r.hasCeiling !== false) {
       const ceiling = new Mesh(ceilingGeometry(r.outline, H), mats.get(ap.defaults.ceilingMaterial));
       ceiling.receiveShadow = true;
+      ceilings.push(ceiling);
       g.add(setLayer(ceiling, Layer.ONLY_3D));
     }
     root.add(tag(g, r.id, "room"));
@@ -79,7 +90,7 @@ export function buildApartment(ap: ApartmentFile, mats: MaterialLibrary): Apartm
   const openingsByWall = new Map<string, Opening[]>();
   for (const o of ap.openings) openingsByWall.set(o.wall, [...(openingsByWall.get(o.wall) ?? []), o]);
   for (const w of ap.walls) {
-    const g = buildWall(w, openingsByWall.get(w.id) ?? [], { ap, rooms, mats, style, tag });
+    const g = buildWall(w, openingsByWall.get(w.id) ?? [], { ap, rooms, mats, style, tag, surfaces, leaves });
     root.add(tag(g, w.id, "wall"));
   }
 
@@ -102,10 +113,15 @@ export function buildApartment(ap: ApartmentFile, mats: MaterialLibrary): Apartm
     bounds.expandByPoint(new Vector3(w.end[0], H, w.end[1]));
   }
 
+  const doors = new Map<string, DoorLeafPivot[]>();
+  for (const l of leaves) doors.set(l.door, [...(doors.get(l.door) ?? []), l]);
+
   return {
     root,
     elements,
     labels,
+    ceilings,
+    doors,
     bounds,
     dispose() {
       root.traverse((o) => {
@@ -125,6 +141,8 @@ interface WallContext {
   mats: MaterialLibrary;
   style: PlanStyle;
   tag: <T extends Object3D>(obj: T, id: string, kind: ElementKind) => T;
+  surfaces?: LayoutSurfaces;
+  leaves: DoorLeafPivot[];
 }
 
 function buildWall(w: Wall, openings: readonly Opening[], c: WallContext): Group {
@@ -137,10 +155,16 @@ function buildWall(w: Wall, openings: readonly Opening[], c: WallContext): Group
   g.rotation.y = -Math.atan2(dz, dx);
 
   const indoor = (id?: string) => !!id && c.rooms.get(id)?.kind === "indoor";
-  const paint = (id?: string): Material => c.mats.get((id && c.rooms.get(id)?.wallMaterial) || c.ap.defaults.wallMaterial);
+  // the layout's colour for this side, else its colour for the room, else the room's finish in apartment.json
+  const paint = (side: Side, id?: string): Material =>
+    c.mats.get(
+      c.surfaces?.walls?.faces?.[`${w.id}:${side}`] ??
+        (id && c.surfaces?.walls?.rooms?.[id]) ??
+        ((id && c.rooms.get(id)?.wallMaterial) || c.ap.defaults.wallMaterial),
+    );
   const glazing = w.kind === "glazing" ? c.mats.get(c.ap.defaults.windowFrameMaterial) : undefined;
-  const left = glazing ?? paint(w.sides?.left);
-  const right = glazing ?? paint(w.sides?.right);
+  const left = glazing ?? paint("left", w.sides?.left);
+  const right = glazing ?? paint("right", w.sides?.right);
   // BoxGeometry face order: +x, -x, +y (top), -y, +z (right side), -z (left side)
   const faces = (top: Material): Material[] => [left, left, top, left, right, left];
   const piece = (x0: number, x1: number, y0: number, y1: number, top: Material) => box(x0, x1, y0, y1, -t / 2, t / 2, faces(top));
@@ -158,7 +182,7 @@ function buildWall(w: Wall, openings: readonly Opening[], c: WallContext): Group
     if (o.sill > 0.01) g.add(setLayer(piece(a, b, 0, o.sill, right), Layer.ONLY_3D));
     const top = o.sill + o.height;
     if (top < h - 0.01) g.add(setLayer(piece(a, b, top, h, c.mats.poche), Layer.ONLY_3D));
-    const ctx: OpeningContext = { wall: w, wallHeight: h, a, outside, defaults: c.ap.defaults, mats: c.mats, style: c.style };
+    const ctx: OpeningContext = { wall: w, wallHeight: h, a, outside, defaults: c.ap.defaults, mats: c.mats, style: c.style, leaves: c.leaves };
     g.add(c.tag(o.kind === "door" ? buildDoor(o, ctx) : buildWindow(o, ctx), o.id, "opening"));
     cursor = Math.max(cursor, b);
   }

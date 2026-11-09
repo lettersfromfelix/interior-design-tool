@@ -14,7 +14,7 @@ in its **Issues** panel.
 | `data/materials.json` | Material presets (colours, wood, fabric, metal, paint, floors, …) |
 | `data/underlay/floorplan.png` | The original plan, cropped (no address), for the 2D underlay |
 | `catalogue/**` | Furniture, one item per file; the format is in [`CATALOGUE.md`](../CATALOGUE.md) |
-| `layouts/*.json` | Placed furniture; `default.json` is the autosaved current layout (named layouts: Phase 4) |
+| `layouts/*.json` | Placed furniture, one layout per file; the app autosaves the one you are editing |
 
 ## Units and coordinate system
 
@@ -217,7 +217,10 @@ back to neutral grey. Catalogue items offer presets per material slot, by id or 
 
 ## `layouts/*.json`
 
-A layout is the furniture placed in the apartment. The app writes it; you (or GHCP) can read and edit it too.
+A layout is the furniture placed in the apartment, plus how the apartment looks in it (wall colours, floors, how
+far the doors are open). Each layout is one file; the app writes it, and you (or GHCP) can read and edit it too.
+The file name is chosen when the layout is created (`"Variant B"` → `variant-b.json`); `name` is what the app
+shows and can be renamed at any time.
 
 ```ts
 {
@@ -225,12 +228,17 @@ A layout is the furniture placed in the apartment. The app writes it; you (or GH
   schemaVersion: 1,
   name: string,
   description?: string,
-  createdFrom?: string,            // the layout this one was duplicated from (Phase 4)
+  createdFrom?: string,            // name of the layout this one was duplicated from
   updatedAt?: string,              // ISO time, set by the app on every save
-  surfaces?: {                     // wall colours and floors (Phase 4)
-    walls?: { rooms?: { [roomId]: presetId }, faces?: { ["<wallId>:left|right"]: presetId } },
+  surfaces?: {                     // wall colours and floors; they win over the finishes in apartment.json
+    walls?: {
+      rooms?: { [roomId]: presetId },                     // every wall side facing that room
+      faces?: { ["<wallId>:left|right"]: presetId }       // one side of one wall (wins over the room colour)
+    },
     floors?: { [roomId]: presetId }
   },
+  doors?: { [doorId]: number },    // how far a door is shown open: 0 = closed … 90 = open as on the plan (the
+                                   // default, not stored). Display only: the door is defined in apartment.json
   items: [{
     uid: string,                   // unique in the layout, e.g. "sofa-3-seater-1"
     item: string,                  // catalogue id
@@ -238,8 +246,8 @@ A layout is the furniture placed in the apartment. The app writes it; you (or GH
     position: [x, z],              // plan position of the item's origin (bottom centre), cm
     rotation: number,              // degrees, clockwise seen from above; 0 = front faces +z (down the plan)
     elevation?: number,            // wall items: floor to the bottom edge (default: the item's defaultElevation)
-    parent?: { uid, surface },     // stands on surface #surface of another item (Phase 3); position and
-                                   // rotation are then relative to that item
+    parent?: { uid, surface },     // stands on surface #surface of another item; position and rotation are
+                                   // then relative to that item
     materials?: { [slot]: presetId | "@original" },   // only slots that differ from the catalogue default
     locked?: boolean,              // can't be moved, rotated or deleted
     hidden?: boolean
@@ -247,14 +255,35 @@ A layout is the furniture placed in the apartment. The app writes it; you (or GH
 }
 ```
 
-How the app treats the file:
+Example of the apartment-related parts:
 
-- **Autosave.** Every change is written about half a second later. `default.json` is created by the first change.
-  The file is formatted for reading and diffing: stable key order, values rounded to 0.1 cm and 0.1°, and each
-  placed item on a single line when it fits into 120 characters.
+```json
+"surfaces": {
+  "walls": { "rooms": { "living": "paint.sage" }, "faces": { "w-entree-living:left": "paint.terracotta" } },
+  "floors": { "living": "floor.oak-parquet" }
+},
+"doors": { "d-entree-living": 0, "d-living-zimmer-13-0": 45 },
+```
+
+Wall colours use `paint.*` presets and floors `floor.*` presets from `data/materials.json`. Glass walls keep their
+frame colour. Ids that don't exist in the apartment or in the presets are reported as warnings in **Issues**.
+
+How the app treats the files:
+
+- **Several layouts.** The layout menu in the toolbar lists every file in `layouts/` (not subfolders). It opens,
+  creates (empty or as a copy of the open one), renames and deletes them, and compares two side by side. The app
+  remembers which one was open; if that file is gone, it opens `default.json` (or the first one).
+- **Autosave.** Every change is written about half a second later. A new layout's file is created by the first
+  change (or right away by "New…" and "Duplicate…"). Before another layout is opened, the open one is saved; if that
+  fails, it stays open. Undo steps are kept per layout while the app runs.
+- **Formatting.** The file is formatted for reading and diffing: stable key order, values rounded to 0.1 cm and 0.1°,
+  and each placed item on a single line when it fits into 120 characters.
+- **Deleting** moves the file to `layouts/.trash/<name>.<time>.json` (ignored by git and never emptied by the app).
+  To restore a layout, move it back to `layouts/` and give it its old name.
 - **Edited outside the app.** The app reloads it within about a second. Local changes that weren't saved yet are
-  dropped in favour of the file. This also holds if the file changes just before an autosave: every save names the
-  version of the file it is based on, and the server refuses it (409) if the file on disk is a different one.
+  dropped in favour of the file (the reload can be undone). This also holds if the file changes just before an
+  autosave: every save names the version of the file it is based on, and the server refuses it (409) if the file on
+  disk is a different one.
 - **Broken file.** The app reports it in **Issues** and pauses editing until the file is valid again, so it never
   overwrites your edit.
 - **Unknown item or material.** A placed item whose catalogue id doesn't exist (any more) is kept and shown as a red
@@ -266,8 +295,9 @@ How the app treats the file:
 
 | Request | Result |
 |---|---|
-| `GET /api/files?dir=data\|catalogue\|layouts` | All `.json` files in the folder (recursive) with their text and modification time, plus `assets`: the other files (models, textures) with size and time |
+| `GET /api/files?dir=data\|catalogue\|layouts` | All `.json` files in the folder (recursive; folders starting with `.` are skipped) with their text and modification time, plus `assets`: the other files (models, textures) with size and time |
 | `PUT /api/layouts/<name>.json` | Writes a layout atomically (temporary file, then rename). Only layout file names, at most 1 MB, not from other websites. With the `x-layout-base` header (the app always sends it) only if the file on disk is one of the listed versions, otherwise `409`. Writes to the same file are applied one after another |
+| `DELETE /api/layouts/<name>.json` | Moves the layout to `layouts/.trash/` (same `x-layout-base` check). `404` if it doesn't exist |
 | `GET /vendor/draco/…`, `/vendor/basis/…` | The Draco and KTX2 decoders that ship with three.js, for compressed GLB models |
 
 Images and 3D models (`/data/…`, `/catalogue/…`) are served by Vite itself from the repository folder. Changes on

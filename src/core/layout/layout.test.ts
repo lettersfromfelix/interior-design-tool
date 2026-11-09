@@ -3,16 +3,20 @@ import type { CatalogueItem } from "../schema/catalogue";
 import type { LayoutFile, PlacedItem } from "../schema/layout";
 import {
   addItem,
+  DOOR_OPEN,
   duplicateItem,
   emptyLayout,
   moveItem,
   nextUid,
   normalizeRotation,
   removeItem,
+  renameLayout,
   rotateItem,
+  setDoorOpening,
   setElevation,
   setFlag,
   setSlotMaterial,
+  setSurface,
 } from "./commands";
 import { baseElevation, descendants, resolvePoses, rotatePlan } from "./poses";
 import { formatJson, serializeLayout } from "./serialize";
@@ -76,6 +80,38 @@ describe("layout commands", () => {
     expect(next.items[0].elevation).toBe(150);
     expect(setElevation(next, "sideboard-1", undefined).items[0]).not.toHaveProperty("elevation");
     expect(setFlag(next, "sideboard-1", "hidden", true).items[0].hidden).toBe(true);
+  });
+
+  it("renames a layout (trimmed; empty names are ignored)", () => {
+    expect(renameLayout(doc, "  Variant B ").name).toBe("Variant B");
+    expect(renameLayout(doc, "   ")).toBe(doc);
+    expect(renameLayout(doc, doc.name)).toBe(doc);
+  });
+
+  it("opens and closes doors (display only; fully open is the default and not stored)", () => {
+    let next = setDoorOpening(doc, "d-1", 44.6);
+    expect(next.doors).toEqual({ "d-1": 45 });
+    next = setDoorOpening(next, "d-2", -10);
+    expect(next.doors).toEqual({ "d-1": 45, "d-2": 0 });
+    expect(setDoorOpening(next, "d-2", 0)).toBe(next);
+    next = setDoorOpening(setDoorOpening(next, "d-1", DOOR_OPEN), "d-2", undefined);
+    expect(next).not.toHaveProperty("doors");
+    expect(setDoorOpening(doc, "d-1", 120)).toBe(doc);
+  });
+
+  it("sets wall colours per room or per wall side and floors, and removes empty groups again", () => {
+    let next = setSurface(doc, { kind: "room-walls", room: "living" }, "paint.sage");
+    next = setSurface(next, { kind: "wall-face", face: "w-1:left" }, "paint.terracotta");
+    next = setSurface(next, { kind: "floor", room: "living" }, "floor.oak-parquet");
+    expect(next.surfaces).toEqual({
+      walls: { rooms: { living: "paint.sage" }, faces: { "w-1:left": "paint.terracotta" } },
+      floors: { living: "floor.oak-parquet" },
+    });
+    expect(setSurface(next, { kind: "floor", room: "living" }, "floor.oak-parquet")).toBe(next);
+    next = setSurface(next, { kind: "room-walls", room: "living" }, undefined);
+    expect(next.surfaces?.walls).toEqual({ faces: { "w-1:left": "paint.terracotta" } });
+    next = setSurface(setSurface(next, { kind: "wall-face", face: "w-1:left" }, undefined), { kind: "floor", room: "living" }, undefined);
+    expect(next).not.toHaveProperty("surfaces");
   });
 });
 

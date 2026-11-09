@@ -2,7 +2,19 @@
  * Door leaves in the host wall's local frame: x along the centre line from the wall's start, z across it
  * (+z = the wall's right side). Shared by the renderer (leaves, swing arcs) and placement (door-swing areas).
  */
-import type { Opening } from "../schema/apartment";
+import type { Opening, Wall } from "../schema/apartment";
+import type { Vec2 } from "../schema/common";
+
+/** Thickness of a door leaf (cm). */
+export const DOOR_LEAF_THICKNESS = 4;
+
+/** Wall-local [x, z] -> plan [x, z] (x along the centre line from the wall's start, +z = the wall's right side). */
+export function wallToPlan(w: Pick<Wall, "start" | "end">): (x: number, z: number) => Vec2 {
+  const L = Math.hypot(w.end[0] - w.start[0], w.end[1] - w.start[1]) || 1;
+  const ux = (w.end[0] - w.start[0]) / L;
+  const uz = (w.end[1] - w.start[1]) / L;
+  return (x, z) => [w.start[0] + ux * x - uz * z, w.start[1] + uz * x + ux * z];
+}
 
 export interface DoorLeaf {
   /** Hinge position along the wall. */
@@ -55,4 +67,25 @@ export function swingOutline(leaf: DoorLeaf, g: DoorGeometry, t: number, segment
     pts.push([leaf.x + leaf.dir * g.leafWidth * Math.cos(th), g.sgn * (t / 2 + g.leafWidth * Math.sin(th))]);
   }
   return pts;
+}
+
+/**
+ * The leaf (wall-local [x, z] corners) when it is open `deg` degrees: 0 = closed, lying in the opening flush with the
+ * face it swings to; 90 = open as drawn on the plan. It turns about its hinge at [leaf.x, sgn·t/2].
+ */
+export function leafOutline(leaf: DoorLeaf, g: DoorGeometry, t: number, deg: number): [number, number][] {
+  const th = (deg * Math.PI) / 180;
+  const hx = leaf.x;
+  const hz = (g.sgn * t) / 2;
+  // along the leaf, from the hinge to its free edge, and across it (towards the opening when open)
+  const d: Vec2 = [leaf.dir * Math.cos(th), g.sgn * Math.sin(th)];
+  const m: Vec2 = [leaf.dir * Math.sin(th), -g.sgn * Math.cos(th)];
+  const w = g.leafWidth;
+  const k = DOOR_LEAF_THICKNESS;
+  return [
+    [hx, hz],
+    [hx + w * d[0], hz + w * d[1]],
+    [hx + w * d[0] + k * m[0], hz + w * d[1] + k * m[1]],
+    [hx + k * m[0], hz + k * m[1]],
+  ];
 }

@@ -6,6 +6,7 @@ import {
   type DataDir,
   type FilesResponse,
   type FsChange,
+  type TrashResponse,
   type WriteResponse,
 } from "../core/files";
 
@@ -36,12 +37,23 @@ export async function putLayout(name: string, text: string, options: PutLayoutOp
     body: text,
     keepalive: options.keepalive ?? false,
   });
+  return answer<WriteResponse>(res);
+}
+
+/** Move layouts/<name> to layouts/.trash/. Throws LayoutConflictError if the file on disk is none of the `base` versions. */
+export async function trashLayout(name: string, base?: readonly (string | undefined)[]): Promise<TrashResponse> {
+  const headers: Record<string, string> = {};
+  if (base) headers[LAYOUT_BASE_HEADER] = base.map(contentTag).join(", ");
+  return answer<TrashResponse>(await fetch(`/api/layouts/${encodeURIComponent(name)}`, { method: "DELETE", headers }));
+}
+
+async function answer<T>(res: Response): Promise<T> {
   if (!res.ok) {
     const detail = (await res.json().catch(() => ({}))) as { error?: string };
     const message = detail.error ?? `HTTP ${res.status}`;
     throw res.status === 409 ? new LayoutConflictError(message) : new Error(message);
   }
-  return (await res.json()) as WriteResponse;
+  return (await res.json()) as T;
 }
 
 /** Subscribe to file changes on disk. Returns an unsubscribe function. */

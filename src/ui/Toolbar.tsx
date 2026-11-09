@@ -1,3 +1,6 @@
+import type { ViewMode } from "../state/store";
+import { countIssues, useAllIssues } from "./issues";
+import { LayoutMenu } from "./LayoutMenu";
 import { useApp } from "./store";
 
 function SaveStatus() {
@@ -43,6 +46,37 @@ function UndoRedo() {
   );
 }
 
+function Hint() {
+  const view = useApp((s) => s.view);
+  const itemSelected = useApp((s) => s.selection?.kind === "item");
+  let text: string;
+  if (view === "walk") text = "Click: look around (Esc frees the mouse) · W A S D / arrows: walk · Shift: run · F: back to the entrance";
+  else if (itemSelected) text = "Drag: move · Ring: rotate (Shift 90°, Alt free) · R/Q/E: rotate · Del: delete · Ctrl+D: duplicate · Ctrl+Z: undo";
+  else text = `${view === "2d" ? "Drag: pan · Wheel: zoom" : "Drag: orbit · Right-drag: pan · Wheel: zoom"} · Click: select · Tab: 2D/3D · M: measure`;
+  return <span className="hint">{text}</span>;
+}
+
+/** Shows or hides the Verify / Inspect / Issues panel (with the issue count while it is hidden). */
+function SidePanelToggle() {
+  const open = useApp((s) => s.sidePanelOpen);
+  const setOpen = useApp((s) => s.setSidePanelOpen);
+  const loadError = useApp((s) => !!s.data.loadError);
+  const counts = countIssues(useAllIssues());
+  const errors = counts.errors + (loadError ? 1 : 0);
+  const total = errors + counts.warnings;
+  return (
+    <button className={open ? "active" : ""} onClick={() => setOpen(!open)} aria-pressed={open} title="Show or hide the Verify / Inspect / Issues panel">
+      Inspect ☰{!open && total > 0 && <span className={`count ${errors ? "count--error" : "count--warning"}`}>{total}</span>}
+    </button>
+  );
+}
+
+const VIEWS: { view: ViewMode; label: string; title: string }[] = [
+  { view: "2d", label: "2D", title: "Top-down plan (Tab)" },
+  { view: "3d", label: "3D", title: "3D orbit view (Tab)" },
+  { view: "walk", label: "Walk", title: "Walk through the apartment at eye height (first person)" },
+];
+
 export function Toolbar() {
   const name = useApp((s) => s.data.apartment?.name);
   const hasUnderlay = useApp((s) => !!s.data.apartment?.underlay);
@@ -55,7 +89,8 @@ export function Toolbar() {
   const requestFit = useApp((s) => s.requestFit);
   const catalogueOpen = useApp((s) => s.catalogueOpen);
   const setCatalogueOpen = useApp((s) => s.setCatalogueOpen);
-  const itemSelected = useApp((s) => s.selection?.kind === "item");
+  const daylight = useApp((s) => s.daylight.on);
+  const setDaylight = useApp((s) => s.setDaylight);
 
   return (
     <header className="toolbar">
@@ -63,13 +98,13 @@ export function Toolbar() {
         ☰ Furniture
       </button>
       <div className="brand">{name ?? "Apartment planner"}</div>
+      <LayoutMenu />
       <div className="segmented" role="group" aria-label="View">
-        <button className={view === "2d" ? "active" : ""} onClick={() => setView("2d")} title="Top-down plan (Tab)">
-          2D
-        </button>
-        <button className={view === "3d" ? "active" : ""} onClick={() => setView("3d")} title="3D orbit view (Tab)">
-          3D
-        </button>
+        {VIEWS.map((v) => (
+          <button key={v.view} className={view === v.view ? "active" : ""} aria-pressed={view === v.view} onClick={() => setView(v.view)} title={v.title}>
+            {v.label}
+          </button>
+        ))}
       </div>
       {view === "2d" && hasUnderlay && (
         <div className="tool-group">
@@ -90,21 +125,23 @@ export function Toolbar() {
           />
         </div>
       )}
-      <label className="toggle">
-        <input type="checkbox" checked={labels} onChange={(e) => setLabels(e.target.checked)} />
-        Room labels
-      </label>
-      <button onClick={requestFit} title="Show the whole apartment (F)">
-        Fit
+      {view !== "walk" && (
+        <label className="toggle">
+          <input type="checkbox" checked={labels} onChange={(e) => setLabels(e.target.checked)} />
+          Room labels
+        </label>
+      )}
+      <button onClick={requestFit} title={view === "walk" ? "Back to the entrance (F)" : "Show the whole apartment (F)"}>
+        {view === "walk" ? "⌂ Entrance" : "Fit"}
+      </button>
+      <button className={daylight ? "active" : ""} onClick={() => setDaylight({ on: !daylight })} aria-pressed={daylight} title="Sunlight through the windows at a chosen date and time">
+        ☀ Daylight
       </button>
       <UndoRedo />
       <div className="spacer" />
-      <span className="hint">
-        {itemSelected
-          ? "Drag: move · Ring: rotate (Shift 90°, Alt free) · R/Q/E: rotate · Del: delete · Ctrl+D: duplicate · Ctrl+Z: undo"
-          : `${view === "2d" ? "Drag: pan · Wheel: zoom" : "Drag: orbit · Right-drag: pan · Wheel: zoom"} · Click: select · Tab: 2D/3D · M: measure`}
-      </span>
+      <Hint />
       <SaveStatus />
+      <SidePanelToggle />
     </header>
   );
 }

@@ -6,6 +6,7 @@
  *   PUT  /api/layouts/<name>.json              -> write a layout atomically (temp file + rename), max 1 MB; with the
  *                                                 x-layout-base header only if the file on disk is the version the
  *                                                 app based its change on (409 otherwise)
+ *   DELETE /api/layouts/<name>.json            -> move a layout to layouts/.trash/ (same x-layout-base check)
  *   GET  /vendor/draco/*, /vendor/basis/*      -> the Draco and KTX2 decoders shipped with three.js (for GLB models)
  *   HMR event "fs:change" { dir, path, event } -> pushed when a file in one of the data folders changes
  *
@@ -28,6 +29,7 @@ import {
   type DataDir,
   type FileEntry,
   type FsChange,
+  type TrashResponse,
   type WriteResponse,
 } from "../src/core/files.ts";
 
@@ -193,6 +195,27 @@ export async function writeLayout(root: string, name: string, text: string, base
   });
 }
 
+/**
+ * "Delete" `layouts/<name>`: move it to layouts/.trash/ (git-ignored, never cleaned up by the app), so nothing is
+ * lost for good. With `base`, only if the file on disk is one of those versions (409 otherwise).
+ */
+export async function trashLayout(root: string, name: string, base?: readonly string[]): Promise<TrashResponse> {
+  if (!isLayoutName(name)) throw new HttpError(400, `invalid layout file name "${name}"`);
+  const dir = path.join(root, "layouts");
+  const target = path.join(dir, name);
+  return serialized(target.toLowerCase(), async () => {
+    const text = await readIfExists(target);
+    if (text === undefined) throw new HttpError(404, `layouts/${name} does not exist`);
+    if (base && !base.includes(contentTag(text))) throw new HttpError(409, `layouts/${name} was changed on disk since the app read it`);
+    const trash = path.join(dir, ".trash");
+    await fs.mkdir(trash, { recursive: true });
+    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const dest = path.join(trash, `${name.slice(0, -".json".length)}.${stamp}.json`);
+    await renameWithRetry(target, dest);
+    return { path: `layouts/${name}`, trashed: `layouts/.trash/${path.basename(dest)}` };
+  });
+}
+
 /** The LAYOUT_BASE_HEADER of a request as a list of tags (undefined if it has none). */
 export function baseTags(req: Pick<IncomingMessage, "headers">): string[] | undefined {
   const value = req.headers[LAYOUT_BASE_HEADER];
@@ -272,6 +295,10 @@ export function localFsApi(): Plugin {
             if (!isSameOrigin(req)) return sendJson(res, 403, { error: "writes are only accepted from the app itself" });
             const text = await readBody(req, MAX_LAYOUT_BYTES);
             return sendJson(res, 200, await writeLayout(root, decodeURIComponent(layout[1]), text, baseTags(req)));
+          }
+          if (req.method === "DELETE" && layout) {
+            if (!isSameOrigin(req)) return sendJson(res, 403, { error: "writes are only accepted from the app itself" });
+            return sendJson(res, 200, await trashLayout(root, decodeURIComponent(layout[1]), baseTags(req)));
           }
           return sendJson(res, 404, { error: `unknown endpoint ${req.method} ${url.pathname}` });
         } catch (err) {

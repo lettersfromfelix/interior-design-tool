@@ -5,6 +5,7 @@
  */
 import { isModelItem, resolveSlot } from "../catalogue/materials";
 import { parentProblem, type ItemLookup } from "../layout/poses";
+import type { ApartmentFile } from "../schema/apartment";
 import { LayoutFile } from "../schema/layout";
 import { fromZod, issue, parseJson, type Issue } from "./issues";
 
@@ -30,12 +31,14 @@ const PARENT_MESSAGES = {
   "missing-surface": "the base item has no surface with this index",
 } as const;
 
-/** Warnings about single placed items (unknown catalogue ids, unavailable materials, broken stacking). */
+/** Warnings about single placed items (unknown catalogue ids, unavailable materials, broken stacking) and about
+ * door states and wall/floor finishes that refer to unknown doors, rooms, walls or presets. */
 export function checkLayout(
   doc: LayoutFile,
   file: string,
   item: ItemLookup,
   presets: ReadonlySet<string> | ReadonlyMap<string, unknown>,
+  apartment?: ApartmentFile,
 ): Issue[] {
   const issues: Issue[] = [];
   const byUid = new Map(doc.items.map((p) => [p.uid, p]));
@@ -72,5 +75,41 @@ export function checkLayout(
       issues.push(issue("warning", file, `${at}.parent`, `${p.uid}: ${PARENT_MESSAGES[problem]}; it is placed on its own`));
     }
   });
+  if (apartment) issues.push(...checkApartmentRefs(doc, file, presets, apartment));
+  return issues;
+}
+
+/** `doors` and `surfaces` refer to doors, rooms and walls of the apartment, and to presets of the right group. */
+function checkApartmentRefs(
+  doc: LayoutFile,
+  file: string,
+  presets: ReadonlySet<string> | ReadonlyMap<string, unknown>,
+  ap: ApartmentFile,
+): Issue[] {
+  const issues: Issue[] = [];
+  const warn = (path: string, message: string, hint?: string) => issues.push(issue("warning", file, path, message, hint));
+  const doors = new Set(ap.openings.filter((o) => o.kind === "door").map((o) => o.id));
+  for (const id of Object.keys(doc.doors ?? {})) {
+    if (!doors.has(id)) warn(`doors.${id}`, `there is no door "${id}" in data/apartment.json; the entry is ignored`);
+  }
+  const rooms = new Set(ap.rooms.map((r) => r.id));
+  const walls = new Set(ap.walls.map((w) => w.id));
+  const preset = (path: string, id: string, group: string) => {
+    if (presets.size > 0 && !presets.has(id)) warn(path, `unknown preset "${id}"; the apartment's own finish is shown`);
+    else if (!id.startsWith(`${group}.`)) warn(path, `"${id}" is not a ${group}.* preset`, `Use one of the ${group}.* presets from data/materials.json.`);
+  };
+  for (const [room, id] of Object.entries(doc.surfaces?.walls?.rooms ?? {})) {
+    if (!rooms.has(room)) warn(`surfaces.walls.rooms.${room}`, `there is no room "${room}"; the entry is ignored`);
+    preset(`surfaces.walls.rooms.${room}`, id, "paint");
+  }
+  for (const [face, id] of Object.entries(doc.surfaces?.walls?.faces ?? {})) {
+    const m = /^(.+):(left|right)$/.exec(face);
+    if (!m || !walls.has(m[1])) warn(`surfaces.walls.faces.${face}`, `"${face}" is not "<wall id>:left" or "<wall id>:right" of a wall; the entry is ignored`);
+    preset(`surfaces.walls.faces.${face}`, id, "paint");
+  }
+  for (const [room, id] of Object.entries(doc.surfaces?.floors ?? {})) {
+    if (!rooms.has(room)) warn(`surfaces.floors.${room}`, `there is no room "${room}"; the entry is ignored`);
+    preset(`surfaces.floors.${room}`, id, "floor");
+  }
   return issues;
 }

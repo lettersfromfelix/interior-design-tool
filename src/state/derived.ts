@@ -2,6 +2,7 @@
 import { resolvePoses, type ItemLookup } from "../core/layout/poses";
 import { indexApartment } from "../core/placement/apartment";
 import { layoutConflicts, type Conflict } from "../core/placement/collisions";
+import type { LayoutFile } from "../core/schema/layout";
 import type { AppState } from "./store";
 
 type Inputs = Pick<AppState, "layout" | "catalogue" | "data" | "aids">;
@@ -9,21 +10,23 @@ type Inputs = Pick<AppState, "layout" | "catalogue" | "data" | "aids">;
 export const itemLookup = (s: Pick<AppState, "catalogue">): ItemLookup => (id) => s.catalogue.entries.get(id)?.item;
 
 const NONE: ReadonlyMap<string, readonly Conflict[]> = new Map();
-let memo: { key: unknown[]; value: ReadonlyMap<string, readonly Conflict[]> } | undefined;
+/** The last results (the working layout and, while comparing, the other one). */
+const memos: { key: unknown[]; value: ReadonlyMap<string, readonly Conflict[]> }[] = [];
 
 /**
- * Conflicts of the working layout by uid, as the aids ask for: collisions unless they are off, clearance warnings
- * while clearance zones are shown.
+ * Conflicts of a layout (default: the working layout) by uid, as the aids ask for: collisions unless they are off,
+ * clearance warnings while clearance zones are shown.
  */
-export function conflictsOf(s: Inputs): ReadonlyMap<string, readonly Conflict[]> {
+export function conflictsOf(s: Inputs, doc: LayoutFile = s.layout.doc): ReadonlyMap<string, readonly Conflict[]> {
   const ap = s.data.apartment;
   const collisions = s.aids.collisions !== "off";
   const clearance = s.aids.clearance;
   if (!ap || (!collisions && !clearance)) return NONE;
-  const key = [s.layout.doc, s.catalogue, ap, collisions, clearance];
-  if (memo && memo.key.every((k, i) => k === key[i])) return memo.value;
+  const key = [doc, s.catalogue, ap, collisions, clearance];
+  const hit = memos.find((m) => m.key.every((k, i) => k === key[i]));
+  if (hit) return hit.value;
   const lookup = itemLookup(s);
-  const all = layoutConflicts(s.layout.doc, lookup, indexApartment(ap), resolvePoses(s.layout.doc, lookup, ap.ceilingHeight), { clearance });
+  const all = layoutConflicts(doc, lookup, indexApartment(ap), resolvePoses(doc, lookup, ap.ceilingHeight), { clearance });
   let value: Map<string, Conflict[]> = all;
   if (!collisions) {
     value = new Map();
@@ -32,7 +35,8 @@ export function conflictsOf(s: Inputs): ReadonlyMap<string, readonly Conflict[]>
       if (kept.length) value.set(uid, kept);
     }
   }
-  memo = { key, value };
+  memos.unshift({ key, value });
+  memos.length = Math.min(memos.length, 2);
   return value;
 }
 

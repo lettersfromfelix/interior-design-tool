@@ -67,6 +67,18 @@
       },
       "additionalProperties": false
     },
+    "doors": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      },
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 90
+      }
+    },
     "items": {
       "type": "array",
       "items": {

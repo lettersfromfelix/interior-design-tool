@@ -8,15 +8,9 @@ import type { LayoutFile, PlacedItem } from "../../core/schema/layout";
 import type { MaterialPreset } from "../../core/schema/materials";
 import { conflictsOf } from "../../state/derived";
 import { duplicate, guardedEdit, remove } from "../actions";
+import { swatchStyle } from "../components";
 import { NumberField } from "../NumberField";
 import { useApp, useAppStore } from "../store";
-
-function swatchStyle(p: MaterialPreset | undefined): React.CSSProperties {
-  if (!p) return { background: "#9a9a9a" };
-  if (p.pattern) return { background: `linear-gradient(135deg, ${p.color} 0 55%, ${p.pattern.color2} 55% 100%)` };
-  if ((p.metalness ?? 0) > 0.5) return { background: `linear-gradient(135deg, ${p.color} 0 40%, #ffffff 60%, ${p.color} 80%)` };
-  return { background: p.color };
-}
 
 function SlotPicker(props: {
   name: string;

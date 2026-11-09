@@ -47,6 +47,11 @@ export const LayoutFile = z.strictObject({
   /** ISO timestamp, set by the app on every save. */
   updatedAt: z.string().optional(),
   surfaces: LayoutSurfaces.optional(),
+  /**
+   * Door id -> how far the door is shown open, in degrees: 0 = closed, 90 = open as drawn on the plan (the default).
+   * Display only: the door itself is defined in data/apartment.json.
+   */
+  doors: z.record(z.string().min(1), z.number().min(0).max(90)).optional(),
   items: z.array(PlacedItem),
 });
 

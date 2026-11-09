@@ -1,6 +1,7 @@
 import { checksFor, elementFacts, elementTitle, findElement } from "../../core/apartment/elements";
 import { ConfidenceBadge } from "../components";
 import { useApp } from "../store";
+import { DoorSettings, RoomFinishes, WallColours } from "./ElementSettings";
 import { ItemPanel } from "./ItemPanel";
 
 /** Properties of the selection: a placed furniture item, or an apartment element (read-only, with provenance). */
@@ -19,7 +20,8 @@ function ElementPanel({ id }: { id: string | null }) {
     return (
       <div className="panel">
         <p className="muted">
-          Click a piece of furniture to change it, or a room, wall, door, window or fixture to see its data and how certain it is.
+          Click a piece of furniture to change it, a door to open or close it, a room or wall to colour it, or any part of the apartment to see its data
+          and how certain it is.
         </p>
       </div>
     );
@@ -49,6 +51,10 @@ function ElementPanel({ id }: { id: string | null }) {
           </tbody>
         </table>
       </section>
+
+      {ref.kind === "opening" && ref.element.door && <DoorSettings door={ref.element} />}
+      {ref.kind === "room" && <RoomFinishes room={ref.element} />}
+      {ref.kind === "wall" && <WallColours wall={ref.element} />}
 
       <section>
         <h3>Provenance</h3>

@@ -16,7 +16,7 @@ export function useAllIssues(): Issue[] {
       .flatMap(([, list]) => list);
     const placed =
       layout.status === "ready" && catalogue.status === "ready"
-        ? checkLayout(layout.doc, layout.file, (id) => catalogue.entries.get(id)?.item, data.materials)
+        ? checkLayout(layout.doc, layout.file, (id) => catalogue.entries.get(id)?.item, data.materials, data.apartment)
         : [];
     return [...data.issues, ...catalogue.issues, ...models, ...layout.issues, ...placed];
   }, [data, catalogue, runtime, layout]);

@@ -46,18 +46,32 @@ code {
   color: var(--muted);
 }
 
-/* layout */
+/* layout: the side panels can be hidden; the placement-aids bar floats over the view (wide) or docks at the bottom (narrow) */
 .app {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "toolbar"
+    "main";
+  height: 100%;
+}
+
+.app--side {
   grid-template-columns: minmax(0, 1fr) clamp(280px, 28vw, 390px);
   grid-template-areas:
     "toolbar toolbar"
     "main side";
-  height: 100%;
 }
 
-.app--with-left {
+.app--left {
+  grid-template-columns: clamp(230px, 19vw, 300px) minmax(0, 1fr);
+  grid-template-areas:
+    "toolbar toolbar"
+    "left main";
+}
+
+.app--left.app--side {
   grid-template-columns: clamp(230px, 19vw, 300px) minmax(0, 1fr) clamp(280px, 26vw, 380px);
   grid-template-areas:
     "toolbar toolbar toolbar"
@@ -82,14 +96,43 @@ code {
 
 @media (max-width: 820px) {
   .app,
-  .app--with-left {
+  .app--left,
+  .app--side,
+  .app--left.app--side {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr) 30% 30%;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "toolbar"
+      "main"
+      "aids";
+  }
+
+  .app--left {
+    grid-template-rows: auto minmax(0, 1fr) 35% auto;
     grid-template-areas:
       "toolbar"
       "main"
       "left"
-      "side";
+      "aids";
+  }
+
+  .app--side {
+    grid-template-rows: auto minmax(0, 1fr) 35% auto;
+    grid-template-areas:
+      "toolbar"
+      "main"
+      "side"
+      "aids";
+  }
+
+  .app--left.app--side {
+    grid-template-rows: auto minmax(0, 1fr) 28% 28% auto;
+    grid-template-areas:
+      "toolbar"
+      "main"
+      "left"
+      "side"
+      "aids";
   }
 
   .side,
@@ -205,9 +248,74 @@ button.save {
   min-width: 0;
 }
 
-.viewport {
+/* one view, or two side by side while comparing layouts */
+.viewports {
   position: absolute;
   inset: 0;
+  display: flex;
+}
+
+.viewport-pane {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.viewports--split .viewport-pane + .viewport-pane {
+  border-left: 2px solid #c9ccd2;
+}
+
+@media (max-width: 820px) {
+  .viewports--split {
+    flex-direction: column;
+  }
+
+  .viewports--split .viewport-pane + .viewport-pane {
+    border-left: 0;
+    border-top: 2px solid #c9ccd2;
+  }
+}
+
+.pane-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  min-height: 32px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.pane-head .spacer {
+  flex: 1;
+}
+
+.viewport-pane--compare .pane-head {
+  background: #f3f6fb;
+}
+
+.viewport {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.crosshair {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
 }
 
 .viewport-canvas {
@@ -292,11 +400,14 @@ button.save {
   background: rgba(0, 137, 123, 0.85);
 }
 
-/* placement aids, floating at the bottom of the view */
+/* placement aids (or the walking settings): a grid item over the bottom-left of the view */
 .aidbar {
-  position: absolute;
-  left: 10px;
-  bottom: 10px;
+  grid-area: main;
+  align-self: end;
+  justify-self: start;
+  position: relative;
+  z-index: 3;
+  margin: 0 0 10px 10px;
   max-width: calc(100% - 20px);
   display: flex;
   flex-wrap: wrap;
@@ -308,6 +419,26 @@ button.save {
   border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   font-size: 12px;
+}
+
+/* narrow screens: docked at the bottom, below the stacked panels */
+@media (max-width: 820px) {
+  .aidbar {
+    grid-area: aids;
+    align-self: stretch;
+    justify-self: stretch;
+    margin: 0;
+    max-width: none;
+    border: 0;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--panel);
+  }
+}
+
+.aidbar input[type="range"] {
+  width: 110px;
 }
 
 .aid {
@@ -414,6 +545,209 @@ button.save {
   font: inherit;
   cursor: pointer;
   max-width: 90%;
+}
+
+.overlay-note--walk {
+  max-width: 90%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+}
+
+/* daylight: top right of the view */
+.daylight {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: min(330px, calc(100% - 20px));
+  display: grid;
+  gap: 6px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+}
+
+.daylight__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.main:has(.viewports--split) .daylight {
+  top: 42px;
+}
+
+/* with the daylight panel on the right, notes move to the left so they don't run under it */
+.main:has(.daylight) .overlay-note {
+  left: 10px;
+  top: 10px;
+  transform: none;
+  max-width: calc(100% - 360px);
+  white-space: normal;
+}
+
+.main:has(.viewports--split):has(.daylight) .overlay-note {
+  top: 42px;
+}
+
+.daylight__row .spacer {
+  flex: 1;
+}
+
+.daylight__row input[type="range"] {
+  flex: 1;
+  min-width: 120px;
+}
+
+.daylight__row input[type="date"] {
+  font: inherit;
+  padding: 1px 4px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+
+.daylight__time {
+  font-variant-numeric: tabular-nums;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* layout menu (toolbar) */
+.layout-menu {
+  position: relative;
+}
+
+.layout-menu__button {
+  border: 1px solid var(--border);
+  background: #fafaf8;
+  border-radius: 6px;
+  padding: 4px 10px;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.layout-menu__button:hover,
+.layout-menu__button.active {
+  background: #f0efeb;
+}
+
+.layout-menu__pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  width: min(380px, 90vw);
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+  white-space: normal;
+}
+
+.layout-menu__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.layout-list {
+  list-style: none;
+  margin: 0 0 6px;
+  padding: 0;
+  max-height: 260px;
+  overflow: auto;
+}
+
+.layout-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 6px;
+}
+
+.layout-row--current {
+  background: var(--accent-soft);
+}
+
+.layout-row__open {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  text-align: left;
+  border: 0;
+  background: none;
+  padding: 5px 6px;
+  border-radius: 6px;
+}
+
+.layout-row__open:hover:not(:disabled) {
+  background: #f3f2ee;
+}
+
+.layout-row__open:disabled {
+  cursor: default;
+}
+
+.layout-row__name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.layout-form {
+  display: grid;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.layout-form input {
+  font: inherit;
+  padding: 4px 7px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+
+.layout-form p {
+  margin: 0;
+}
+
+.actions button.danger {
+  background: #fdecec;
+  border-color: #f2c4c4;
+  color: #8e1c1c;
+}
+
+/* door opening (Inspect panel) */
+.door-slider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.door-slider input {
+  flex: 1;
+}
+
+.door-slider__value {
+  min-width: 34px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.toolbar .count {
+  margin-left: 6px;
 }
 
 .overlay-card {

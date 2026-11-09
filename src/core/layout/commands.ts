@@ -174,3 +174,59 @@ export function setPlacement(doc: LayoutFile, uid: string, change: PlacementChan
     }
   });
 }
+
+/** The layout's display name (the file name stays). */
+export function renameLayout(doc: LayoutFile, name: string): LayoutFile {
+  const n = name.trim();
+  return !n || n === doc.name ? doc : produce(doc, (d) => void (d.name = n));
+}
+
+/** Doors are shown open this far (degrees) unless the layout says otherwise. */
+export const DOOR_OPEN = 90;
+
+/** How far the door is open (0–90°); `undefined` goes back to the default (90°, as on the plan). */
+export function setDoorOpening(doc: LayoutFile, doorId: string, degrees: number | undefined): LayoutFile {
+  const v = degrees === undefined || degrees >= DOOR_OPEN ? undefined : Math.max(0, Math.round(degrees));
+  if (doc.doors?.[doorId] === v) return doc;
+  return produce(doc, (d) => {
+    if (v === undefined) {
+      if (!d.doors) return;
+      delete d.doors[doorId];
+      if (Object.keys(d.doors).length === 0) delete d.doors;
+    } else {
+      d.doors = { ...d.doors, [doorId]: v };
+    }
+  });
+}
+
+export type SurfaceTarget = { kind: "room-walls"; room: string } | { kind: "wall-face"; face: string } | { kind: "floor"; room: string };
+
+/** Wall colour (per room or per wall side) or floor material; `undefined` goes back to the apartment's finish. */
+export function setSurface(doc: LayoutFile, target: SurfaceTarget, preset: string | undefined): LayoutFile {
+  const current =
+    target.kind === "room-walls"
+      ? doc.surfaces?.walls?.rooms?.[target.room]
+      : target.kind === "wall-face"
+        ? doc.surfaces?.walls?.faces?.[target.face]
+        : doc.surfaces?.floors?.[target.room];
+  if (current === preset) return doc;
+  return produce(doc, (d) => {
+    const s = (d.surfaces ??= {});
+    if (target.kind === "floor") {
+      const floors = (s.floors ??= {});
+      if (preset === undefined) delete floors[target.room];
+      else floors[target.room] = preset;
+    } else {
+      const walls = (s.walls ??= {});
+      const map = target.kind === "room-walls" ? (walls.rooms ??= {}) : (walls.faces ??= {});
+      const key = target.kind === "room-walls" ? target.room : target.face;
+      if (preset === undefined) delete map[key];
+      else map[key] = preset;
+      if (walls.rooms && Object.keys(walls.rooms).length === 0) delete walls.rooms;
+      if (walls.faces && Object.keys(walls.faces).length === 0) delete walls.faces;
+      if (Object.keys(walls).length === 0) delete s.walls;
+    }
+    if (s.floors && Object.keys(s.floors).length === 0) delete s.floors;
+    if (Object.keys(s).length === 0) delete d.surfaces;
+  });
+}

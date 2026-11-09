@@ -14,13 +14,30 @@ import {
   MeshBasicMaterial,
   type Material,
 } from "three";
-import { doorGeometry, swingOutline } from "../../core/apartment/doors";
+import { DOOR_LEAF_THICKNESS, doorGeometry, swingOutline } from "../../core/apartment/doors";
 import type { ApartmentFile, Opening, Wall } from "../../core/schema/apartment";
 import { Layer, setLayer } from "../layers";
 import { isSeeThrough, type MaterialLibrary } from "../materials/MaterialLibrary";
 import { applyCmUVs } from "./uv";
 
 export type Side = "left" | "right";
+
+const DEG = Math.PI / 180;
+
+/** A door leaf's hinge: turning it opens or closes the leaf. */
+export interface DoorLeafPivot {
+  door: string;
+  pivot: Group;
+  /** +1: the leaf closes towards the wall's end; −1: towards its start. */
+  dir: 1 | -1;
+  /** +1: it swings to the wall's right side; −1: to its left side. */
+  sgn: 1 | -1;
+}
+
+/** Show the leaf open `deg` degrees (0 = closed, 90 = open as on the plan). */
+export function setLeafOpening(leaf: DoorLeafPivot, deg: number): void {
+  leaf.pivot.rotation.y = leaf.dir * leaf.sgn * (90 - deg) * DEG;
+}
 
 /** Materials for the 2D plan symbols (shared by all openings of one build). */
 export function createPlanStyle() {
@@ -50,6 +67,8 @@ export interface OpeningContext {
   defaults: ApartmentFile["defaults"];
   mats: MaterialLibrary;
   style: PlanStyle;
+  /** Collects the door leaves' hinges. */
+  leaves: DoorLeafPivot[];
 }
 
 /** Axis-aligned box from min/max coordinates (wall-local cm). */
@@ -103,13 +122,17 @@ export function buildDoor(o: Opening, c: OpeningContext): Group {
 
   const leafMat = c.mats.get(d.style === "glazed" && c.wall.kind === "glazing" ? c.defaults.sashMaterial : c.defaults.doorLeafMaterial);
   const glass = c.mats.get(c.defaults.glassMaterial);
-  const thickness = 4;
+  const thickness = DOOR_LEAF_THICKNESS;
   for (const h of geo.leaves) {
-    // shown open at 90°, standing on the side it swings to
+    // the leaf turns about its hinge on the face it swings to; built open at 90°, as on the plan
+    const pivot = new Group();
+    pivot.position.set(h.x, s + 1, (sgn * t) / 2);
     const leaf = buildLeaf(geo.leafWidth, top - s - 1, thickness, d.style === "glazed", leafMat, glass);
-    leaf.position.set(h.dir > 0 ? h.x : h.x - thickness, s + 1, (sgn * t) / 2);
+    leaf.position.x = h.dir > 0 ? 0 : -thickness;
     leaf.scale.z = sgn;
-    g.add(leaf);
+    pivot.add(leaf);
+    g.add(pivot);
+    c.leaves.push({ door: o.id, pivot, dir: h.dir, sgn });
 
     const arc = swingOutline(h, geo, t, 24).slice(1); // without the hinge point
     g.add(setLayer(new Line(lineGeometry(arc.flatMap(([x, z]) => [x, 2, z])), c.style.swing), Layer.ONLY_2D));

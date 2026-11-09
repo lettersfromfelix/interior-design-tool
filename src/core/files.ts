@@ -38,6 +38,12 @@ export interface WriteResponse {
   mtime: number;
 }
 
+/** Response of DELETE /api/layouts/<name>.json: where the file went. */
+export interface TrashResponse {
+  path: string;
+  trashed: string;
+}
+
 /** Layout file names: letters, digits, space, ".", "_" and "-", ending in ".json"; no folders. */
 export const LAYOUT_NAME_RE = /^[A-Za-z0-9][A-Za-z0-9 ._-]{0,79}\.json$/;
 export const isLayoutName = (name: string): boolean => LAYOUT_NAME_RE.test(name) && !name.includes("..");

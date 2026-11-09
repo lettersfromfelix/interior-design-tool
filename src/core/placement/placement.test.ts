@@ -15,7 +15,7 @@ import { sideDistances } from "./distances";
 import { constrainToAxis, snapMeasurePoint } from "./measure";
 import { frontDirection, localSolids, rotationFacing, worldRect } from "./shapes";
 import { angleDiff, snapToWall } from "./snap";
-import { moveTo, solvePlacement, type Mover, type PlacementContext } from "./solve";
+import { currentAttempt, moveTo, refused, solvePlacement, type Mover, type PlacementContext } from "./solve";
 
 const ap = ApartmentFile.parse(JSON.parse(readFileSync(new URL("../../../data/apartment.json", import.meta.url), "utf8")));
 const index = indexApartment(ap);
@@ -302,6 +302,25 @@ describe("placement solver", () => {
     // warn mode lets it through
     const warn = moveTo(m, { point: [822.7, 370], rotation: 0 }, ctx(doc, { wallSnap: false }), first);
     expect(warn.conflicts.get("w")).toContainEqual({ kind: "fixture", other: "column", hard: true });
+  });
+
+  it("keeps an item where it was if the very first step of a gesture is blocked", () => {
+    // back 1 cm south of the column; the first pointer move goes 8 cm north, into it
+    const start: Vec2 = [822.7, 379.3 + 1];
+    const doc = layout(placed("w", "wardrobe", start));
+    const c = ctx(doc, { collisions: "block", wallSnap: false });
+    const m: Mover = { item: wardrobe, uid: "w", moving: new Set(["w"]), isNew: false, before: new Map() };
+    const here = currentAttempt(m, c)!;
+    expect(here.solution.placement.position).toEqual(start);
+    expect(refused(here, m, c)).toBe(false);
+    const step = moveTo(m, { point: [822.7, start[1] - 8], rotation: 0 }, c, here);
+    expect(step.blocked).toBe(true);
+    expect(step.solution.placement.position).toEqual(start);
+    expect(refused(step, m, c)).toBe(false);
+    // without a starting point the blocked attempt is returned, and must be refused
+    const unseeded = moveTo(m, { point: [822.7, start[1] - 8], rotation: 0 }, c);
+    expect(refused(unseeded, m, c)).toBe(true);
+    expect(refused(unseeded, m, ctx(doc, { collisions: "warn", wallSnap: false }))).toBe(false);
   });
 });
 

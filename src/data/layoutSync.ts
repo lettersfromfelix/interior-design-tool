@@ -20,7 +20,7 @@ const fileName = (file: string) => file.slice(file.lastIndexOf("/") + 1);
 export class LayoutSync {
   private timer: ReturnType<typeof setTimeout> | undefined;
   /** The save that is in flight. */
-  private inFlight: { text: string; revision: number } | undefined;
+  private inFlight: { text: string; revision: number; done: Promise<void> } | undefined;
   private unsubscribe: (() => void) | undefined;
   private readonly onConflict: () => void;
   private readonly delayMs: number;
@@ -62,29 +62,43 @@ export class LayoutSync {
   /** Write the layout now if it has unsaved changes. */
   async flush(): Promise<void> {
     if (!this.dirty || this.inFlight) return;
+    clearTimeout(this.timer);
     const { layout } = this.store.getState();
+    const file = layout.file;
     const text = serializeLayout(layout.doc, new Date().toISOString());
     const revision = layout.revision;
-    this.inFlight = { text, revision };
-    this.store.getState().saveStarted(text);
+    let finished = () => {};
+    this.inFlight = { text, revision, done: new Promise<void>((resolve) => (finished = resolve)) };
+    this.store.getState().saveStarted(file, text);
     let next: number | undefined = this.delayMs; // for changes made while saving
     try {
-      await putLayout(fileName(layout.file), text, { base: [layout.diskText] });
-      this.store.getState().saveFinished(text, revision);
+      await putLayout(fileName(file), text, { base: [layout.diskText] });
+      this.store.getState().saveFinished(file, text, revision);
     } catch (err) {
       if (err instanceof LayoutConflictError) {
-        console.warn(`${layout.file} was changed on disk; loading it instead of saving over it`);
-        this.store.getState().saveFailed(revision);
+        console.warn(`${file} was changed on disk; loading it instead of saving over it`);
+        this.store.getState().saveFailed(file, revision);
         next = undefined; // the reload replaces the local changes
         this.onConflict();
       } else {
-        this.store.getState().saveFailed(revision, err instanceof Error ? err.message : String(err));
+        this.store.getState().saveFailed(file, revision, err instanceof Error ? err.message : String(err));
         next = this.retryMs;
       }
     } finally {
       this.inFlight = undefined;
+      finished();
     }
     if (next !== undefined) this.schedule(next);
+  }
+
+  /** Wait until the working layout is on disk (e.g. before opening another one). False if it could not be saved. */
+  async settle(): Promise<boolean> {
+    for (let attempt = 0; attempt < 4; attempt++) {
+      if (this.inFlight) await this.inFlight.done;
+      else if (this.dirty) await this.flush();
+      else return true;
+    }
+    return !this.dirty && !this.inFlight;
   }
 
   /**

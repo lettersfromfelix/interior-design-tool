@@ -93,6 +93,46 @@ describe("LayoutSync", () => {
     expect(server.puts).toHaveLength(2);
   });
 
+  it("settles before another layout is opened: waits for the save in flight and saves what came after it", async () => {
+    const { store, sync, place } = setup();
+    place("chair-1");
+    const saving = sync.flush();
+    place("chair-2"); // while the first save is in flight
+    let settled: boolean | undefined;
+    const settling = sync.settle().then((ok) => (settled = ok));
+    server.puts[0].respond(200);
+    await saving;
+    await vi.waitFor(() => expect(server.puts).toHaveLength(2));
+    expect(JSON.parse(server.puts[1].body).items).toHaveLength(2);
+    server.puts[1].respond(200);
+    await settling;
+    expect(settled).toBe(true);
+    const { layout } = store.getState();
+    expect(layout.savedRevision).toBe(layout.revision);
+  });
+
+  it("reports when the layout could not be saved before switching", async () => {
+    const { sync, place } = setup();
+    place("chair-1");
+    const settling = sync.settle();
+    for (let i = 0; i < 4; i++) {
+      await vi.waitFor(() => expect(server.puts).toHaveLength(i + 1));
+      server.puts[i].respond(500);
+    }
+    expect(await settling).toBe(false);
+  });
+
+  it("ignores the answer to a save of a layout that is no longer open", async () => {
+    const { store, sync, place } = setup();
+    place("chair-1");
+    const saving = sync.flush();
+    store.getState().openLayout("layouts/other.json");
+    server.puts[0].respond(200);
+    await saving;
+    expect(store.getState().layout.file).toBe("layouts/other.json");
+    expect(store.getState().layout.diskText).toBeUndefined();
+  });
+
   it("keeps a version that was reloaded from disk while a save was in flight", async () => {
     const { store, sync, place } = setup();
     place("chair-1");

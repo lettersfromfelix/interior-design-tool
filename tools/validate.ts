@@ -53,7 +53,7 @@ for (const f of layouts.files) {
   const res = parseLayout(f.text, f.path);
   issues.push(...res.issues);
   if (res.layout) {
-    issues.push(...checkLayout(res.layout, f.path, (id) => items.get(id), presets));
+    issues.push(...checkLayout(res.layout, f.path, (id) => items.get(id), presets, ap?.apartment));
     console.log(`  layout ${f.path}: ${res.layout.items.length} placed item(s)`);
   }
 }

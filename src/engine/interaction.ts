@@ -2,11 +2,11 @@
  * Pointer interaction, the same in 2D and 3D:
  * - press on an item: select it; drag: move it through the placement solver (wall snap, grid, stacking, wall
  *   mounting, collisions); committed on release as one undo step
- * - drag the blue ring of the selected item: rotate it (15° steps, Shift: 90°, Alt: free)
+ * - drag the blue ring of the selected item: rotate it in steps from where it was (15°, Shift: 90°, Alt: free)
  * - click on anything else: select it (room, wall, opening, fixture) or clear the selection
  * - placing a catalogue item: a translucent preview follows the pointer through the same solver; click (or drop)
  * - measure tool: click two points; the line stays until it is cleared
- * Dragging that starts on empty space still moves the camera.
+ * Dragging that starts on empty space still moves the camera. Nothing here is active in walk mode.
  */
 import { type Material, type Object3D, type Raycaster, type Scene, type Vector3 } from "three";
 import { resolveMaterials } from "../core/catalogue/materials";
@@ -19,7 +19,7 @@ import { sideDistances, type SideDistance } from "../core/placement/distances";
 import { constrainToAxis, snapMeasurePoint, type MeasureSnap, type MeasureTargets } from "../core/placement/measure";
 import { worldRect, type Solid } from "../core/placement/shapes";
 import { snapTo } from "../core/placement/snap";
-import { moveTo, placeExactly, type Attempt, type Mover, type PlacementContext, type Target } from "../core/placement/solve";
+import { currentAttempt, moveTo, placeExactly, refused, type Attempt, type Mover, type PlacementContext, type Target } from "../core/placement/solve";
 import type { CatalogueItem } from "../core/schema/catalogue";
 import type { Vec2 } from "../core/schema/common";
 import type { LayoutFile } from "../core/schema/layout";
@@ -109,6 +109,10 @@ type Gesture =
   | {
       kind: "rotate";
       id: number;
+      x: number;
+      y: number;
+      /** The pointer moved far enough to count as a rotation (not a click on the ring). */
+      moved: boolean;
       uid: string;
       planeY: number;
       center: Vec2;
@@ -135,7 +139,7 @@ export class Interaction {
   private gesture: Gesture | null = null;
   private ghost?: Ghost;
   private measureStart?: [number, number, number];
-  private targets?: { doc: LayoutFile; targets: MeasureTargets };
+  private targets?: { key: readonly unknown[]; targets: MeasureTargets };
 
   constructor(private readonly h: InteractionHost) {
     // capture phase: runs before the camera controls, which then never see presses on furniture
@@ -224,7 +228,9 @@ export class Interaction {
     const before = isNew ? new Map<string, Conflict[]>() : layoutConflicts(doc, lookup, index, poses, { only: moving, clearance: false });
     const others = bodiesOf(doc, lookup, poses).filter((b) => !moving.has(b.uid));
     const still: Solid[] = [...index.obstacles, ...others.flatMap((b) => b.solids)];
-    return { mover: { item, uid, moving, isNew, before }, ctx: { doc, lookup, ap: index, aids: s.aids, poses }, still };
+    const mover: Mover = { item, uid, moving, isNew, before };
+    const ctx: PlacementContext = { doc, lookup, ap: index, aids: s.aids, poses };
+    return { mover, ctx, still, last: currentAttempt(mover, ctx) };
   }
 
   /** Conflicts to show during a gesture: the attempt's for the moving items, the layout's for the rest. */
@@ -260,7 +266,7 @@ export class Interaction {
   // ---- pointer --------------------------------------------------------------------------------------------
 
   private onDown = (e: PointerEvent): void => {
-    if (e.button !== 0 || this.gesture) return;
+    if (e.button !== 0 || this.gesture || this.h.view() === "walk") return;
     const s = this.state;
     const press: Gesture = { kind: "press", id: e.pointerId, x: e.clientX, y: e.clientY, target: null };
     if (s.placing?.via === "click" || s.tool === "measure") {
@@ -326,6 +332,9 @@ export class Interaction {
     this.gesture = {
       kind: "rotate",
       id: e.pointerId,
+      x: e.clientX,
+      y: e.clientY,
+      moved: false,
       uid,
       planeY: obj.position.y,
       center,
@@ -372,10 +381,13 @@ export class Interaction {
         this.h.furniture.preview(this.h.furniture.previewPoses(new Map([[g.uid, { position: pos }]])));
       }
     } else if (g.kind === "rotate") {
+      if (!g.moved && Math.hypot(e.clientX - g.x, e.clientY - g.y) < CLICK_PX) return;
+      g.moved = true;
       const p = this.h.planPoint(e.clientX, e.clientY, g.planeY);
       if (!p) return;
       const angle = Math.atan2(p[1] - g.center[1], p[0] - g.center[0]) / DEG;
-      const world = snapTo(g.startWorld + angle - g.startAngle, rotationStep(s.aids, e));
+      // steps relative to where it started, so an item along a skewed wall stays parallel to it
+      const world = g.startWorld + snapTo(angle - g.startAngle, rotationStep(s.aids, e));
       const rotation = world - g.parentWorld;
       g.rotation = rotation;
       if (g.session) {
@@ -397,13 +409,17 @@ export class Interaction {
     const s = this.state;
     if (g.kind === "move" || g.kind === "rotate") {
       const last = g.session?.last;
+      // block mode never commits a place where the item runs into something new
+      const ok = !!last && !refused(last, g.session!.mover, g.session!.ctx);
       if (g.kind === "move" && g.moved) {
-        if (last) s.edit((doc) => setPlacement(doc, g.uid, last.solution.placement));
-        else if (g.raw) s.edit((doc) => moveItem(doc, g.uid, g.raw!.pos));
+        if (last) {
+          if (ok) s.edit((doc) => setPlacement(doc, g.uid, last.solution.placement));
+        } else if (g.raw) s.edit((doc) => moveItem(doc, g.uid, g.raw!.pos));
       }
-      if (g.kind === "rotate") {
-        if (last) s.edit((doc) => setPlacement(doc, g.uid, last.solution.placement));
-        else if (!g.session) s.edit((doc) => setRotation(doc, g.uid, g.rotation));
+      if (g.kind === "rotate" && g.moved) {
+        if (last) {
+          if (ok) s.edit((doc) => setPlacement(doc, g.uid, last.solution.placement));
+        } else if (!g.session) s.edit((doc) => setRotation(doc, g.uid, g.rotation));
       }
       this.endPreview();
       return;
@@ -434,6 +450,16 @@ export class Interaction {
     this.gesture = null;
     if (this.h.canvas.hasPointerCapture(g.id)) this.h.canvas.releasePointerCapture(g.id);
     if (g.kind !== "press") this.endPreview();
+  }
+
+  /**
+   * The layout changed while the pointer was down (undo, a keyboard edit, a reload from disk): drop the gesture
+   * rather than commit it on top of a document it wasn't started on. A preview being placed is re-solved.
+   */
+  layoutChanged(): void {
+    if (this.gesture && this.gesture.kind !== "press") this.cancel();
+    const ghost = this.ghost;
+    if (ghost?.built.root.visible && ghost.pointer) this.updateGhost(ghost.pointer.x, ghost.pointer.y);
   }
 
   private onCancel = (): void => this.cancel();
@@ -470,7 +496,8 @@ export class Interaction {
 
   private measureTargets(): MeasureTargets {
     const s = this.state;
-    if (this.targets?.doc === s.layout.doc) return this.targets.targets;
+    const key = [s.layout.doc, s.data.apartment, s.catalogue] as const;
+    if (this.targets && this.targets.key.every((k, i) => k === key[i])) return this.targets.targets;
     const ap = s.data.apartment;
     const index = ap ? indexApartment(ap) : undefined;
     const corners: Vec2[] = [...(index?.corners ?? [])];
@@ -485,7 +512,7 @@ export class Interaction {
       rect.forEach((c, i) => edges.push([c, rect[(i + 1) % 4]]));
     }
     const targets = { corners, edges };
-    this.targets = { doc: s.layout.doc, targets };
+    this.targets = { key, targets };
     return targets;
   }
 
