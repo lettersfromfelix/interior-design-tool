@@ -6,6 +6,7 @@ import type { LayoutFile } from "../../core/schema/layout";
 import type { MaterialPreset } from "../../core/schema/materials";
 import type { CatalogueSnapshot } from "../../data/catalogue";
 import type { MaterialLibrary } from "../materials/MaterialLibrary";
+import { applyTint, resetTint, type TintLevel } from "../overlays/tint";
 import { buildItem, type BuiltItem } from "./buildItem";
 import type { ModelLibrary } from "./models";
 
@@ -31,6 +32,7 @@ export class FurnitureLayer {
   private matsVersion = 0;
   private input?: FurnitureInput;
   private poses = new Map<string, WorldPose>();
+  private tints: ReadonlyMap<string, TintLevel> = new Map();
 
   constructor(
     private readonly models: ModelLibrary,
@@ -62,16 +64,38 @@ export class FurnitureLayer {
       let b = this.built.get(p.uid);
       if (!b || b.key !== key) {
         this.remove(p.uid);
-        const item = buildItem(entry, resolved, { mats, models: this.models, onLoaded: this.onChange });
-        item.root.name = p.uid;
-        item.root.userData.itemUid = p.uid;
-        this.group.add(item.root);
-        b = { item, key };
+        const root = new Group();
+        const item = buildItem(entry, resolved, {
+          mats,
+          models: this.models,
+          onLoaded: () => {
+            resetTint(root); // the model's meshes arrived: tint them too
+            this.onChange();
+          },
+        });
+        root.add(item.root);
+        root.name = p.uid;
+        root.userData.itemUid = p.uid;
+        this.group.add(root);
+        b = { item: { root, dispose: item.dispose }, key };
         this.built.set(p.uid, b);
       }
       applyPose(b.item.root, this.poses.get(p.uid)!);
+      applyTint(b.item.root, this.tints.get(p.uid));
     }
     for (const uid of [...this.built.keys()]) if (!keep.has(uid)) this.remove(uid);
+  }
+
+  /** Red (overlap) or amber (warning) tints by uid; replaces the previous set. */
+  setTints(tints: ReadonlyMap<string, TintLevel>): void {
+    this.tints = tints;
+    for (const [uid, b] of this.built) applyTint(b.item.root, tints.get(uid));
+    this.onChange();
+  }
+
+  /** Poses of the layout as it is (not the preview). */
+  layoutPoses(): ReadonlyMap<string, WorldPose> {
+    return this.poses;
   }
 
   /** Poses with temporary overrides (dragging, rotating), without changing the layout. */

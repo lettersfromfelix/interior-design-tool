@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "rug-200x300",
+  "name": "Rug 200 × 300",
+  "category": "rug",
+  "tags": ["living room", "carpet"],
+  "dimensions": { "width": 200, "depth": 300, "height": 1 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "rug", "shape": "box", "size": { "x": 200, "y": 1, "z": 300 }, "cornerRadius": 0.5, "position": { "x": 0, "y": 0.5, "z": 0 }, "material": "rug" }
+    ]
+  },
+  "materialSlots": {
+    "rug": { "label": "Rug", "default": "fabric.wool-sand", "allowed": ["fabric.*"] }
+  },
+  "collision": "none",
+  "notes": "Generic example with typical sizes, not a specific product. Furniture can stand on it: it takes no part in collision checks."
+}

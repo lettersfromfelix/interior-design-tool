@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "tv-55",
+  "name": "TV, 55 inch",
+  "category": "media",
+  "tags": ["living room", "television", "wall"],
+  "dimensions": { "width": 123, "depth": 6, "height": 71 },
+  "placement": { "type": "wall", "defaultElevation": 95, "minElevation": 40, "maxElevation": 180 },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "wall bracket", "shape": "box", "size": { "x": 40, "y": 30, "z": 0.6 }, "position": { "x": 0, "y": 34, "z": -2.7 }, "material": "frame" },
+      { "name": "back", "shape": "box", "size": { "x": 92, "y": 50, "z": 3.4 }, "cornerRadius": 1, "position": { "x": 0, "y": 34, "z": -0.7 }, "material": "frame" },
+      { "name": "frame", "shape": "box", "size": { "x": 123, "y": 71, "z": 1.8 }, "cornerRadius": 0.4, "position": { "x": 0, "y": 35.5, "z": 1.9 }, "material": "frame" },
+      { "name": "screen", "shape": "box", "size": { "x": 121.8, "y": 68.5, "z": 0.3 }, "position": { "x": 0, "y": 35.5, "z": 2.85 }, "material": "screen" }
+    ]
+  },
+  "materialSlots": {
+    "frame": { "label": "Frame", "default": "metal.black-matte", "allowed": ["metal.black-matte", "metal.stainless"] },
+    "screen": { "label": "Screen", "default": "glass.black", "allowed": ["glass.black"] }
+  },
+  "notes": "Generic example with typical sizes, not a specific product. 16:9 screen of 121.8 × 68.5 cm; the 6 cm depth includes the wall bracket. Hangs with its bottom edge 95 cm above the floor by default (screen centre at about 130 cm); change the height per placed TV."
+}

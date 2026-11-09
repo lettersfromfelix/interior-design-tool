@@ -26,6 +26,23 @@ function SaveStatus() {
   );
 }
 
+function UndoRedo() {
+  const canUndo = useApp((s) => s.layout.status === "ready" && s.history.past.length > 0);
+  const canRedo = useApp((s) => s.layout.status === "ready" && s.history.future.length > 0);
+  const undo = useApp((s) => s.undo);
+  const redo = useApp((s) => s.redo);
+  return (
+    <span className="segmented" role="group" aria-label="Undo and redo">
+      <button onClick={undo} disabled={!canUndo} title="Undo (Ctrl+Z)" aria-label="Undo">
+        ↶
+      </button>
+      <button onClick={redo} disabled={!canRedo} title="Redo (Ctrl+Y or Ctrl+Shift+Z)" aria-label="Redo">
+        ↷
+      </button>
+    </span>
+  );
+}
+
 export function Toolbar() {
   const name = useApp((s) => s.data.apartment?.name);
   const hasUnderlay = useApp((s) => !!s.data.apartment?.underlay);
@@ -80,11 +97,12 @@ export function Toolbar() {
       <button onClick={requestFit} title="Show the whole apartment (F)">
         Fit
       </button>
+      <UndoRedo />
       <div className="spacer" />
       <span className="hint">
         {itemSelected
-          ? "Drag: move · Ring: rotate · R/Q/E: rotate · Del: delete · Ctrl+D: duplicate · Esc: deselect"
-          : `${view === "2d" ? "Drag: pan · Wheel: zoom" : "Drag: orbit · Right-drag: pan · Wheel: zoom"} · Click: select · Tab: 2D/3D`}
+          ? "Drag: move · Ring: rotate (Shift 90°, Alt free) · R/Q/E: rotate · Del: delete · Ctrl+D: duplicate · Ctrl+Z: undo"
+          : `${view === "2d" ? "Drag: pan · Wheel: zoom" : "Drag: orbit · Right-drag: pan · Wheel: zoom"} · Click: select · Tab: 2D/3D · M: measure`}
       </span>
       <SaveStatus />
     </header>

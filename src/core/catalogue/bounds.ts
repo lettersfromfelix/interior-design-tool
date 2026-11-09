@@ -7,7 +7,8 @@
  * r · |row i of M|, so rotated discs (cylinder ends), rounded boxes and spheres stay exact.
  * Partial arcs (torus, lathe) are sampled every 2°.
  */
-import type { Part, Vec3 } from "../schema/common";
+import { convexHull } from "../geometry/convex";
+import type { Part, Vec2, Vec3 } from "../schema/common";
 
 type V3 = [number, number, number];
 /** Row-major 3×3 matrix. */
@@ -118,19 +119,19 @@ function localBlobs(part: Part): Blob[] {
   }
 }
 
-/** All blobs of a part in item-local coordinates, including `repeat`, `repeatAround` and `mirror` copies. */
-function partBlobs(part: Part): Blob[] {
+/** Blobs of every copy of a part (`repeat`, `repeatAround` and `mirror` copies separately), in item-local cm. */
+function partCopyBlobs(part: Part): Blob[][] {
   const local = localBlobs(part);
   const rot = partRotation(part.rotation);
   const count = part.repeat?.count ?? 1;
   const step = part.repeat?.step ?? { x: 0, y: 0, z: 0 };
   const around = part.repeatAround ?? { count: 1, step: 0 };
-  const copies: Blob[] = [];
+  const copies: Blob[][] = [];
   for (let k = 0; k < around.count; k++) {
     const pivot = rotY(-k * around.step * DEG);
     for (let i = 0; i < count; i++) {
       const t: V3 = [part.position.x + step.x * i, part.position.y + step.y * i, part.position.z + step.z * i];
-      for (const b of local) copies.push(transform(transform(b, rot, t), pivot));
+      copies.push(local.map((b) => transform(transform(b, rot, t), pivot)));
     }
   }
   const mirrors = part.mirror ?? [];
@@ -141,10 +142,12 @@ function partBlobs(part: Part): Blob[] {
   if (mirrors.includes("x") && mirrors.includes("z")) variants.push([-1, -1]);
   for (const [sx, sz] of variants) {
     const mirror: M3 = [sx, 0, 0, 0, 1, 0, 0, 0, sz];
-    for (const b of copies) out.push(transform(b, mirror));
+    for (const c of copies) out.push(c.map((b) => transform(b, mirror)));
   }
   return out;
 }
+
+const partBlobs = (part: Part): Blob[] => partCopyBlobs(part).flat();
 
 /** Axis-aligned bounding box of the parts in item-local cm, or undefined for an empty list. */
 export function partsBounds(parts: readonly Part[]): Box3D | undefined {
@@ -161,4 +164,49 @@ export function partsBounds(parts: readonly Part[]): Box3D | undefined {
   }
   if (!Number.isFinite(min[0])) return undefined;
   return { min: { x: min[0], y: min[1], z: min[2] }, max: { x: max[0], y: max[1], z: max[2] } };
+}
+
+/** The floor area a solid takes up (convex, plan cm) and its height range. Used for collisions. */
+export interface Footprint {
+  poly: Vec2[];
+  y0: number;
+  y1: number;
+}
+
+/** Directions for sampling round outlines (every 22.5°): footprints of discs and spheres are 16-gons. */
+const DIRS: Vec2[] = Array.from({ length: 16 }, (_, i) => [Math.cos((i * Math.PI) / 8), Math.sin((i * Math.PI) / 8)]);
+
+function blobsFootprint(blobs: readonly Blob[]): Footprint {
+  const pts: Vec2[] = [];
+  let y0 = Infinity;
+  let y1 = -Infinity;
+  for (const b of blobs) {
+    const ey = b.r * Math.hypot(b.m[3], b.m[4], b.m[5]);
+    y0 = Math.min(y0, b.c[1] - ey);
+    y1 = Math.max(y1, b.c[1] + ey);
+    if (b.r === 0) {
+      pts.push([b.c[0], b.c[2]]);
+      continue;
+    }
+    for (const [dx, dz] of DIRS) {
+      // support point of { c + M·u : |u| <= r } in the horizontal direction D = (dx, 0, dz): c + r·M·Mᵀ·D / |Mᵀ·D|
+      const t0 = b.m[0] * dx + b.m[6] * dz;
+      const t1 = b.m[1] * dx + b.m[7] * dz;
+      const t2 = b.m[2] * dx + b.m[8] * dz;
+      const len = Math.hypot(t0, t1, t2);
+      if (len < 1e-12) {
+        pts.push([b.c[0], b.c[2]]);
+        continue;
+      }
+      const sx = (b.m[0] * t0 + b.m[1] * t1 + b.m[2] * t2) / len;
+      const sz = (b.m[6] * t0 + b.m[7] * t1 + b.m[8] * t2) / len;
+      pts.push([b.c[0] + b.r * sx, b.c[2] + b.r * sz]);
+    }
+  }
+  return { poly: convexHull(pts), y0, y1 };
+}
+
+/** One footprint per part copy (every leg, cushion and shelf separately), in item-local cm. */
+export function partFootprints(parts: readonly Part[]): Footprint[] {
+  return parts.flatMap((part) => partCopyBlobs(part).map(blobsFootprint));
 }

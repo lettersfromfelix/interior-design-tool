@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "armchair",
+  "name": "Armchair",
+  "category": "seating",
+  "tags": ["living room", "lounge chair"],
+  "dimensions": { "width": 80, "depth": 82, "height": 78 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "legs", "shape": "cylinder", "radius": 1.8, "radiusTop": 2.4, "height": 14, "position": { "x": 33, "y": 7, "z": 33 }, "mirror": ["x", "z"], "material": "legs" },
+      { "name": "arms", "shape": "box", "size": { "x": 14, "y": 46, "z": 82 }, "cornerRadius": 5, "position": { "x": 33, "y": 37, "z": 0 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "back", "shape": "box", "size": { "x": 52, "y": 64, "z": 14 }, "cornerRadius": 3, "position": { "x": 0, "y": 46, "z": -34 }, "material": "upholstery" },
+      { "name": "base", "shape": "box", "size": { "x": 52, "y": 16, "z": 68 }, "cornerRadius": 2, "position": { "x": 0, "y": 22, "z": 7 }, "material": "upholstery" },
+      { "name": "seat cushion", "shape": "box", "size": { "x": 52, "y": 14, "z": 66 }, "cornerRadius": 4, "position": { "x": 0, "y": 37, "z": 7 }, "material": "upholstery" },
+      { "name": "back cushion", "shape": "box", "size": { "x": 52, "y": 32, "z": 12 }, "cornerRadius": 5, "position": { "x": 0, "y": 59.5, "z": -21 }, "rotation": { "x": -8 }, "material": "upholstery" }
+    ]
+  },
+  "materialSlots": {
+    "upholstery": { "label": "Upholstery", "default": "fabric.boucle-cream", "allowed": ["fabric.*", "leather.*"] },
+    "legs": { "label": "Legs", "default": "wood.oak-natural", "allowed": ["wood.*", "metal.black-matte", "metal.brass"] }
+  },
+  "clearance": { "front": 50, "note": "Legroom in front of the seat" },
+  "notes": "Generic example with typical sizes, not a specific product. Seat height 44 cm, armrests 60 cm."
+}

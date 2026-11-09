@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "wardrobe-150",
+  "name": "Wardrobe 150",
+  "category": "storage",
+  "tags": ["bedroom", "closet"],
+  "dimensions": { "width": 150, "depth": 60, "height": 220 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "plinth", "shape": "box", "size": { "x": 146, "y": 8, "z": 51 }, "position": { "x": 0, "y": 4, "z": -3.5 }, "material": "body" },
+      { "name": "carcass", "shape": "box", "size": { "x": 150, "y": 212, "z": 56 }, "position": { "x": 0, "y": 114, "z": -2 }, "material": "body" },
+      { "name": "doors", "shape": "box", "size": { "x": 49.6, "y": 211.6, "z": 2 }, "position": { "x": -50, "y": 114, "z": 27 }, "repeat": { "count": 3, "step": { "x": 50, "y": 0, "z": 0 } }, "material": "doors" },
+      { "name": "handles, door pair", "shape": "box", "size": { "x": 1.2, "y": 40, "z": 2 }, "position": { "x": -27, "y": 110, "z": 29 }, "repeat": { "count": 2, "step": { "x": 4, "y": 0, "z": 0 } }, "material": "handles" },
+      { "name": "handle, single door", "shape": "box", "size": { "x": 1.2, "y": 40, "z": 2 }, "position": { "x": 27, "y": 110, "z": 29 }, "material": "handles" }
+    ]
+  },
+  "materialSlots": {
+    "body": { "label": "Body and plinth", "default": "lacquer.white", "allowed": ["wood.*", "lacquer.*"] },
+    "doors": { "label": "Doors", "default": "lacquer.white", "allowed": ["wood.*", "lacquer.*"] },
+    "handles": { "label": "Handles", "default": "metal.black-matte", "allowed": ["metal.black-matte", "metal.brass", "metal.stainless"] }
+  },
+  "clearance": { "front": 70, "note": "The 50 cm doors swing out to the front; plus room to stand in front of the open doors" },
+  "notes": "Generic example with typical sizes, not a specific product. Three 50 cm doors: a pair on the left and a single door on the right, on a recessed plinth."
+}

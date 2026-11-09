@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { duplicate, nudgeSelected, remove, rotateSelected, selectedItem } from "./actions";
+import { AidBar } from "./AidBar";
 import { IssueLine } from "./components";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { LeftPanel } from "./panels/LeftPanel";
@@ -30,6 +31,7 @@ function DataError() {
 function Banners() {
   const invalid = useApp((s) => (s.layout.status === "invalid" ? s.layout.file : null));
   const placing = useApp((s) => (s.placing?.via === "click" ? s.catalogue.entries.get(s.placing.itemId)?.item.name : null));
+  const measuring = useApp((s) => s.tool === "measure");
   const setSidePanel = useApp((s) => s.setSidePanel);
   if (invalid) {
     return (
@@ -39,6 +41,9 @@ function Banners() {
     );
   }
   if (placing) return <div className="overlay-note">Click into the view to place {placing} · R: rotate · Esc: cancel</div>;
+  if (measuring) {
+    return <div className="overlay-note">Tape measure: click two points · snaps to corners and edges · Shift: straight · Alt: no snapping · Esc: done</div>;
+  }
   return null;
 }
 
@@ -54,10 +59,17 @@ function useShortcuts(): void {
       if (isTyping(e.target) && e.key !== "Escape") return;
       const s = store.getState();
       const item = selectedItem(store);
-      if ((e.ctrlKey || e.metaKey) && !e.altKey && e.key.toLowerCase() === "d") {
-        if (item) {
+      const key = e.key.toLowerCase();
+      if ((e.ctrlKey || e.metaKey) && !e.altKey) {
+        if (key === "d" && item) {
           e.preventDefault(); // the browser would add a bookmark
           duplicate(store, item.uid);
+        } else if (key === "z" && !e.shiftKey) {
+          e.preventDefault();
+          s.undo();
+        } else if (key === "y" || (key === "z" && e.shiftKey)) {
+          e.preventDefault();
+          s.redo();
         }
         return;
       }
@@ -71,6 +83,10 @@ function useShortcuts(): void {
         case "f":
         case "F":
           s.requestFit();
+          break;
+        case "m":
+        case "M":
+          s.setTool(s.tool === "measure" ? "select" : "measure");
           break;
         case "Escape":
           if (s.placing) s.stopPlacing();
@@ -134,6 +150,7 @@ export function App() {
         {status === "loading" && <div className="overlay-note">Loading…</div>}
         {status === "error" && <DataError />}
         {status === "ready" && <Banners />}
+        {status === "ready" && <AidBar />}
       </main>
       <ErrorBoundary name="side panel">
         <SidePanel />

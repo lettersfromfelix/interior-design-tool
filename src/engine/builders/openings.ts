@@ -14,6 +14,7 @@ import {
   MeshBasicMaterial,
   type Material,
 } from "three";
+import { doorGeometry, swingOutline } from "../../core/apartment/doors";
 import type { ApartmentFile, Opening, Wall } from "../../core/schema/apartment";
 import { Layer, setLayer } from "../layers";
 import { isSeeThrough, type MaterialLibrary } from "../materials/MaterialLibrary";
@@ -66,8 +67,6 @@ function lineGeometry(points: number[]): BufferGeometry {
   return new BufferGeometry().setAttribute("position", new Float32BufferAttribute(points, 3));
 }
 
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
-
 /** Door leaf in its own frame: x = thickness [0, t], y = height [0, h], z = width [0, w] (hinge at z = 0). */
 function buildLeaf(w: number, h: number, t: number, glazed: boolean, mat: Material, glass: Material): Group {
   const g = new Group();
@@ -90,15 +89,13 @@ function buildLeaf(w: number, h: number, t: number, glazed: boolean, mat: Materi
 
 export function buildDoor(o: Opening, c: OpeningContext): Group {
   const d = o.door!;
+  const geo = doorGeometry(o)!;
   const g = new Group();
   const t = c.wall.thickness;
-  const a = c.a;
-  const b = a + o.width;
+  const { a, b, jamb, sgn } = geo;
   const s = o.sill;
   const top = s + o.height;
   const frame = c.mats.get(c.defaults.doorFrameMaterial);
-  const leafW = d.leafWidth ?? (o.width - 8) / d.leaves;
-  const jamb = clamp((o.width - d.leaves * leafW) / 2, 2, 8);
   const fz = t / 2 + 0.5;
 
   g.add(box(a, a + jamb, s, top, -fz, fz, frame), box(b - jamb, b, s, top, -fz, fz, frame));
@@ -106,28 +103,16 @@ export function buildDoor(o: Opening, c: OpeningContext): Group {
 
   const leafMat = c.mats.get(d.style === "glazed" && c.wall.kind === "glazing" ? c.defaults.sashMaterial : c.defaults.doorLeafMaterial);
   const glass = c.mats.get(c.defaults.glassMaterial);
-  const sgn = d.opensTo === "right" ? 1 : -1;
-  const hinges =
-    d.leaves === 2
-      ? [
-          { x: a + jamb, dir: 1 },
-          { x: b - jamb, dir: -1 },
-        ]
-      : [d.hinge === "start" ? { x: a + jamb, dir: 1 } : { x: b - jamb, dir: -1 }];
   const thickness = 4;
-  for (const h of hinges) {
+  for (const h of geo.leaves) {
     // shown open at 90°, standing on the side it swings to
-    const leaf = buildLeaf(leafW, top - s - 1, thickness, d.style === "glazed", leafMat, glass);
+    const leaf = buildLeaf(geo.leafWidth, top - s - 1, thickness, d.style === "glazed", leafMat, glass);
     leaf.position.set(h.dir > 0 ? h.x : h.x - thickness, s + 1, (sgn * t) / 2);
     leaf.scale.z = sgn;
     g.add(leaf);
 
-    const pts: number[] = [];
-    for (let i = 0; i <= 24; i++) {
-      const th = (i / 24) * (Math.PI / 2);
-      pts.push(h.x + h.dir * leafW * Math.cos(th), 2, sgn * (t / 2 + leafW * Math.sin(th)));
-    }
-    g.add(setLayer(new Line(lineGeometry(pts), c.style.swing), Layer.ONLY_2D));
+    const arc = swingOutline(h, geo, t, 24).slice(1); // without the hinge point
+    g.add(setLayer(new Line(lineGeometry(arc.flatMap(([x, z]) => [x, 2, z])), c.style.swing), Layer.ONLY_2D));
   }
   return g;
 }

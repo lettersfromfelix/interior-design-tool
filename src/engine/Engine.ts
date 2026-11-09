@@ -20,20 +20,27 @@ import {
 } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
+import { type WorldPose } from "../core/layout/poses";
+import { clearanceZones, type Conflict } from "../core/placement/collisions";
 import type { Vec2 } from "../core/schema/common";
+import type { LayoutFile } from "../core/schema/layout";
 import type { DataSnapshot } from "../data/snapshot";
+import { conflictLevel, conflictsOf, itemLookup } from "../state/derived";
 import type { AppState, AppStore, ViewMode } from "../state/store";
 import { buildApartment, type ApartmentBuild } from "./builders/apartment";
-import { Interaction } from "./interaction";
+import { Interaction, type Preview } from "./interaction";
 import { UNKNOWN_SIZE } from "./items/buildItem";
 import { FurnitureLayer } from "./items/FurnitureLayer";
 import type { ModelLibrary } from "./items/models";
 import { configureCameraLayers } from "./layers";
 import { Lights } from "./lighting";
 import { isSeeThrough, MaterialLibrary } from "./materials/MaterialLibrary";
+import { ClearanceOverlay, type ZoneView } from "./overlays/clearance";
 import { DimensionOverlay } from "./overlays/dimension";
 import { Highlight } from "./overlays/highlight";
+import { formatLength, LineOverlay } from "./overlays/lines";
 import { SelectionOverlay } from "./overlays/selection";
+import type { TintLevel } from "./overlays/tint";
 import { UnderlayOverlay } from "./overlays/underlay";
 import { PlanControls } from "./views/PlanControls";
 
@@ -52,6 +59,10 @@ export class Engine {
   private readonly highlight = new Highlight();
   private readonly dimension = new DimensionOverlay();
   private readonly selection = new SelectionOverlay();
+  private readonly clearance = new ClearanceOverlay();
+  private readonly distances = new LineOverlay("distances", "#2f6fd0", "dist-label", 1.5);
+  private readonly measurements = new LineOverlay("measurements", "#00897b", "measure-label", 2.5);
+  private readonly measureLive = new LineOverlay("measure-live", "#00897b", "measure-label measure-label--live", 2, true);
   private readonly underlay: UnderlayOverlay;
   private readonly furniture: FurnitureLayer;
   private readonly interaction: Interaction;
@@ -66,6 +77,10 @@ export class Engine {
   private dirty = true;
   private frame = 0;
   private labelsOn = true;
+  /** A gesture shows its own poses, conflicts and zones. */
+  private previewing = false;
+  /** 2D zoom the tape-measure lines were drawn for. */
+  private measurementScale = 0;
 
   constructor(
     private readonly container: HTMLElement,
@@ -95,6 +110,10 @@ export class Engine {
       this.dimension.group,
       this.selection.group,
       this.underlay.group,
+      this.clearance.group,
+      this.distances.group,
+      this.measurements.group,
+      this.measureLive.group,
     );
     configureCameraLayers(this.planCamera, "2d");
     configureCameraLayers(this.orbitCamera, "3d");
@@ -108,11 +127,14 @@ export class Engine {
       furniture: this.furniture,
       overlay: this.selection,
       models,
+      measureLive: this.measureLive,
       view: () => this.view,
       ray: (x, y) => this.ray(x, y),
       planPoint: (x, y, h) => this.planPoint(x, y, h),
+      cmPerPx: () => this.plan.cmPerPx,
       apartmentRoot: () => this.build?.root,
       materials: () => this.mats,
+      preview: (p) => this.preview(p),
       requestRender: () => this.requestRender(),
     });
     this.plan = new PlanControls(
@@ -141,7 +163,10 @@ export class Engine {
     this.syncFurniture(s);
     this.applyDisplay(s);
     this.applySelection(s);
+    this.applyAids(s);
+    this.drawMeasurements(s);
     this.interaction.setPlacing(s.placing);
+    this.interaction.setTool();
     this.unsubscribe = store.subscribe((next, prev) => this.onState(next, prev));
     if (import.meta.env.DEV) (window as unknown as { __engine?: Engine }).__engine = this; // for debugging in the browser console
     this.loop();
@@ -162,10 +187,14 @@ export class Engine {
       this.view = s.view;
       this.applyView();
     }
-    if (dataChanged || s.layout.doc !== prev.layout.doc || s.catalogue !== prev.catalogue) this.syncFurniture(s);
+    const furnitureChanged = dataChanged || s.layout.doc !== prev.layout.doc || s.catalogue !== prev.catalogue;
+    if (furnitureChanged) this.syncFurniture(s);
     if (dataChanged || s.placing !== prev.placing || s.catalogue !== prev.catalogue) {
       this.interaction.setPlacing(s.placing, dataChanged || s.catalogue !== prev.catalogue);
     }
+    if (furnitureChanged || s.aids !== prev.aids) this.applyAids(s);
+    if (s.tool !== prev.tool || s.view !== prev.view) this.interaction.setTool();
+    if (s.measurements !== prev.measurements || s.view !== prev.view) this.drawMeasurements(s);
     if (s.underlay !== prev.underlay || s.labels !== prev.labels || s.view !== prev.view) this.applyDisplay(s);
     if (
       dataChanged ||
@@ -211,6 +240,74 @@ export class Engine {
       presets: s.data.materials,
       ceilingHeight: s.data.apartment?.ceilingHeight ?? 250,
     });
+  }
+
+  /** Conflict tints and clearance zones of the layout (unless a gesture shows its own). */
+  private applyAids(s: AppState): void {
+    if (this.previewing) return;
+    const conflicts = conflictsOf(s);
+    this.furniture.setTints(this.tintsOf(conflicts));
+    this.showZones(s.layout.doc, this.furniture.layoutPoses(), conflicts);
+  }
+
+  private tintsOf(conflicts: ReadonlyMap<string, readonly Conflict[]>): Map<string, TintLevel> {
+    const tints = new Map<string, TintLevel>();
+    for (const [uid, list] of conflicts) {
+      const level = conflictLevel(list);
+      if (level) tints.set(uid, level);
+    }
+    return tints;
+  }
+
+  private showZones(doc: LayoutFile, poses: ReadonlyMap<string, WorldPose>, conflicts: ReadonlyMap<string, readonly Conflict[]>): void {
+    const s = this.store.getState();
+    if (!s.aids.clearance) return this.clearance.clear();
+    const lookup = itemLookup(s);
+    const zones: ZoneView[] = [];
+    for (const p of doc.items) {
+      const item = lookup(p.item);
+      const pose = poses.get(p.uid);
+      if (!item?.clearance || !pose || p.hidden) continue;
+      const blocked = new Set((conflicts.get(p.uid) ?? []).filter((c) => c.kind === "clearance").map((c) => c.side));
+      for (const z of clearanceZones(item, pose)) zones.push({ poly: z.solid.poly, y: pose.y, blocked: blocked.has(z.side) });
+    }
+    this.clearance.show(zones);
+  }
+
+  /** Show the scene as a gesture would leave it (null: as the layout is). */
+  private preview(p: Preview | null): void {
+    const s = this.store.getState();
+    if (!p) {
+      this.previewing = false;
+      this.distances.clear();
+      this.applyAids(s);
+      this.requestRender();
+      return;
+    }
+    this.previewing = true;
+    this.furniture.preview(p.poses);
+    this.furniture.setTints(this.tintsOf(p.conflicts));
+    this.showZones(p.doc, p.poses, p.conflicts);
+    this.distances.clear();
+    const y = this.view === "2d" ? 300 : p.y;
+    for (const d of p.distances) this.distances.segment([d.from[0], y, d.from[1]], [d.to[0], y, d.to[1]], formatLength(d.length), this.dotSize() * 0.6);
+    this.requestRender();
+  }
+
+  /** Size of line end dots: a few pixels in 2D, cm in 3D. */
+  private dotSize(): number {
+    return this.view === "2d" ? 4 * this.plan.cmPerPx : 2.5;
+  }
+
+  private drawMeasurements(s: AppState): void {
+    this.measurements.clear();
+    this.measurementScale = this.plan.cmPerPx;
+    for (const m of s.measurements) {
+      const lift = (p: readonly [number, number, number]): [number, number, number] => (this.view === "2d" ? [p[0], 300, p[2]] : [p[0], p[1], p[2]]);
+      const len = Math.hypot(m.b[0] - m.a[0], m.b[1] - m.a[1], m.b[2] - m.a[2]);
+      this.measurements.segment(lift(m.a), lift(m.b), formatLength(len), this.dotSize() * 0.7);
+    }
+    this.requestRender();
   }
 
   private applyView(): void {
@@ -273,7 +370,9 @@ export class Engine {
     const size = s.catalogue.entries.get(placed.item)?.item.dimensions ?? { width: UNKNOWN_SIZE, depth: UNKNOWN_SIZE, height: UNKNOWN_SIZE };
     // the object's current transform: follows previews while dragging or rotating
     const pose = { x: item.position.x, y: item.position.y, z: item.position.z, rotation: -item.rotation.y / DEG };
-    const rotatable = !placed.locked && s.layout.status === "ready";
+    // wall items always face away from their wall
+    const wallItem = s.catalogue.entries.get(placed.item)?.item.placement.type === "wall";
+    const rotatable = !placed.locked && s.layout.status === "ready" && !wallItem;
     this.selection.show(pose, size, rotatable, this.view === "2d" ? this.plan.cmPerPx : 0);
   }
 
@@ -309,6 +408,7 @@ export class Engine {
     this.orbitCamera.aspect = w / h;
     this.orbitCamera.updateProjectionMatrix();
     this.dimension.setResolution(w, h);
+    for (const o of [this.distances, this.measurements, this.measureLive]) o.setResolution(w, h);
     if (this.fitted.has(this.view) && !this.adjusted.has(this.view)) this.fit();
     this.requestRender();
   }
@@ -337,6 +437,9 @@ export class Engine {
 
   private loop = (): void => {
     this.frame = requestAnimationFrame(this.loop);
+    if (this.view === "2d" && this.measurementScale !== this.plan.cmPerPx && this.store.getState().measurements.length) {
+      this.drawMeasurements(this.store.getState()); // keep the end dots the same size on screen
+    }
     if (!this.dirty) return;
     this.dirty = false;
     try {
@@ -365,6 +468,8 @@ export class Engine {
     this.highlight.dispose();
     this.dimension.dispose();
     this.selection.dispose();
+    this.clearance.dispose();
+    for (const o of [this.distances, this.measurements, this.measureLive]) o.dispose();
     this.renderer.dispose();
     this.renderer.domElement.remove();
     this.labels.domElement.remove();

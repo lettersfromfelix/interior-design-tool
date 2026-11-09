@@ -1,0 +1,32 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "bookshelf-80",
+  "name": "Bookshelf 80",
+  "category": "storage",
+  "tags": ["living room", "books"],
+  "dimensions": { "width": 80, "depth": 32, "height": 200 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "sides", "shape": "box", "size": { "x": 2, "y": 200, "z": 32 }, "position": { "x": 39, "y": 100, "z": 0 }, "mirror": ["x"], "material": "body" },
+      { "name": "back panel", "shape": "box", "size": { "x": 76, "y": 200, "z": 1 }, "position": { "x": 0, "y": 100, "z": -15.5 }, "material": "body" },
+      { "name": "plinth", "shape": "box", "size": { "x": 76, "y": 8, "z": 2 }, "position": { "x": 0, "y": 4, "z": 13 }, "material": "body" },
+      { "name": "bottom, shelves and top", "shape": "box", "size": { "x": 76, "y": 2, "z": 31 }, "position": { "x": 0, "y": 9, "z": 0.5 }, "repeat": { "count": 6, "step": { "x": 0, "y": 38, "z": 0 } }, "material": "body" }
+    ]
+  },
+  "materialSlots": {
+    "body": { "label": "Body", "default": "wood.oak-natural", "allowed": ["wood.*", "lacquer.*"] }
+  },
+  "surfaces": [
+    { "name": "top", "height": 200, "width": 80, "depth": 32 },
+    { "name": "shelf 4", "height": 162, "width": 76, "depth": 31, "center": [0, 0.5], "maxItemHeight": 36 },
+    { "name": "shelf 3", "height": 124, "width": 76, "depth": 31, "center": [0, 0.5], "maxItemHeight": 36 },
+    { "name": "shelf 2", "height": 86, "width": 76, "depth": 31, "center": [0, 0.5], "maxItemHeight": 36 },
+    { "name": "shelf 1", "height": 48, "width": 76, "depth": 31, "center": [0, 0.5], "maxItemHeight": 36 },
+    { "name": "bottom", "height": 10, "width": 76, "depth": 31, "center": [0, 0.5], "maxItemHeight": 36 }
+  ],
+  "clearance": { "front": 50, "note": "Room to stand in front and take out books" },
+  "notes": "Generic example with typical sizes, not a specific product. Five open compartments, each 36 cm high, with a back panel and a recessed plinth."
+}

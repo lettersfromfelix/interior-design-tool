@@ -264,6 +264,134 @@ button.save {
   border-radius: 4px;
 }
 
+/* live distances while moving an item, and the tape measure */
+.dist-label,
+.measure-label {
+  pointer-events: none;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.dist-label {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--accent);
+  border: 1px solid #b9cdee;
+}
+
+.measure-label {
+  margin-top: -22px;
+  background: #00897b;
+  color: #fff;
+  font-size: 12px;
+}
+
+.measure-label--live {
+  background: rgba(0, 137, 123, 0.85);
+}
+
+/* placement aids, floating at the bottom of the view */
+.aidbar {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  max-width: calc(100% - 20px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+}
+
+.aid {
+  border: 1px solid var(--border);
+  background: #fafaf8;
+  border-radius: 6px;
+  padding: 3px 9px;
+  white-space: nowrap;
+}
+
+.aid:hover {
+  background: #f0efeb;
+}
+
+.aid--on {
+  background: var(--accent-soft);
+  border-color: #b9cdee;
+  color: #1d4f9c;
+}
+
+.aid-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.aid-group select {
+  font: inherit;
+  padding: 2px 4px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.aid-label {
+  color: var(--muted);
+}
+
+.aid-sep {
+  width: 1px;
+  align-self: stretch;
+  background: var(--border);
+  margin: 0 2px;
+}
+
+.segmented--small button {
+  padding: 3px 9px;
+}
+
+.segmented button:disabled {
+  color: #b5b8bd;
+  cursor: default;
+}
+
+/* conflicts of the selected item */
+.conflicts {
+  list-style: none;
+  margin: 8px 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.conflict {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #fdf3e1;
+  color: #7a4f0f;
+  border-left: 3px solid #f2a516;
+}
+
+.conflict--hard {
+  background: #fdeaea;
+  color: #9b1c1c;
+  border-left-color: #e53935;
+}
+
+.conflict span {
+  flex: 1;
+}
+
 .overlay-note,
 .overlay-card {
   position: absolute;

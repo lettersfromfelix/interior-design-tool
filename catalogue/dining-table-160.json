@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "dining-table-160",
+  "name": "Dining table 160",
+  "category": "table",
+  "tags": ["dining"],
+  "dimensions": { "width": 160, "depth": 90, "height": 75 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "legs", "shape": "box", "size": { "x": 6, "y": 72, "z": 6 }, "position": { "x": 71, "y": 36, "z": 36 }, "mirror": ["x", "z"], "material": "legs" },
+      { "name": "long rails", "shape": "box", "size": { "x": 136, "y": 8, "z": 2 }, "position": { "x": 0, "y": 68, "z": 37 }, "mirror": ["z"], "material": "legs" },
+      { "name": "short rails", "shape": "box", "size": { "x": 2, "y": 8, "z": 66 }, "position": { "x": 72, "y": 68, "z": 0 }, "mirror": ["x"], "material": "legs" },
+      { "name": "top", "shape": "box", "size": { "x": 160, "y": 3, "z": 90 }, "cornerRadius": 1, "position": { "x": 0, "y": 73.5, "z": 0 }, "material": "top" }
+    ]
+  },
+  "materialSlots": {
+    "top": { "label": "Table top", "default": "wood.oak-natural", "allowed": ["wood.*", "lacquer.*"] },
+    "legs": { "label": "Legs and frame", "default": "wood.oak-natural", "allowed": ["wood.*", "lacquer.*", "metal.black-matte"] }
+  },
+  "surfaces": [{ "name": "top", "height": 75, "width": 160, "depth": 90 }],
+  "notes": "Generic example with typical sizes, not a specific product. Seats six. The legs stand 6 cm in from the edges and the frame under the top starts 64 cm above the floor, so chairs slide under the top; the chairs carry their own clearance."
+}

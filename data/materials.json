@@ -52,6 +52,11 @@
     { "id": "fabric.linen-grey", "name": "Linen, grey", "color": "#A5A39D", "roughness": 0.95,
       "pattern": { "type": "weave", "color2": "#8F8D87", "scale": 1.5, "strength": 0.45 } },
     { "id": "fabric.velvet-green", "name": "Velvet, bottle green", "color": "#2F4A3C", "roughness": 0.85 },
+    { "id": "fabric.cotton-white", "name": "Cotton, white (bedding)", "color": "#F2F0EB", "roughness": 0.9 },
+    { "id": "fabric.wool-sand", "name": "Wool, sand (rugs)", "color": "#CDBB9B", "roughness": 0.98,
+      "pattern": { "type": "weave", "color2": "#B7A27F", "scale": 4, "strength": 0.5 } },
+    { "id": "fabric.wool-charcoal", "name": "Wool, charcoal (rugs)", "color": "#4D4E50", "roughness": 0.98,
+      "pattern": { "type": "weave", "color2": "#393A3C", "scale": 4, "strength": 0.5 } },
     { "id": "leather.cognac", "name": "Leather, cognac", "color": "#8A5530", "roughness": 0.6 }
   ]
 }

@@ -150,3 +150,27 @@ export function setFlag(doc: LayoutFile, uid: string, flag: "locked" | "hidden",
     else delete p[flag];
   });
 }
+
+export interface PlacementChange {
+  /** Relative to the base item if `parent` is set. */
+  position: Vec2;
+  rotation: number;
+  /** The surface the item stands on; undefined = on its own (floor, wall or ceiling). */
+  parent?: { uid: string; surface: number };
+}
+
+/** Move and turn an item in one step, and put it on another item's surface or take it off. */
+export function setPlacement(doc: LayoutFile, uid: string, change: PlacementChange): LayoutFile {
+  const position: Vec2 = [round1(change.position[0]), round1(change.position[1])];
+  const rotation = normalizeRotation(change.rotation);
+  const parent = change.parent;
+  return updateItem(doc, uid, (p) => {
+    if (p.position[0] !== position[0] || p.position[1] !== position[1]) p.position = position;
+    if (p.rotation !== rotation) p.rotation = rotation;
+    if (!parent) {
+      if (p.parent) delete p.parent;
+    } else if (p.parent?.uid !== parent.uid || p.parent.surface !== parent.surface) {
+      p.parent = { uid: parent.uid, surface: parent.surface };
+    }
+  });
+}
