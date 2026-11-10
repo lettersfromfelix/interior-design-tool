@@ -97,7 +97,7 @@ data/
   underlay/floorplan.png  cropped floor plan without the address header, for the 2D underlay
 catalogue/              furniture, one item per file (or per folder with its 3D model) – see CATALOGUE.md
 layouts/
-  *.json                one file per layout, autosaved; yours stay out of git unless you decide otherwise
+  *.json                one file per layout, autosaved; tracked in git
   demo.json             an example layout
   .trash/               deleted layouts (git-ignored)
 schemas/                GENERATED JSON Schemas for editor validation – don't edit

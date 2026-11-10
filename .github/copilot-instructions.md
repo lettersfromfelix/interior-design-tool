@@ -59,9 +59,9 @@ The schemas are strict: unknown properties are errors, ids are kebab-case, and p
 
 - Human-readable JSON in `layouts/`, format in [docs/DATA.md](../docs/DATA.md#layoutsjson). The app autosaves and
   reloads a file that changes on disk, so you can read and edit layouts while it runs.
-- They are the user's files. Don't create, change or delete them unless asked. Don't commit them and don't add them
-  to `.gitignore`: the user hasn't decided yet whether layouts go into git. `layouts/demo.json` is the only
-  committed layout, an example. `layouts/.trash/` (deleted layouts) is git-ignored.
+- They are the user's files, and they are tracked in git (the user's decision). Don't create, change or delete them
+  unless asked, and commit changes to them only when the user asks, not as part of other work. `layouts/demo.json`
+  is an example layout. `layouts/.trash/` (deleted layouts) is git-ignored.
 - To place furniture for the user, edit the layout file: `position` is the item's bottom centre `[x, z]`, `rotation`
   is in degrees, and items standing on another item have `parent` and positions relative to it.
 

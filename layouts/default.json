@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/layout.schema.json",
+  "schemaVersion": 1,
+  "name": "Default",
+  "updatedAt": "2026-11-09T21:42:50.039Z",
+  "doors": {
+    "d-living-zimmer-13-0": 0,
+    "d-zimmer-13-0-balcony-n": 0,
+    "d-living-balcony-n": 0,
+    "d-living-balcony-se": 0,
+    "d-zimmer-15-9-balcony-se": 0,
+    "d-living-zimmer-15-9": 0,
+    "d-entrance": 0
+  },
+  "items": []
+}
