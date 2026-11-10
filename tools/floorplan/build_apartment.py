@@ -160,6 +160,9 @@ def build(force=False):
             "north": {"confidence": "medium", "source": "plan",
                       "note": "From the plan's north arrow. Checklist {check:north}."},
             "location": {"confidence": "medium", "source": "assumed", "note": "City-level coordinates (Zurich)."},
+            "defaults.ceilingMaterial": {"confidence": "high", "source": "user",
+                                         "note": "Ceilings painted Alpina white (you). paint.white has its light "
+                                                 "reflectance (about 89 %, close to RAL 9010)."},
         }),
         "rooms": room_json,
         "walls": wall_json,

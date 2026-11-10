@@ -59,6 +59,11 @@
         "confidence": "medium",
         "source": "assumed",
         "note": "City-level coordinates (Zurich)."
+      },
+      "defaults.ceilingMaterial": {
+        "confidence": "high",
+        "source": "user",
+        "note": "Ceilings painted Alpina white (you). paint.white has its light reflectance (about 89 %, close to RAL 9010)."
       }
     }
   },

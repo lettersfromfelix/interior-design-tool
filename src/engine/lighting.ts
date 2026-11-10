@@ -22,9 +22,11 @@ const mix = (a: string, b: string, t: number) => new Color(a).lerp(new Color(b),
  * directional light becomes the sun at its real position; it shines through the windows, and the ceilings cast
  * shadows too, so only the windows let it in (in 2D as well: sun patches on the plan).
  *
- * There is no bounced light in real-time rendering, so two lights stand in for it: one from below for the light the
- * floor throws back (ceilings and the undersides of things would otherwise be grey), and, while walking, a soft fill
- * for the light bouncing around a room (the overview keeps more contrast, which helps to read the shapes).
+ * There is no bounced light in real-time rendering, so two lights stand in for it: in the overview, one from below
+ * for the light the floor throws back (the undersides of things would otherwise be grey); while walking, a soft fill
+ * for the light bouncing around a room instead (the overview keeps more contrast, which helps to read the shapes).
+ * Both together would light the ceilings twice and make them glow: in the photos the white ceilings are only about
+ * as bright as the light grey walls.
  */
 export class Lights {
   readonly group = new Group();
@@ -91,6 +93,8 @@ export class Lights {
     this.bounce.position.copy(this.center).setY(-4000);
     this.bounce.target.updateMatrixWorld();
     const walk = this.view === "walk";
+    // intensity 0 rather than hiding it: a different number of lights would recompile every shader on each switch
+    const bounce = walk ? 0 : 1;
     if (!d) {
       this.hemi.intensity = walk ? 1.1 : 1.5;
       this.hemi.color.set("#ffffff");
@@ -98,7 +102,7 @@ export class Lights {
       this.hemi.groundColor.set(walk ? "#e2ded6" : "#d8d0c2");
       this.sun.intensity = walk ? 1.4 : 1.9;
       this.sun.color.set("#fff8ef");
-      this.bounce.intensity = 1.3;
+      this.bounce.intensity = 1.3 * bounce;
       this.fill.intensity = walk ? 1.0 : 0;
       // the default light isn't a real sun: its shadows help in the overview, but not inside the rooms while walking
       this.sun.castShadow = this.view === "3d";
@@ -112,7 +116,7 @@ export class Lights {
     this.hemi.intensity = 0.45 + 1.2 * day;
     this.hemi.color.copy(mix("#4a5878", "#eef3ff", day));
     this.hemi.groundColor.copy(mix("#2e2a24", "#d6cfc2", day));
-    this.bounce.intensity = 1.1 * day;
+    this.bounce.intensity = 1.1 * day * bounce;
     this.fill.intensity = walk ? 0.6 * day : 0;
   }
 }
