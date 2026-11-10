@@ -273,9 +273,11 @@ describe("collisions", () => {
   });
 });
 
-describe("collisions with the real starter catalogue", () => {
+describe("collisions with real catalogue items", () => {
   const real = (id: string) => CatalogueItem.parse(JSON.parse(readFileSync(new URL(`../../../catalogue/${id}.json`, import.meta.url), "utf8")));
-  const items = new Map(["dining-table-160", "dining-chair", "wardrobe-150", "sideboard-180", "table-lamp-globe"].map((id) => [id, real(id)]));
+  const items = new Map(
+    ["dining-table-160", "dining-chair", "wardrobe-150", "sideboard-180", "table-lamp-globe", "bistro-table-60", "bistro-chair"].map((id) => [id, real(id)]),
+  );
   const look = (id: string) => items.get(id);
   const check = (doc: LayoutFile) => layoutConflicts(doc, look, index, resolvePoses(doc, look, ap.ceilingHeight));
   const hard = (doc: LayoutFile, uid: string) => (check(doc).get(uid) ?? []).filter((c) => c.hard);
@@ -290,6 +292,44 @@ describe("collisions with the real starter catalogue", () => {
     expect(hard(layout(placed("w", "wardrobe-150", [822.7, 340.6 + 35])), "w")).toContainEqual({ kind: "fixture", other: "column", hard: true });
     const doc = layout(placed("s", "sideboard-180", [650, 400]), placed("l", "table-lamp-globe", [40, 0], 0, { parent: { uid: "s", surface: 0 } }));
     expect(check(doc).get("l")).toBeUndefined();
+  });
+  it("lets the bistro set stand on both round balconies; the railing still stops a chair, also in block mode", () => {
+    for (const balcony of ["balcony-n", "balcony-se"]) {
+      const railing = ap.fixtures.find((f) => f.id === `${balcony}-railing`)!;
+      const rail = railing.parts.find((p) => p.name === "top rail");
+      if (rail?.shape !== "lathe" || rail.arc === undefined) throw new Error(`${balcony}: expected a lathe top rail with an arc`);
+      const inner = Math.min(...rail.profile.map(([r]) => r));
+      // u: from the circle's centre to the middle of the railing (away from the façade), v: along the façade
+      const a = ((railing.rotation + (rail.rotation?.y ?? 0) + rail.arc / 2) * Math.PI) / 180;
+      const u: Vec2 = [Math.cos(a), Math.sin(a)];
+      const v: Vec2 = [-u[1], u[0]];
+      const at = (s: number, t: number): Vec2 => [railing.position[0] + u[0] * s + v[0] * t, railing.position[1] + u[1] * s + v[1] * t];
+      const inward = rotationFacing([-u[0], -u[1]]);
+
+      const set = layout(
+        placed("t", "bistro-table-60", at(15, 0)),
+        placed("c1", "bistro-chair", at(15, 60), rotationFacing([-v[0], -v[1]])),
+        placed("c2", "bistro-chair", at(15, -60), rotationFacing(v)),
+      );
+      for (const uid of ["t", "c1", "c2"]) expect(hard(set, uid), `${balcony} ${uid}`).toEqual([]);
+      const onRailing = layout(placed("c", "bistro-chair", at(inner, 0), inward));
+      expect(hard(onRailing, "c"), balcony).toContainEqual({ kind: "fixture", other: railing.id, hard: true });
+
+      const doc = layout(placed("c", "bistro-chair", at(0, 0), inward));
+      const c: PlacementContext = {
+        doc,
+        lookup: look,
+        ap: index,
+        aids: { ...DEFAULT_AIDS, collisions: "block", wallSnap: false },
+        poses: resolvePoses(doc, look, ap.ceilingHeight),
+      };
+      const m: Mover = { item: look("bistro-chair")!, uid: "c", moving: new Set(["c"]), isNew: false, before: new Map() };
+      const across = moveTo(m, { point: at(50, 0), rotation: inward }, c, currentAttempt(m, c));
+      expect(across.blocked, balcony).toBe(false);
+      const out = moveTo(m, { point: at(inner, 0), rotation: inward }, c, across);
+      expect(out.blocked, balcony).toBe(true);
+      expect((out.conflicts.get("c") ?? []).filter((x) => x.hard), balcony).toEqual([]);
+    }
   });
 });
 

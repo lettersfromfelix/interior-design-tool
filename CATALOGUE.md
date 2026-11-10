@@ -285,8 +285,12 @@ Collisions are checked when **Collisions** in the placement bar is set to **Warn
 - `collisionParts`: for a model, a few parts that describe its shape better than the box, e.g. one cylinder for a
   round stool. They use the part format; their `material` is required but ignored.
 
-Because each part is one convex block, a long curved or diagonal part blocks everything under its outline: an arc
-lamp's arc as one torus would block the sofa it reaches over. Split such parts (the arc lamp uses two arcs).
+Because each block reaches from its part's lowest to its highest point, a long tilted part blocks everything under its
+outline: a straight lamp arm leaning over a sofa would block the sofa. Split such parts into a few shorter ones. Arcs
+are split for you: a `torus` or `lathe` with an `arc` below 360° collides as blocks of at most 10° along the arc (each
+bulges at most 0.4 % of the radius into the curve). So a curved backrest or a round balcony railing leaves the space
+inside its curve free, and an arc lamp's arc only blocks where it is low. A full ring (no `arc`) stays one block, hole
+included.
 
 Overlaps of up to 0.5 cm are ignored, so items can touch. Items standing on each other never collide with each other.
 What the app reports:

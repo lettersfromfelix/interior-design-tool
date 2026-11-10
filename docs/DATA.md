@@ -145,6 +145,10 @@ Fixed elements are built from the same parametric **parts** that catalogue items
   provenance }
 ```
 
+Fixtures stop furniture and walking the way catalogue parts collide (see `collision` in `CATALOGUE.md`): every part
+copy is one convex block, and an arc below 360° is cut into blocks of at most 10°, so a round balcony stays free up to
+its railing. `collides: false` turns this off.
+
 ### Parts
 
 Every part has `position` (its centre in local cm; for `extrusion` and `lathe`, the centre of its base),

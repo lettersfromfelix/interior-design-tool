@@ -5,7 +5,8 @@
  * radius r. A point is M = 0, a sphere M = I, an ellipsoid M = diag(scale), a flat disc M = [u v 0] (two in-plane
  * axes). Rotations, mirrors and translations keep that form, and the extent along a world axis i is
  * r · |row i of M|, so rotated discs (cylinder ends), rounded boxes and spheres stay exact.
- * Partial arcs (torus, lathe) are sampled every 2°.
+ * Partial arcs (torus, lathe) are sampled every 2°. For collisions they are cut into segments of at most ARC_SEGMENT
+ * degrees, so the space inside the curve stays free.
  */
 import { convexHull } from "../geometry/convex";
 import type { Part, Vec2, Vec3 } from "../schema/common";
@@ -62,14 +63,37 @@ const transform = (b: Blob, a: M3, t: V3 = [0, 0, 0]): Blob => {
   return { c: [c[0] + t[0], c[1] + t[1], c[2] + t[2]], m: mul(a, b.m), r: b.r };
 };
 
+/**
+ * Longest stretch of a partial arc (torus, lathe) that collides as one convex block, degrees. Its outline cuts at
+ * most r·(1 − cos 5°) ≈ 0.4 % of the radius into the curve (4 mm at a round balcony's railing).
+ */
+export const ARC_SEGMENT = 10;
+
 /** Angles from 0 to `arc` (degrees) at most 2° apart, both ends included. */
 function arcSamples(arc: number): number[] {
   const n = Math.max(2, Math.ceil(arc / 2));
   return Array.from({ length: n + 1 }, (_, i) => ((arc * i) / n) * DEG);
 }
 
-/** Blobs of one part in part-local coordinates (before its position and rotation). */
-function localBlobs(part: Part): Blob[] {
+/**
+ * The blobs `at` each sample angle of an arc, as collision pieces: one for a full turn; for a partial arc, segments of
+ * at most ARC_SEGMENT degrees that share their end samples (so together they hold exactly the same blobs).
+ */
+function arcPieces(arc: number, at: (angle: number) => Blob[]): Blob[][] {
+  const angles = arcSamples(arc);
+  if (arc >= 360) return [angles.flatMap(at)];
+  const gaps = angles.length - 1;
+  const perPiece = Math.max(1, Math.floor((ARC_SEGMENT * gaps) / arc + 1e-9));
+  const pieces: Blob[][] = [];
+  for (let i = 0; i < gaps; i += perPiece) pieces.push(angles.slice(i, Math.min(i + perPiece, gaps) + 1).flatMap(at));
+  return pieces;
+}
+
+/**
+ * Blobs of one part in part-local coordinates (before its position and rotation), in the pieces that collide as one
+ * convex block each: a partial arc in segments (see arcPieces), any other part whole.
+ */
+function localPieces(part: Part): Blob[][] {
   switch (part.shape) {
     case "box": {
       const { x, y, z } = part.size;
@@ -85,43 +109,47 @@ function localBlobs(part: Part): Blob[] {
           }
         }
       }
-      return out;
+      return [out];
     }
     case "cylinder":
       return [
-        { c: [0, part.height / 2, 0], m: FLAT, r: part.radiusTop ?? part.radius },
-        { c: [0, -part.height / 2, 0], m: FLAT, r: part.radius },
+        [
+          { c: [0, part.height / 2, 0], m: FLAT, r: part.radiusTop ?? part.radius },
+          { c: [0, -part.height / 2, 0], m: FLAT, r: part.radius },
+        ],
       ];
     case "sphere": {
       const s = part.scale ?? { x: 1, y: 1, z: 1 };
-      return [{ c: [0, 0, 0], m: [s.x, 0, 0, 0, s.y, 0, 0, 0, s.z], r: part.radius }];
+      return [[{ c: [0, 0, 0], m: [s.x, 0, 0, 0, s.y, 0, 0, 0, s.z], r: part.radius }]];
     }
     case "torus":
       // ring in the x/z plane from +x clockwise seen from above; the tube's cross-section is a circle in the plane
       // of the radial direction and y
-      return arcSamples(part.arc ?? 360).map((u) => {
+      return arcPieces(part.arc ?? 360, (u) => {
         const [cu, su] = [Math.cos(u), Math.sin(u)];
-        return { c: [part.radius * cu, 0, part.radius * su], m: [cu, 0, 0, 0, 1, 0, su, 0, 0], r: part.tube };
+        return [{ c: [part.radius * cu, 0, part.radius * su], m: [cu, 0, 0, 0, 1, 0, su, 0, 0], r: part.tube }];
       });
     case "extrusion":
-      return part.points.flatMap(([x, z]) => [
-        { c: [x, 0, z] as V3, m: ZERO, r: 0 },
-        { c: [x, part.height, z] as V3, m: ZERO, r: 0 },
-      ]);
+      return [
+        part.points.flatMap(([x, z]) => [
+          { c: [x, 0, z] as V3, m: ZERO, r: 0 },
+          { c: [x, part.height, z] as V3, m: ZERO, r: 0 },
+        ]),
+      ];
     case "lathe": {
       const arc = part.arc ?? 360;
-      if (arc >= 360) return part.profile.map(([r, y]) => ({ c: [0, y, 0] as V3, m: FLAT, r }));
-      const angles = arcSamples(arc);
-      return part.profile.flatMap(([r, y]) =>
-        angles.map((a) => ({ c: [r * Math.cos(a), y, r * Math.sin(a)] as V3, m: ZERO, r: 0 })),
-      );
+      if (arc >= 360) return [part.profile.map(([r, y]) => ({ c: [0, y, 0] as V3, m: FLAT, r }))];
+      return arcPieces(arc, (a) => part.profile.map(([r, y]) => ({ c: [r * Math.cos(a), y, r * Math.sin(a)] as V3, m: ZERO, r: 0 })));
     }
   }
 }
 
-/** Blobs of every copy of a part (`repeat`, `repeatAround` and `mirror` copies separately), in item-local cm. */
-function partCopyBlobs(part: Part): Blob[][] {
-  const local = localBlobs(part);
+/**
+ * Blobs of every copy of a part (`repeat`, `repeatAround` and `mirror` copies separately), one list per collision
+ * piece of each copy (see localPieces), in item-local cm.
+ */
+function partPieces(part: Part): Blob[][] {
+  const local = localPieces(part);
   const rot = partRotation(part.rotation);
   const count = part.repeat?.count ?? 1;
   const step = part.repeat?.step ?? { x: 0, y: 0, z: 0 };
@@ -131,7 +159,7 @@ function partCopyBlobs(part: Part): Blob[][] {
     const pivot = rotY(-k * around.step * DEG);
     for (let i = 0; i < count; i++) {
       const t: V3 = [part.position.x + step.x * i, part.position.y + step.y * i, part.position.z + step.z * i];
-      copies.push(local.map((b) => transform(transform(b, rot, t), pivot)));
+      for (const piece of local) copies.push(piece.map((b) => transform(transform(b, rot, t), pivot)));
     }
   }
   const mirrors = part.mirror ?? [];
@@ -147,7 +175,7 @@ function partCopyBlobs(part: Part): Blob[][] {
   return out;
 }
 
-const partBlobs = (part: Part): Blob[] => partCopyBlobs(part).flat();
+const partBlobs = (part: Part): Blob[] => partPieces(part).flat();
 
 /** Axis-aligned bounding box of the parts in item-local cm, or undefined for an empty list. */
 export function partsBounds(parts: readonly Part[]): Box3D | undefined {
@@ -206,7 +234,11 @@ function blobsFootprint(blobs: readonly Blob[]): Footprint {
   return { poly: convexHull(pts), y0, y1 };
 }
 
-/** One footprint per part copy (every leg, cushion and shelf separately), in item-local cm. */
+/**
+ * One footprint per part copy (every leg, cushion and shelf separately), in item-local cm. A partial arc gives one per
+ * segment of at most ARC_SEGMENT degrees, so a curved backrest or a round railing doesn't block the space it curves
+ * around.
+ */
 export function partFootprints(parts: readonly Part[]): Footprint[] {
-  return parts.flatMap((part) => partCopyBlobs(part).map(blobsFootprint));
+  return parts.flatMap((part) => partPieces(part).map(blobsFootprint));
 }

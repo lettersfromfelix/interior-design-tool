@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import type { Part } from "../schema/common";
-import { partsBounds } from "./bounds";
+import { insideConvex } from "../geometry/convex";
+import type { Part, Vec2 } from "../schema/common";
+import { partFootprints, partsBounds, type Footprint } from "./bounds";
 
 const at = (x = 0, y = 0, z = 0) => ({ x, y, z });
 const close = (a: { x: number; y: number; z: number }, b: [number, number, number], digits = 3) => {
@@ -95,5 +96,46 @@ describe("partsBounds", () => {
     const b = partsBounds([{ shape: "extrusion", points: [[0, 0], [30, 0], [0, -20]], height: 5, position: at(10, 2, 0), material: "m" }])!;
     close(b.min, [10, 2, -20]);
     close(b.max, [40, 7, 0]);
+  });
+});
+
+describe("partFootprints", () => {
+  const inside = (fps: readonly Footprint[], p: Vec2) => fps.some((f) => insideConvex(p, f.poly));
+  const polar = (r: number, deg: number): Vec2 => [r * Math.cos((deg * Math.PI) / 180), r * Math.sin((deg * Math.PI) / 180)];
+
+  it("cuts partial arcs into blocks of at most 10°, so the space inside the curve stays free", () => {
+    // half a flat ring 100–104 cm from the axis, like the rail of a round balcony
+    const rail = partFootprints([
+      { shape: "lathe", profile: [[100, 0], [104, 0], [104, 2], [100, 2], [100, 0]], arc: 180, position: at(), material: "m" },
+    ]);
+    expect(rail.length).toBe(18);
+    for (const deg of [1, 47, 90, 133, 179]) expect(inside(rail, polar(102, deg)), `on the rail at ${deg}°`).toBe(true);
+    // the middle of a block bulges 100·(1 − cos 5°) = 0.38 cm into the curve, no more
+    for (const deg of [5, 85, 90, 175]) expect(inside(rail, polar(99.5, deg)), `inside the curve at ${deg}°`).toBe(false);
+    expect(inside(rail, [0, 50])).toBe(false); // one convex block would cover this
+    expect(inside(rail, polar(102, 200))).toBe(false); // past the end of the arc
+
+    const ring = partFootprints([{ shape: "torus", radius: 50, tube: 2, arc: 90, position: at(), material: "m" }]);
+    expect(ring.length).toBe(9);
+    expect(inside(ring, polar(50, 45))).toBe(true);
+    expect(inside(ring, polar(47.5, 45))).toBe(false);
+    expect(inside(ring, [20, 20])).toBe(false);
+  });
+
+  it("gives every block of an upright arc its own height range", () => {
+    // a quarter ring standing up from +x to +y: under its top end, it only blocks from about 49 cm up
+    const arc = partFootprints([{ shape: "torus", radius: 50, tube: 0.5, arc: 90, position: at(), rotation: { x: -90 }, material: "m" }]);
+    const over = arc.filter((f) => insideConvex([2, 0], f.poly));
+    expect(over.length).toBeGreaterThan(0);
+    expect(Math.min(...over.map((f) => f.y0))).toBeGreaterThan(45);
+    expect(Math.min(...arc.map((f) => f.y0))).toBeLessThan(1); // its low end still stands on the floor
+  });
+
+  it("keeps full turns and every other part in one block", () => {
+    const ring = partFootprints([{ shape: "torus", radius: 50, tube: 2, position: at(), material: "m" }]);
+    expect(ring.length).toBe(1);
+    expect(insideConvex([0, 0], ring[0].poly)).toBe(true);
+    const shell = partFootprints([{ shape: "lathe", profile: [[20, 0], [21, 0], [21, 30], [20, 30], [20, 0]], position: at(), material: "m" }]);
+    expect(shell.length).toBe(1);
   });
 });

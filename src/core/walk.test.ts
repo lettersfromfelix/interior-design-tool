@@ -77,6 +77,26 @@ describe("walking", () => {
     expect(walkStep(from, [0, -100], solids(doc))[1]).toBeCloseTo(650 + BODY_RADIUS, 0);
     expect(walkStep(from, [0, -100], solids(doc, false))[1]).toBeCloseTo(600, 0);
   });
+
+  it("steps out onto the round balconies and stops at their railings", () => {
+    const s = solids(emptyLayout(), false);
+    for (const id of ["balcony-n-railing", "balcony-se-railing"]) {
+      const railing = ap.fixtures.find((f) => f.id === id)!;
+      const rail = railing.parts.find((p) => p.name === "top rail");
+      if (rail?.shape !== "lathe" || rail.arc === undefined) throw new Error(`${id}: expected a lathe top rail with an arc`);
+      const inner = Math.min(...rail.profile.map(([r]) => r));
+      const centre = railing.position;
+      // the railing's circle is centred on the balcony: you can stand there
+      const clear = standClear(centre, s);
+      expect(Math.hypot(clear[0] - centre[0], clear[1] - centre[1]), id).toBeLessThan(0.01);
+      // walking out to the middle of the railing, you stop at it (its 10° blocks bulge less than 0.4 cm inwards)
+      const a = ((railing.rotation + (rail.rotation?.y ?? 0) + rail.arc / 2) * Math.PI) / 180;
+      const stop = walkStep(centre, [300 * Math.cos(a), 300 * Math.sin(a)], s);
+      const reach = Math.hypot(stop[0] - centre[0], stop[1] - centre[1]);
+      expect(reach, id).toBeGreaterThan(inner - BODY_RADIUS - 0.5);
+      expect(reach, id).toBeLessThan(inner - BODY_RADIUS + 0.1);
+    }
+  });
 });
 
 describe("door leaves", () => {
