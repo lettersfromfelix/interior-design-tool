@@ -1,0 +1,105 @@
+{
+  "$schema": "../schemas/layout.schema.json",
+  "schemaVersion": 1,
+  "name": "Inspiration",
+  "description": "Furnished with pieces from the inspiration catalogue: living room, dining, office, bedroom, Entrée and the north balcony.",
+  "doors": { "d-entree-living": 70, "d-living-zimmer-13-0": 90, "d-entree-zimmer-15-9": 80 },
+  "items": [
+    { "uid": "rug-200x300-1", "item": "rug-200x300", "position": [555.1, 310.7], "rotation": 76.1 },
+    { "uid": "tv-tripod-55-1", "item": "tv-tripod-55", "position": [526.7, 187.1], "rotation": 346.1 },
+    {
+      "uid": "sofa-florence-knoll-3-1",
+      "item": "sofa-florence-knoll-3",
+      "position": [579.8, 402.5],
+      "rotation": 166.1
+    },
+    { "uid": "coffee-table-noguchi-1", "item": "coffee-table-noguchi", "position": [549.9, 281.1], "rotation": 346.1 },
+    { "uid": "floor-lamp-ic-f2-1", "item": "floor-lamp-ic-f2", "position": [722, 368], "rotation": 0 },
+    {
+      "uid": "lounge-chair-pacha-1",
+      "item": "lounge-chair-pacha",
+      "position": [812, 425],
+      "rotation": 119,
+      "materials": { "upholstery": "fabric.boucle-cream" }
+    },
+    { "uid": "plant-olive-tree-1", "item": "plant-olive-tree", "position": [890, 372], "rotation": 30 },
+    {
+      "uid": "dining-table-gueridon-105-1",
+      "item": "dining-table-gueridon-105",
+      "position": [1111, 377.6],
+      "rotation": 345
+    },
+    {
+      "uid": "dining-chair-eames-dsr-1",
+      "item": "dining-chair-eames-dsr",
+      "position": [1043.5, 338.6],
+      "rotation": 300
+    },
+    { "uid": "dining-chair-eames-dsr-2", "item": "dining-chair-eames-dsr", "position": [1150, 310], "rotation": 30 },
+    {
+      "uid": "dining-chair-eames-dsr-3",
+      "item": "dining-chair-eames-dsr",
+      "position": [1178.6, 416.6],
+      "rotation": 120
+    },
+    { "uid": "dining-chair-eames-dsr-4", "item": "dining-chair-eames-dsr", "position": [1072, 445.1], "rotation": 210 },
+    { "uid": "pendant-lamp-ph5-1", "item": "pendant-lamp-ph5", "position": [1111, 377.6], "rotation": 0 },
+    { "uid": "desk-oak-140-1", "item": "desk-oak-140", "position": [124.4, 524.7], "rotation": 256.1 },
+    {
+      "uid": "desk-chair-capitol-complex-1",
+      "item": "desk-chair-capitol-complex",
+      "position": [185.1, 509.6],
+      "rotation": 76.1
+    },
+    {
+      "uid": "table-lamp-flowerpot-vp3-1",
+      "item": "table-lamp-flowerpot-vp3",
+      "position": [-50, -14],
+      "rotation": 0,
+      "parent": { "uid": "desk-oak-140-1", "surface": 0 }
+    },
+    {
+      "uid": "wall-shelf-string-pocket-1",
+      "item": "wall-shelf-string-pocket",
+      "position": [93.5, 506.6],
+      "rotation": 256.1,
+      "elevation": 100
+    },
+    { "uid": "display-cabinet-oak-1", "item": "display-cabinet-oak", "position": [140.8, 642.2], "rotation": 256.1 },
+    {
+      "uid": "sideboard-usm-haller-2x2-1",
+      "item": "sideboard-usm-haller-2x2",
+      "position": [369.5, 522.5],
+      "rotation": 76.1
+    },
+    { "uid": "lounge-chair-eames-1", "item": "lounge-chair-eames", "position": [108, 338], "rotation": 325 },
+    { "uid": "ottoman-eames-1", "item": "ottoman-eames", "position": [149.3, 397], "rotation": 325 },
+    { "uid": "bed-arched-180x200-1", "item": "bed-arched-180x200", "position": [1010, 759.5], "rotation": 180 },
+    { "uid": "side-table-travertine-1", "item": "side-table-travertine", "position": [886, 845], "rotation": 0 },
+    { "uid": "side-table-travertine-2", "item": "side-table-travertine", "position": [1134, 845], "rotation": 0 },
+    {
+      "uid": "table-lamp-flowerpot-vp3-2",
+      "item": "table-lamp-flowerpot-vp3",
+      "position": [0, 0],
+      "rotation": 0,
+      "parent": { "uid": "side-table-travertine-1", "surface": 0 },
+      "materials": { "lacquer": "lacquer.olive" }
+    },
+    { "uid": "wardrobe-oak-cane-120-1", "item": "wardrobe-oak-cane-120", "position": [791.5, 800], "rotation": 270 },
+    { "uid": "lounge-chair-pacha-2", "item": "lounge-chair-pacha", "position": [1180, 772], "rotation": 110 },
+    { "uid": "floor-lamp-paper-lantern-1", "item": "floor-lamp-paper-lantern", "position": [1242, 846], "rotation": 0 },
+    { "uid": "bistro-table-60-1", "item": "bistro-table-60", "position": [305, 105], "rotation": 0 },
+    { "uid": "bistro-chair-1", "item": "bistro-chair", "position": [255, 105], "rotation": 270 },
+    { "uid": "bistro-chair-2", "item": "bistro-chair", "position": [355, 105], "rotation": 90 },
+    { "uid": "plant-olive-tree-2", "item": "plant-olive-tree", "position": [250, 160], "rotation": 200 },
+    { "uid": "bench-shoe-oak-1", "item": "bench-shoe-oak", "position": [725.5, 770], "rotation": 90 },
+    {
+      "uid": "coat-rack-hang-it-all-1",
+      "item": "coat-rack-hang-it-all",
+      "position": [734, 770],
+      "rotation": 90,
+      "elevation": 140
+    },
+    { "uid": "mirror-round-80-1", "item": "mirror-round-80", "position": [741, 905], "rotation": 90, "elevation": 95 }
+  ]
+}
