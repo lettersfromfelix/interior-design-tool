@@ -574,11 +574,18 @@
         ]
       ],
       "hasCeiling": false,
-      "floorMaterial": "floor.wood-decking",
+      "floorMaterial": "floor.concrete-grey",
       "provenance": {
         "confidence": "medium",
         "source": "plan",
-        "note": "Round balcony from the railing circle (inner radius 100 cm); floor area 3.53 m2 (plan: 6.6 m2 for both balconies). Checklist M25."
+        "note": "Round balcony from the railing circle (inner radius 100 cm); floor area 3.53 m2 (plan: 6.6 m2 for both balconies). Checklist M25.",
+        "fields": {
+          "floorMaterial": {
+            "confidence": "high",
+            "source": "user",
+            "note": "Grey concrete floor (you)."
+          }
+        }
       }
     },
     {
@@ -800,11 +807,18 @@
         ]
       ],
       "hasCeiling": false,
-      "floorMaterial": "floor.wood-decking",
+      "floorMaterial": "floor.concrete-grey",
       "provenance": {
         "confidence": "medium",
         "source": "plan",
-        "note": "Round balcony from the railing circle (inner radius 100 cm); floor area 3.53 m2 (plan: 6.6 m2 for both balconies). Checklist M25."
+        "note": "Round balcony from the railing circle (inner radius 100 cm); floor area 3.53 m2 (plan: 6.6 m2 for both balconies). Checklist M25.",
+        "fields": {
+          "floorMaterial": {
+            "confidence": "high",
+            "source": "user",
+            "note": "Grey concrete floor (you)."
+          }
+        }
       }
     }
   ],

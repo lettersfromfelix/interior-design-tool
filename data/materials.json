@@ -18,8 +18,10 @@
                    "jointWidth": 0.3, "variation": 0.12 } },
     { "id": "floor.oak-parquet", "name": "Oak parquet", "color": "#C49A6C", "roughness": 0.55,
       "pattern": { "type": "planks", "color2": "#A97F52", "scale": 18, "strength": 0.6 } },
-    { "id": "floor.wood-decking", "name": "Wooden decking (balcony)", "color": "#9C7A5B", "roughness": 0.8,
+    { "id": "floor.wood-decking", "name": "Wooden decking", "color": "#9C7A5B", "roughness": 0.8,
       "pattern": { "type": "planks", "color2": "#7E6046", "scale": 14, "strength": 0.7 } },
+    { "id": "floor.concrete-grey", "name": "Concrete, grey (balconies)", "color": "#ABA9A4", "roughness": 0.9,
+      "pattern": { "type": "noise", "color2": "#77756F", "scale": 30, "strength": 0.55 } },
 
     { "id": "kitchen.light-grey-matt", "name": "Kitchen fronts, light grey matt", "color": "#C9CCCC", "roughness": 0.6 },
     { "id": "kitchen.brown-dark", "name": "Kitchen carcass and panels, dark brown", "color": "#574B42", "roughness": 0.55 },

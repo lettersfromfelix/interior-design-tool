@@ -26,6 +26,8 @@ FRONT_GAP = 0.4  # dark joint between two fronts
 FRONT_T = 2.0  # front thickness
 PULL_R = 5.0  # walnut half-moon pulls on the top edge of the base fronts
 
+BALCONY_FLOOR = "floor.concrete-grey"  # both balconies: grey concrete (you)
+
 
 def r1(v):
     return round(v + 0.0, 1)
@@ -607,11 +609,13 @@ def balconies(plan, rooms_pt, poche: Region, glazing_edges_pt):
             "kind": "balcony",
             "outline": outline,
             "hasCeiling": False,
-            "floorMaterial": "floor.wood-decking",
+            "floorMaterial": BALCONY_FLOOR,
             "provenance": prov("medium", "plan",
                                f"Round balcony from the railing circle (inner radius {r_in * K:.0f} cm); "
                                f"floor area {area:.2f} m2 (plan: 6.6 m2 for both balconies). "
-                               "Checklist {check:balcony-diameter}."),
+                               "Checklist {check:balcony-diameter}.",
+                               {"floorMaterial": {"confidence": "high", "source": "user",
+                                                  "note": "Grey concrete floor (you)."}}),
         })
         start, sweep = _ring_extent(plan, bb, c, r_in, r_out)
         out_fixtures.append(_balcony_railing(bid, plan.to_cm(c), (r_in + r_out) / 2 * K, start, sweep))
