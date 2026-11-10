@@ -4,10 +4,11 @@ dist/
 *.tsbuildinfo
 .vite/
 
-# Personal reference material stays local-only (contains the street address and interior photos).
-# Only the cropped, address-free underlay in data/underlay/ is committed.
+# Personal reference material stays local-only (contains the street address and interior photos), and so does the
+# floor-plan underlay made from it: regenerate it with `python tools/floorplan/underlay.py` (see tools/floorplan/README.md).
 reference/floorplan.pdf
 reference/photos/
+data/underlay/
 
 # Floor-plan extraction debug output (regenerate with tools/floorplan/*.py)
 tools/floorplan/out/

@@ -3,8 +3,8 @@
 
     python tools/floorplan/underlay.py
 
-Writes data/underlay/floorplan.png (committed) and tools/floorplan/out/underlay.json, which
-build_apartment.py copies into data/apartment.json -> "underlay" (image placement in model cm).
+Writes data/underlay/floorplan.png (local only: git-ignored and never published) and tools/floorplan/out/underlay.json,
+which build_apartment.py copies into data/apartment.json -> "underlay" (image placement in model cm).
 """
 from __future__ import annotations
 
