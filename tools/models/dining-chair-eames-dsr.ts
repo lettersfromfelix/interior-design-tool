@@ -3,14 +3,25 @@
  * own geometry (no third-party assets): the Vitra Eames Plastic Side Chair DSR, a moulded one-piece shell on an
  * Eiffel wire base.
  *
- * The shell is a parametric surface over (x, t): x across the width, t along the side profile from the front edge of
- * the seat, through the bend into the back, up to the top of the back. Every column x has its own side profile (the
- * bend is tighter in the middle than at the sides, so the rim sweeps from the seat into the back in a wide curve)
- * and is lifted towards the sitter: the seat is dished, the back wraps around the sitter and the edges roll up. The
- * surface is offset to both sides (4.5 mm wall) and closed by a rolled rim of 1 cm, so the shell is one smooth solid.
+ * The shape follows Vitra's dimension drawing (front and side view; traced at about 2 mm per pixel and scaled to the
+ * official size, see DRAWING_* below) and dealer photos from all sides:
+ * - From the side, the seat's front edge rolls down in a short lip. Behind it the seat falls gently towards the back,
+ *   runs flat for a few cm and bends up, in a radius of about 11 cm, into a back that stands almost upright (7–10°
+ *   from vertical). Only the top edge curls back; that curl, not a long seat, makes the 55 cm depth.
+ * - From the front, the shell is widest at the seat and narrows steadily up the back, without a waist, to a broad
+ *   domed top.
+ * - The seat dishes deeper towards the back, the back wraps around the sitter and the edges roll up slightly.
  *
- * The base follows the earlier parametric version of the item: four splayed legs that meet two runners under the
- * seat, a belt 16 cm above the floor, crossed struts on all four sides, shock mounts and glides.
+ * The shell is a parametric surface over (x, t): x across the width, t along the side profile of the centre line from
+ * the front edge, through the bend, to the top. Every column x has its own side profile (the bend starts earlier at
+ * the sides, so the rim sweeps from the seat into the back in a wide curve) and is lifted towards the sitter by the
+ * dish, the wrap and the rolled edges. The surface is offset to both sides (4.5 mm wall) and closed by a rolled rim of
+ * 1 cm, so the shell is one smooth solid. The fit places the profile as in the drawing (front edge, the seat's
+ * underside, the outside of the back, the height) and fits the outline's width and the wrap up the back to the
+ * drawing's front and side view. The script prints the result next to the drawing, and collision parts for item.json.
+ *
+ * The base: four splayed legs that meet two runners under the seat, a belt 16 cm above the floor, crossed struts on
+ * all four sides, shock mounts and glides; the feet and mounts sit where the drawing has them.
  *
  * Built in cm in the catalogue frame (x right, y up, the front faces +z) and exported in metres. Its bounding box is
  * exactly the item's dimensions, W 46.5 × H 83 × D 55 cm (seat height 43 cm), so the app scales it evenly. The
@@ -60,6 +71,19 @@ const DEG = Math.PI / 180;
 const smoother = (u: number) => (u <= 0 ? 0 : u >= 1 ? 1 : u * u * u * (u * (u * 6 - 15) + 10));
 const step = (v: number, a: number, b: number) => smoother((v - a) / (b - a));
 
+/**
+ * 0 → 1 over [a, b] with a slope that rises over the first share k, stays constant and falls over the last share k.
+ * As a turning angle: a bend of almost constant radius whose curvature still changes smoothly.
+ */
+function ramp(v: number, a: number, b: number, k: number): number {
+  if (v <= a) return 0;
+  if (v >= b) return 1;
+  const u = (v - a) / (b - a);
+  const rise = (w: number) => w ** 4 * (w * w - 3 * w + 2.5); // the integral of smoother from 0 to w
+  const area = u <= k ? k * rise(u / k) : u <= 1 - k ? k / 2 + u - k : 1 - k - k * rise((1 - u) / k);
+  return area / (1 - k);
+}
+
 /** Natural cubic spline through [t, value] points (continuous curvature), continued straight beyond the ends. */
 function spline(points: readonly (readonly [number, number])[]): (t: number) => number {
   const n = points.length;
@@ -98,7 +122,37 @@ const GW = [0.1012285362903763, 0.2223810344533745, 0.3137066458778873, 0.362683
 
 /** Overall size (Vitra): W 46.5 × D 55 × H 83 cm, seat height 43 cm. */
 const SIZE = { width: 46.5, depth: 55, height: 83 };
-const SEAT_HEIGHT = 43;
+/** The seat's front edge is the front of the bounding box; "depth" below is measured back from it. */
+const FRONT = SIZE.depth / 2;
+
+/**
+ * Vitra's dimension drawing of the DSR (www.vitra.com, as shown by dealers), traced and scaled to the official size.
+ * Its side view is drawn about 4 % shallower than the 55 cm Vitra lists, and is stretched to it. Up the back, by
+ * height: the half-width seen from the front, and seen from the side the depth of the rims (the frontmost point) and
+ * of the outside of the back (the rearmost).
+ */
+const DRAWING_BACK: readonly (readonly [height: number, halfWidth: number, rims: number, back: number])[] = [
+  [47, 23.03, 28.5, 46.9],
+  [49, 22.29, 36.5, 47.7],
+  [51, 21.8, 39.4, 48.2],
+  [53, 21.32, 40.8, 48.4],
+  [55, 20.79, 41.9, 48.5],
+  [58, 20.04, 43.2, 48.9],
+  [61, 19.29, 44.2, 49.3],
+  [64, 18.44, 45.1, 49.8],
+  [67, 17.68, 45.9, 50.0],
+  [70, 16.75, 46.6, 50.7],
+  [73, 15.79, 47.5, 51.2],
+  [76, 14.73, 48.3, 51.6],
+  [78, 13.95, 49.1, 52.1],
+  [80, 12.84, 50.2, 52.5],
+  [81, 11.87, 50.9, 53.1],
+  [82, 10.56, 51.9, 54.2],
+];
+/** Along the seat, by depth: the height of the rims (the top of the side view) ... */
+const DRAWING_RIMS = [[2, 45.0], [5, 45.7], [10, 45.9], [20, 46.15], [25, 46.6], [30, 47.2], [33, 47.9], [36, 48.75], [38, 49.8], [40, 52.1], [42, 55.5], [44, 60.7]] as const;
+/** ... and of the underside (its bottom, where the base doesn't hide it). */
+const DRAWING_UNDERSIDE = [[0.5, 42.9], [2, 43.35], [4, 44.0], [6, 44.4], [10, 44.0], [12, 43.55], [14, 43.1], [20, 42.25], [24, 41.6], [28, 41.2], [30, 40.95], [37.5, 40.95], [41, 41.8], [43, 42.9], [45, 44.6]] as const;
 
 // ---- the shell (cm) ----
 const WALL = 0.45;
@@ -111,86 +165,88 @@ const RIM_SEGMENTS = 6;
 const XREF = 23;
 
 // Side profile of the centre line, as its tangent angle in degrees going back from the front edge and up the back.
-const PHI_FRONT = 28; // the front edge rolls down (waterfall) ...
-const WATERFALL = 7; // ... over this length
-const PHI_SEAT = -5; // the seat falls slightly towards the back
-const PHI_SEAT_END = -1; // and flattens out before the bend
-const BEND = 15; // length of the bend into the back on the centre line
-const BEND_EARLY = 9; // at the sides the bend starts earlier ...
-const BEND_LATE = 14; // ... and ends later, so the rim sweeps from the seat into the back
-const PHI_BACK = 78; // the back after the bend (12° from vertical) ...
-const PHI_TOP = 73; // ... and at the top (17°): on average it leans back about 14°
+const PHI_TIP = 22; // the front edge rolls down (a short waterfall lip) ...
+const WATERFALL = 10; // ... and turns over a crown into the seat within this length,
+const PHI_FALL = -13; // behind which the seat falls towards the back,
+const EASED = 16; // ... easing by here
+const PHI_SEAT = -9; // ... to this slope,
+const SETTLE = 6; // and levels out over this length
+const FLAT = 4.5; // ... into a flat floor in front of the bend
+const BEND = 18.5; // length of the bend into the back on the centre line (a radius of about 11 cm), ...
+const BEND_EASE = 0.15; // ... its curvature easing in and out over the first and last 15 %
+const BEND_EARLY = 8; // at the sides the bend starts earlier ...
+const BEND_LATE = 4; // ... and ends later, so the rim sweeps from the seat into the back
+const PHI_BACK = 83; // the back rises almost upright (7° from vertical) ...
+const PHI_UPPER = 79.5; // ... leaning back a little more towards the top,
+const CURL = 4; // and near the top the edge curls back within this length (the fit sets how far: the 55 cm depth)
+const TIP = 1; // ... and runs straight for the last cm
 const FRONT_BOW = 1.5; // the front edge bows forward in the middle
 const TOP_DIP = 2.5; // the top edge's corners are set back down the profile a little
 const FRONT_CORNER = 9.5; // radius of the seat's front corners (seen from above)
-const TOP_CORNER = 7; // radius of the back's top corners
+const TOP_CORNER = 8; // radius of the back's top corners
 const ROLL_START = 0.62; // the edges roll up over the outer 38 % of the half-width
+
+type Knots = readonly (readonly [number, number])[];
+/** Half-width of the outline along the seat by depth, from Vitra's photo of the underside (scaled by the fit). */
+const SEAT_WIDTH: Knots = [[0, 21.4], [9, 22.5], [18, 23.25], [27, 23.0], [33, 22.45]];
+/** Heights up the back at which the fit matches the outline's half-width to the drawing's front view ... */
+const WIDTH_AT = [49, 55, 61, 67, 73, 78];
+/** ... and the wrap to the rims in its side view. */
+const WRAP_AT = [55, 61, 67, 73];
+/** Half-width of the outline at the top of the back, before its corners are rounded. */
+const TOP_WIDTH = 12.8;
+/** Depth of the transverse curvature at x = XREF: the seat dishes deeper towards the back (by depth), ... */
+const SEAT_DISH: Knots = [[0, 0.4], [7, 0.3], [14, 1.2], [21, 2.5], [30, 4.9]];
+const BEND_DISH = 5.3; // ... in the middle of the bend ...
+const TOP_WRAP = 3.8; // ... and at the top of the back (the wrap in between is fitted).
+/** Height of the rolled-up edges along the seat by depth, in the bend, up the back and at the top. */
+const SEAT_EDGE: Knots = [[0, 0.8], [10, 1.0], [25, 1.1]];
+const BEND_EDGE = 1.0;
+const BACK_EDGE = 0.8;
+const TOP_EDGE = 0.6;
+/** The seat's underside at its lowest, in front of the bend (the drawing). */
+const SEAT_LOW = 40.95;
 
 interface Fit {
   /** Position of the centre line's front edge (cm). */
   z0: number;
   y0: number;
-  /** t where the bend into the back starts on the centre line: sets the seat depth. */
+  /** t where the centre line's bend starts: sets how far back the back stands. */
   seat: number;
   /** Length of the centre line from the front edge to the top of the back: sets the height. */
   length: number;
-  /** Scales the half-width: sets the overall width. */
-  width: number;
+  /** Scales SEAT_WIDTH: sets the overall width. */
+  seatScale: number;
+  /** The angle (degrees) the top edge curls back to: sets the depth. */
+  curl: number;
+  /** Half-width of the outline at the WIDTH_AT heights, and depth of the wrap at the WRAP_AT heights. */
+  width: number[];
+  wrap: number[];
 }
 
 function shellModel(fit: Fit) {
   const S = fit.length;
   const b0 = fit.seat;
-  const b1 = fit.seat + BEND;
-  /** Half-width of the outline before the corners are rounded; narrowest at the waist. */
-  const W = spline(
-    (
-      [
-        [0, 21.4],
-        [7, 22.2],
-        [14, 22.4],
-        [b0 - 6, 21.6],
-        [b1, 19.7],
-        [b1 + 14, 21.0],
-        [S - 12, 22.6],
-        [S, 22.8],
-      ] as const
-    ).map(([t, w]) => [t, w * fit.width] as const),
-  );
-  /** Depth of the transverse curvature at x = XREF: a shallow dish in the seat, the wrap of the back. */
-  const D = spline([
-    [0, 0.8],
-    [10, 1.1],
-    [b0 - 2, 1.9],
-    [b1, 3.6],
-    [b1 + 12, 5.2],
-    [S, 6.0],
-  ]);
-  /** Height of the rolled-up edges. */
-  const E = spline([
-    [0, 0.8],
-    [10, 1.4],
-    [b0, 2.7],
-    [b1, 2.3],
-    [b1 + 12, 1.5],
-    [S, 1.2],
-  ]);
-
+  const b1 = b0 + BEND;
   const phiAt = (s: number, a: number, b: number) =>
-    (PHI_FRONT +
-      (PHI_SEAT - PHI_FRONT) * step(s, 0, WATERFALL) +
-      (PHI_SEAT_END - PHI_SEAT) * step(s, WATERFALL, b0) +
-      (PHI_BACK - PHI_SEAT_END) * step(s, a, b) +
-      (PHI_TOP - PHI_BACK) * step(s, b, S)) *
+    (PHI_TIP +
+      (PHI_FALL - PHI_TIP) * step(s, 0, WATERFALL) +
+      (PHI_SEAT - PHI_FALL) * step(s, WATERFALL, EASED) -
+      PHI_SEAT * step(s, b0 - FLAT - SETTLE, b0 - FLAT) +
+      PHI_BACK * ramp(s, a, b, BEND_EASE) +
+      (PHI_UPPER - PHI_BACK) * step(s, b, S - TIP - CURL) +
+      (fit.curl - PHI_UPPER) * step(s, S - TIP - CURL, S - TIP)) *
     DEG;
 
   /** The side profile of column q = (x / XREF)² at arc length s: position (from the front edge) and tangent angle. */
   const profile = (s: number, q: number) => {
     const a = b0 - BEND_EARLY * q;
     const b = b1 + BEND_LATE * q;
+    const e = BEND_EASE * (b - a);
     const lo = Math.min(0, s);
     const hi = Math.max(0, s);
-    const cuts = [0, ...[WATERFALL, b0, a, b, S].filter((c) => c > lo && c < hi).sort((u, v) => u - v), s];
+    const breaks = [WATERFALL, EASED, b0 - FLAT - SETTLE, b0 - FLAT, a, a + e, b - e, b, S - TIP - CURL, S - TIP, S];
+    const cuts = [0, ...breaks.filter((c) => c > lo && c < hi).sort((u, v) => u - v), s];
     let z = 0;
     let y = 0;
     for (let k = 0; k + 1 < cuts.length; k++) {
@@ -204,6 +260,32 @@ function shellModel(fit: Fit) {
     }
     return { z, y, phi: phiAt(s, a, b) };
   };
+
+  // the centre line, to place the knots of the outline and the lift by depth (along the seat) and height (up the back)
+  const DT = 0.1;
+  const line: [t: number, depth: number, height: number][] = [];
+  for (let t = 0; t <= S + DT / 2; t += DT) {
+    const p = profile(t, 0);
+    line.push([t, FRONT - fit.z0 - p.z, fit.y0 + p.y]);
+  }
+  /** The first t after `from` where the centre line's depth (k = 1) or height (k = 2) reaches v. */
+  const find = (k: 1 | 2, v: number, from: number) => {
+    for (let i = 1; i < line.length; i++) {
+      if (line[i][0] <= from || line[i][k] < v) continue;
+      const u = Math.min(1, Math.max(0, (v - line[i - 1][k]) / (line[i][k] - line[i - 1][k])));
+      return line[i - 1][0] + u * DT;
+    }
+    return S;
+  };
+  const bySeat = (knots: Knots, scale = 1) => knots.map(([d, v]): [number, number] => [find(1, d, -1), v * scale]);
+  const byBack = (heights: number[], values: number[]) => heights.map((h, k): [number, number] => [find(2, h, b0), values[k]]);
+  const middle = b0 + BEND / 2;
+  /** Half-width of the outline before the corners are rounded: no waist, it narrows steadily up the back. */
+  const W = spline([...bySeat(SEAT_WIDTH, fit.seatScale), ...byBack(WIDTH_AT, fit.width), [S, TOP_WIDTH]]);
+  /** Depth of the transverse curvature at x = XREF: the seat's dish, the wrap of the back. */
+  const D = spline([...bySeat(SEAT_DISH), [middle, BEND_DISH], ...byBack(WRAP_AT, fit.wrap), [S, TOP_WRAP]]);
+  /** Height of the rolled-up edges. */
+  const E = spline([...bySeat(SEAT_EDGE), [middle, BEND_EDGE], [find(2, 65, b0), BACK_EDGE], [S, TOP_EDGE]]);
 
   /** Mid-surface of the wall. The lift goes along the profile's normal (sin φ, cos φ), towards the sitter. */
   const mid = (x: number, t: number): Vec => {
@@ -282,7 +364,7 @@ function shellModel(fit: Fit) {
     const g = unit(cross(sub(surface(x + e, t, side), surface(x - e, t, side)), sub(surface(x, t + e, side), surface(x, t - e, side))));
     return dot(g, n) * side > 0 ? g : mul(g, -1);
   };
-  return { S, b0, b1, mid, normal, surface, surfaceNormal, X, sideTangent };
+  return { S, b0, b1, find, mid, normal, surface, surfaceNormal, X, sideTangent };
 }
 
 type Shell = ReturnType<typeof shellModel>;
@@ -290,7 +372,7 @@ type Shell = ReturnType<typeof shellModel>;
 /** Rows along the profile: denser in the waterfall, the bend and the top corners. */
 function rowsOf(sh: Shell): number[] {
   const density = (t: number) =>
-    0.5 + 1.5 * (1 - step(t, 5, 9)) + 0.5 * step(t, sh.b0 - 14, sh.b0 - 8) * (1 - step(t, sh.b1 + 10, sh.b1 + 18)) + 1.2 * step(t, sh.S - 9, sh.S - 5);
+    0.5 + 1.5 * (1 - step(t, 7, 11)) + 0.5 * step(t, sh.b0 - 14, sh.b0 - 8) * (1 - step(t, sh.b1 + 10, sh.b1 + 18)) + 1.2 * step(t, sh.S - 10, sh.S - 6);
   const n = 2000;
   const cum = [0];
   for (let i = 1; i <= n; i++) cum.push(cum[i - 1] + (density(((i - 0.5) / n) * sh.S) * sh.S) / n);
@@ -315,13 +397,13 @@ const columns = Array.from({ length: COLUMNS + 1 }, (_, i) => {
 });
 
 interface Built {
-  positions: number[];
+  positions: ArrayLike<number>;
   normals: number[];
-  indices: number[];
+  indices: ArrayLike<number>;
 }
 
 /** The closed shell: sitter's side, outside and the rolled rim, as one smooth indexed mesh. */
-function buildShell(sh: Shell, withNormals: boolean): Built {
+function buildShell(sh: Shell, withNormals: boolean): Built & { positions: number[]; indices: number[] } {
   const rows = rowsOf(sh);
   const I = COLUMNS;
   const J = rows.length - 1;
@@ -418,27 +500,79 @@ function bounds(positions: ArrayLike<number>) {
   return { min, max };
 }
 
-/** Highest point of the sitter's side along the centre line of the seat (the seat height). */
-const seatHeight = (sh: Shell) => {
-  let best = -Infinity;
-  for (let t = 0; t < sh.b0; t += 0.05) best = Math.max(best, sh.surface(0, t, 1)[1]);
-  return best;
-};
+/** Every point where a triangle edge of the mesh crosses the plane where coordinate `axis` is v. */
+function crossings(m: Built, axis: 1 | 2, v: number, visit: (p: Vec) => void) {
+  const P = m.positions;
+  const I = m.indices;
+  for (let i = 0; i < I.length; i += 3) {
+    for (let e = 0; e < 3; e++) {
+      const a = 3 * I[i + e];
+      const b = 3 * I[i + ((e + 1) % 3)];
+      const da = P[a + axis] - v;
+      const db = P[b + axis] - v;
+      if (da * db > 0 || da === db) continue;
+      const u = da / (da - db);
+      visit([P[a] + u * (P[b] - P[a]), P[a + 1] + u * (P[b + 1] - P[a + 1]), P[a + 2] + u * (P[b + 2] - P[a + 2])]);
+    }
+  }
+}
+/** The shell at height y: its half-width seen from the front, and seen from the side the depth of its frontmost and rearmost points. */
+function across(m: Built, y: number) {
+  let halfWidth = 0;
+  let zMin = Infinity;
+  let zMax = -Infinity;
+  crossings(m, 1, y, (p) => {
+    halfWidth = Math.max(halfWidth, Math.abs(p[0]));
+    zMin = Math.min(zMin, p[2]);
+    zMax = Math.max(zMax, p[2]);
+  });
+  return { halfWidth, front: FRONT - zMax, back: FRONT - zMin };
+}
+/** The shell at a depth behind the front edge: its top and bottom, as in the side view. */
+function along(m: Built, depth: number) {
+  let top = -Infinity;
+  let bottom = Infinity;
+  crossings(m, 2, FRONT - depth, (p) => {
+    top = Math.max(top, p[1]);
+    bottom = Math.min(bottom, p[1]);
+  });
+  return { top, bottom };
+}
 
-// ---- fit the shell to the dimensions: front edge at +depth/2, seat height, depth, height and width ----
-let fit: Fit = { z0: 25, y0: 41, seat: 33, length: 84, width: 1 };
-for (let it = 0; it < 30; it++) {
-  const sh = shellModel(fit);
-  const { min, max } = bounds(buildShell(sh, false).positions);
-  const halfWidth = Math.max(max[0], -min[0]);
-  const err = [SIZE.depth / 2 - max[2], SIZE.depth - (max[2] - min[2]), SEAT_HEIGHT - seatHeight(sh), SIZE.height - max[1]];
-  if (err.every((e) => Math.abs(e) < 1e-4) && Math.abs(halfWidth - SIZE.width / 2) < 1e-4) break;
+// ---- fit the shell to the drawing: front edge, the seat's underside, the outside of the back, height and width ----
+const drawn = (h: number) => {
+  const row = DRAWING_BACK.find(([y]) => y === h);
+  if (!row) throw new Error(`no drawing row at ${h} cm`);
+  return { halfWidth: row[1], rims: row[2], back: row[3] };
+};
+const BACK_ROWS = DRAWING_BACK.filter(([h]) => h >= 53 && h <= 78);
+let fit: Fit = { z0: 27, y0: 42.5, seat: 37, length: 87, seatScale: 1, curl: 45, width: WIDTH_AT.map((h) => drawn(h).halfWidth), wrap: WRAP_AT.map(() => 5.5) };
+let iterations = 0;
+let residual = Infinity;
+for (; iterations < 80; iterations++) {
+  const m = buildShell(shellModel(fit), false);
+  const { min, max } = bounds(m.positions);
+  const err = {
+    front: FRONT - max[2],
+    low: SEAT_LOW - min[1],
+    top: SIZE.height - max[1],
+    depth: SIZE.depth - (max[2] - min[2]),
+    back: BACK_ROWS.reduce((sum, [h, , , back]) => sum + back - across(m, h).back, 0) / BACK_ROWS.length,
+    width: SIZE.width / 2 - Math.max(max[0], -min[0]),
+  };
+  const width = WIDTH_AT.map((h) => drawn(h).halfWidth - across(m, h).halfWidth);
+  const wrap = WRAP_AT.map((h) => across(m, h).front - drawn(h).rims);
+  residual = Math.max(...Object.values(err).map(Math.abs), ...width.map(Math.abs), ...wrap.map(Math.abs));
+  if (residual < 2e-3) break;
   fit = {
-    z0: fit.z0 + err[0],
-    seat: fit.seat + err[1],
-    y0: fit.y0 + err[2],
-    length: fit.length + (err[3] - err[2]) / 0.95,
-    width: (fit.width * SIZE.width) / 2 / halfWidth,
+    z0: fit.z0 + err.front,
+    y0: fit.y0 + err.low,
+    seat: fit.seat + err.back,
+    length: fit.length + err.top / 0.8,
+    seatScale: fit.seatScale * (1 + err.width / (SIZE.width / 2)),
+    curl: Math.min(79, Math.max(15, fit.curl - 15 * err.depth)),
+    width: fit.width.map((w, k) => w + 0.8 * width[k]),
+    wrap: fit.wrap.map((d, k) => Math.max(0, d + (0.8 * wrap[k]) / (fit.width[k] / XREF) ** 2)),
   };
 }
 const shell = shellModel(fit);
@@ -460,9 +594,9 @@ const underside = (x: number, z: number) => {
 const LEG = 0.42; // legs and runners
 const WIRE = 0.3; // belt and struts
 const MOUNT = { radius: 1.5, height: 1.4 }; // shock mounts: from the runner's axis up to the shell
-const RUNNER_X = 11.5;
-const MOUNT_Z = [13, -8]; // front and back shock mounts, where the legs meet the runners
-const FOOT = { x: 20.3, z: [21.5, -17.5], height: 0.9 }; // glides
+const RUNNER_X = 7.5; // the runners lie close together under the seat (the drawing's front view)
+const MOUNT_Z = [FRONT - 16.5, FRONT - 33.8]; // front and back shock mounts, where the legs meet the runners
+const FOOT = { x: 18.85, z: [FRONT - 5.85, FRONT - 47.3], height: 0.9 }; // glides, where the drawing has them
 const BELT = 16;
 
 /** A round wire along a path (smooth frames; open ends, they end inside other parts). */
@@ -583,23 +717,148 @@ mkdirSync(resolve(out, ".."), { recursive: true });
 const glb = (await new GLTFExporter().parseAsync(chair, { binary: true })) as ArrayBuffer;
 writeFileSync(out, Buffer.from(glb));
 
-const cm = (v: number) => v.toFixed(2);
-console.log(`fit: bend at ${cm(fit.seat)} cm, centre line ${cm(fit.length)} cm, width ×${fit.width.toFixed(4)}`);
+// ---- report: the fit, the shape next to the drawing (final geometry, cm), collision parts for item.json ----
+const cm = (v: number) => v.toFixed(1);
+const inCm = (g: BufferGeometry): Built => ({
+  positions: Array.from(g.getAttribute("position").array, (v) => v * 100),
+  normals: [],
+  indices: Array.from(g.getIndex()?.array ?? []),
+});
+const final = inCm(shellGeometry);
+const baseCm = inCm(baseGeometry);
 console.log(
-  `bounds before the exact fit: x ${cm(box.min[0])}..${cm(box.max[0])}, y ${cm(box.min[1])}..${cm(box.max[1])}, z ${cm(box.min[2])}..${cm(box.max[2])} (×${factor.map((f) => f.toFixed(5)).join(", ")})`,
+  `fit after ${iterations} rounds (largest residual ${residual.toExponential(1)} cm): bend from ${cm(fit.seat)} cm along the centre line, which is ${cm(fit.length)} cm long; the top curls back to ${cm(90 - fit.curl)}° from vertical`,
 );
-console.log(`seat height ${cm(seatHeight(shell))}; runners at ${runnerHeight.map(cm).join(" (front), ")} (back)`);
+console.log(`exact fit: ×${factor.map((f) => f.toFixed(4)).join(", ")} (x, y, z)`);
 {
-  // seat depth: front edge to the back's sitter side, 10 cm above the seat (raw cm frame, before the exact fit)
-  const backAt = (y: number) => {
-    let z = Infinity;
-    for (let t = shell.b0; t < shell.S; t += 0.02) {
-      const p = shell.surface(0, t, 1);
-      if (Math.abs(p[1] - y) < 0.05) z = Math.min(z, p[2]);
-    }
-    return z;
-  };
-  console.log(`seat depth (to the back, 10 cm above the seat) ${cm(SIZE.depth / 2 - backAt(SEAT_HEIGHT + 10))}`);
+  const t18 = shell.find(1, 18, -1);
+  console.log(`seat surface in the middle, 18 cm behind the front edge: ${cm(shell.surface(0, t18, 1)[1] * factor[1] + (target.min[1] - box.min[1] * factor[1]))} cm (Vitra: seat height 43)`);
 }
-console.log(`shell ${shellData.positions.length / 3} vertices, ${shellData.indices.length / 3} triangles; base ${baseGeometry.getAttribute("position").count} vertices`);
+console.log("\nseen from the front and the side, up the back (model / drawing, cm)\n  height  half-width     rims (depth)   outside of the back (depth)");
+for (const [h, w, rims, back] of DRAWING_BACK) {
+  const c = across(final, h);
+  console.log(`  ${String(h).padStart(4)}    ${cm(c.halfWidth).padStart(4)} / ${cm(w).padStart(4)}    ${cm(c.front).padStart(4)} / ${cm(rims).padStart(4)}    ${cm(c.back).padStart(4)} / ${cm(back)}`);
+}
+console.log("\nseen from the side, along the seat (model / drawing, cm)\n  depth   rims (height)   underside (height)");
+const depths = [...new Set([...DRAWING_RIMS.map(([d]) => d), ...DRAWING_UNDERSIDE.map(([d]) => d)])].sort((a, b) => a - b);
+for (const d of depths) {
+  const c = along(final, d);
+  const rim = DRAWING_RIMS.find(([x]) => x === d)?.[1];
+  const low = DRAWING_UNDERSIDE.find(([x]) => x === d)?.[1];
+  console.log(`  ${String(d).padStart(5)}   ${rim === undefined ? "      -      " : `${cm(c.top)} / ${cm(rim)}`}   ${low === undefined ? "" : `${cm(c.bottom)} / ${cm(low)}`}`);
+}
+
+{
+  // collision parts: the seat as an extrusion up to SEAT_TOP, the back as curved slabs (lathes), the base as a box
+  const SEAT_TOP = 50;
+  const r1 = (v: number) => Math.round(v * 10) / 10;
+  const points = (m: Built, keep: (p: Vec) => boolean) => {
+    const out: Vec[] = [];
+    for (let i = 0; i < m.positions.length; i += 3) {
+      const p: Vec = [m.positions[i], m.positions[i + 1], m.positions[i + 2]];
+      if (keep(p)) out.push(p);
+    }
+    return out;
+  };
+  /** Convex hull in (x, z), simplified to at most n corners (dropping those that cut off the least area). */
+  const hull = (ps: [number, number][], n: number) => {
+    const s = [...ps].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    const turn = (o: [number, number], a: [number, number], b: [number, number]) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+    const lower: [number, number][] = [];
+    for (const p of s) {
+      while (lower.length >= 2 && turn(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop();
+      lower.push(p);
+    }
+    const upper: [number, number][] = [];
+    for (const p of [...s].reverse()) {
+      while (upper.length >= 2 && turn(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop();
+      upper.push(p);
+    }
+    const h = [...lower.slice(0, -1), ...upper.slice(0, -1)];
+    while (h.length > n) {
+      let best = 0;
+      let area = Infinity;
+      for (let i = 0; i < h.length; i++) {
+        const a = Math.abs(turn(h[(i + h.length - 1) % h.length], h[i], h[(i + 1) % h.length]));
+        if (a < area) [area, best] = [a, i];
+      }
+      h.splice(best, 1);
+    }
+    return h;
+  };
+  const seat = points(final, (p) => p[1] <= SEAT_TOP);
+  const seatLow = Math.min(...seat.map((p) => p[1]));
+  const LOWER_BACK = 60;
+  const lowerBack = points(final, (p) => p[1] >= SEAT_TOP && p[1] <= LOWER_BACK);
+  const parts: object[] = [
+    {
+      name: "seat",
+      shape: "extrusion",
+      points: hull(seat.map((p) => [p[0], p[2]]), 22).map(([x, z]) => [r1(x), r1(z)]),
+      height: r1(SEAT_TOP - Math.floor(seatLow * 10) / 10),
+      position: { x: 0, y: Math.floor(seatLow * 10) / 10, z: 0 },
+      material: "shell",
+    },
+    {
+      // the rims still sweep forward here: a convex block, tight on the outside of the back
+      name: "backrest, lower",
+      shape: "extrusion",
+      points: hull(lowerBack.map((p) => [p[0], p[2]]), 16).map(([x, z]) => [r1(x), r1(z)]),
+      height: LOWER_BACK - SEAT_TOP,
+      position: { x: 0, y: SEAT_TOP, z: 0 },
+      material: "shell",
+    },
+  ];
+  const bands = [
+    ["backrest, middle", LOWER_BACK, 70],
+    ["backrest, upper", 70, SIZE.height],
+  ] as const;
+  for (const [name, lo, hi] of bands) {
+    const ps = points(final, (p) => p[1] >= lo && p[1] <= hi);
+    // the axis (on the centre plane) that makes the slab thinnest without reaching out of the item's box
+    let best = { c: 0, rin: 0, rout: 0, from: 0, to: 0, cost: Infinity };
+    for (let c = -10; c <= 200; c += 0.25) {
+      let rin = Infinity;
+      let rout = 0;
+      let from = Infinity;
+      let to = -Infinity;
+      for (const p of ps) {
+        const r = Math.hypot(p[0], p[2] - c);
+        const a = ((Math.atan2(p[2] - c, p[0]) / DEG) % 360 + 360) % 360;
+        rin = Math.min(rin, r);
+        rout = Math.max(rout, r);
+        from = Math.min(from, a);
+        to = Math.max(to, a);
+      }
+      // the slab's outer corners lie at rout at both ends of the arc, its back at rout straight behind the axis;
+      // up to 0.4 cm beyond the item's box is fine (the app ignores overlaps of up to 0.5 cm)
+      const sides = Math.max(Math.abs(Math.cos(from * DEG)), Math.abs(Math.cos(to * DEG))) * rout - SIZE.width / 2 - 0.4;
+      const rear = -FRONT - (c - rout) - 0.4;
+      const cost = rout - rin + 10 * (Math.max(0, sides) + Math.max(0, rear));
+      if (cost < best.cost) best = { c, rin, rout, from, to, cost };
+    }
+    const rin = Math.floor(best.rin * 10) / 10;
+    const rout = Math.ceil(best.rout * 10) / 10;
+    parts.push({
+      name,
+      shape: "lathe",
+      profile: [[rin, 0], [rout, 0], [rout, hi - lo], [rin, hi - lo], [rin, 0]],
+      arc: r1(best.to - best.from + 0.2),
+      position: { x: 0, y: lo, z: r1(best.c) },
+      rotation: { y: r1(best.from - 0.1) },
+      material: "shell",
+    });
+  }
+  const b = bounds(baseCm.positions);
+  const top = Math.floor(b.max[1] * 10) / 10;
+  parts.push({
+    name: "base",
+    shape: "box",
+    size: { x: r1(b.max[0] - b.min[0]), y: top, z: r1(b.max[2] - b.min[2]) },
+    position: { x: 0, y: r1(top / 2), z: r1((b.max[2] + b.min[2]) / 2) },
+    material: "base",
+  });
+  console.log(`\ncollision parts for item.json:\n${JSON.stringify(parts)}`);
+}
+console.log(`\nshell ${shellData.positions.length / 3} vertices, ${shellData.indices.length / 3} triangles; base ${baseGeometry.getAttribute("position").count} vertices`);
 console.log(`wrote ${out} (${glb.byteLength} bytes)`);
