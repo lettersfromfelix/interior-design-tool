@@ -6,10 +6,12 @@ corrections (for example tape measurements) are made directly in `data/apartment
 
 Requirements: Python 3.12 with PyMuPDF (`fitz`), Pillow and numpy. The PDF itself is
 **local-only**: copy it to `reference/floorplan.pdf`. It is gitignored because it contains the
-street address.
+street address. The underlay image made from it, `data/underlay/floorplan.png`, is gitignored as
+well and never published; after a fresh clone, run `underlay.py` once to get the **Plan underlay**
+toggle back in the 2D view (without the image the toggle is hidden).
 
 ```powershell
-python tools/floorplan/underlay.py          # data/underlay/floorplan.png (cropped, no address) + out/underlay.json
+python tools/floorplan/underlay.py          # data/underlay/floorplan.png (cropped, no address; local only) + out/underlay.json
 python tools/floorplan/build_apartment.py   # data/apartment.json (refuses to overwrite measured data unless --force)
 python tools/floorplan/preview.py           # out/apartment_preview.png: the JSON drawn over the underlay
 ```

@@ -1,4 +1,5 @@
 import type { Issue } from "../../core/validate/issues";
+import { isWebsite } from "../../data/backend";
 import { IssueLine } from "../components";
 import { countIssues, useAllIssues } from "../issues";
 import { useApp } from "../store";
@@ -16,12 +17,13 @@ export function IssuesPanel() {
     <div className="panel">
       {loadError && (
         <ul className="issues">
-          <IssueLine issue={{ severity: "error", file: "file API", path: "", message: loadError }} />
+          <IssueLine issue={{ severity: "error", file: isWebsite ? "website" : "file API", path: "", message: loadError }} />
         </ul>
       )}
       {issues.length === 0 && !loadError ? (
         <p className="muted">
-          No problems found in the data files, the catalogue or the layout. They are checked again whenever a file changes on disk.
+          No problems found in the data files, the catalogue or the layout.
+          {isWebsite ? " The layout is checked again after every change." : " They are checked again whenever a file changes on disk."}
         </p>
       ) : (
         groupByFile(issues).map(([file, list]) => {

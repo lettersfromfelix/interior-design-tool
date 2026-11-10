@@ -1,19 +1,43 @@
 import { useEffect, useRef, useState } from "react";
+import { isWebsite } from "../data/backend";
+import { LayoutImportError } from "../data/layouts";
 import type { LayoutInfo } from "../state/store";
+import { downloadLayout } from "./layoutFiles";
 import { useServices } from "./services";
-import { useApp } from "./store";
+import { useApp, useAppStore } from "./store";
 
-type Mode = "new" | "duplicate" | "rename" | "delete";
+type Mode = "new" | "duplicate" | "rename" | "delete" | "reset";
 
-const TITLES: Record<Exclude<Mode, "delete">, string> = {
+const TITLES: Record<"new" | "duplicate" | "rename", string> = {
   new: "New empty layout",
   duplicate: "Duplicate as a new layout",
   rename: "Rename",
 };
 
-/** The layouts in layouts/: switch, create, duplicate, rename, delete and compare. */
+interface MenuError {
+  message: string;
+  /** The problems of a layout file that could not be opened. */
+  details?: string[];
+}
+
+const MAX_DETAILS = 6;
+
+function menuError(e: unknown): MenuError {
+  if (e instanceof LayoutImportError) {
+    const details = e.issues.slice(0, MAX_DETAILS).map((i) => `${i.path ? `${i.path}: ` : ""}${i.message}`);
+    if (e.issues.length > MAX_DETAILS) details.push(`… and ${e.issues.length - MAX_DETAILS} more`);
+    return { message: e.message, details };
+  }
+  return { message: e instanceof Error ? e.message : String(e) };
+}
+
+/**
+ * The layouts: switch, create, duplicate, rename, delete, compare, and open a layout file. Locally they are the files
+ * in layouts/; on the website they are kept in the browser, and a published layout's changes can be reset.
+ */
 export function LayoutMenu() {
   const { layouts: manager } = useServices();
+  const store = useAppStore();
   const files = useApp((s) => s.layouts);
   const file = useApp((s) => s.layout.file);
   const name = useApp((s) => s.layout.doc.name);
@@ -24,9 +48,10 @@ export function LayoutMenu() {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<Mode | null>(null);
   const [text, setText] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<MenuError | null>(null);
   const [busy, setBusy] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const picker = useRef<HTMLInputElement>(null);
 
   const close = () => {
     setOpen(false);
@@ -61,7 +86,7 @@ export function LayoutMenu() {
       setMode(null);
       if (closeAfter) setOpen(false);
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      setError(menuError(e));
     } finally {
       setBusy(false);
     }
@@ -79,20 +104,32 @@ export function LayoutMenu() {
     else if (mode === "rename") void run(() => manager.rename(text), false);
   };
 
-  // the working layout may not be on disk yet (nothing placed so far)
+  const openFile = (picked: File | undefined) => {
+    if (picked) void run(async () => manager.importFile(picked.name, await picked.text()), true);
+  };
+
+  // the working layout may not be stored yet (nothing placed so far)
   const rows: readonly LayoutInfo[] = files.some((l) => l.file === file) ? files : [{ file, name, valid: status !== "invalid", items }, ...files];
-  const canDelete = files.some((l) => l.file === file) && files.length > 1;
+  const origin = files.find((l) => l.file === file)?.origin;
+  // on the website, a published layout is reset instead of deleted
+  const published = isWebsite && (origin === "site" || origin === "changed");
+  const canDelete = files.some((l) => l.file === file) && files.length > 1 && !published;
+  const deleteTitle = canDelete
+    ? isWebsite
+      ? "Remove this layout from this browser"
+      : "Move this layout to layouts/.trash/"
+    : "The only layout can't be deleted";
 
   return (
     <div className="layout-menu" ref={ref}>
-      <button className={`layout-menu__button ${open ? "active" : ""}`} onClick={() => (open ? close() : setOpen(true))} aria-expanded={open} title="Layouts: switch, create, duplicate, compare">
+      <button className={`layout-menu__button ${open ? "active" : ""}`} onClick={() => (open ? close() : setOpen(true))} aria-expanded={open} title="Layouts: switch, create, duplicate, compare, open a file">
         ▤ <b>{name}</b> ▾
       </button>
       {open && (
         <div className="layout-menu__pop" role="dialog" aria-label="Layouts">
           <div className="layout-menu__head">
             <b>Layouts</b>
-            <span className="muted small">one JSON file each in layouts/</span>
+            <span className="muted small">{isWebsite ? "kept in this browser · Save downloads a file" : "one JSON file each in layouts/"}</span>
           </div>
           <ul className="layout-list">
             {rows.map((l) => {
@@ -113,6 +150,7 @@ export function LayoutMenu() {
                     <span className="muted small">
                       {current ? `${items} item${items === 1 ? "" : "s"}` : `${l.items} item${l.items === 1 ? "" : "s"}`}
                       {l.createdFrom ? ` · from ${l.createdFrom}` : ""}
+                      {l.origin === "changed" ? " · changed in this browser" : ""}
                       {current && !saved ? " · not saved yet" : ""}
                     </span>
                   </button>
@@ -136,23 +174,59 @@ export function LayoutMenu() {
           </ul>
 
           {mode === null && (
-            <div className="actions actions--compact">
-              <button onClick={() => start("new")} disabled={busy}>
-                New…
-              </button>
-              <button onClick={() => start("duplicate")} disabled={busy || status !== "ready"} title="Start a new layout from this one">
-                Duplicate…
-              </button>
-              <button onClick={() => start("rename")} disabled={busy || status !== "ready"}>
-                Rename…
-              </button>
-              <button onClick={() => start("delete")} disabled={busy || !canDelete} title={canDelete ? "Move this layout to layouts/.trash/" : "The only layout can't be deleted"}>
-                Delete…
-              </button>
-            </div>
+            <>
+              <div className="actions actions--compact">
+                <button onClick={() => start("new")} disabled={busy}>
+                  New…
+                </button>
+                <button onClick={() => start("duplicate")} disabled={busy || status !== "ready"} title="Start a new layout from this one">
+                  Duplicate…
+                </button>
+                <button onClick={() => start("rename")} disabled={busy || status !== "ready"}>
+                  Rename…
+                </button>
+                {published ? (
+                  <button
+                    onClick={() => start("reset")}
+                    disabled={busy || origin !== "changed"}
+                    title={origin === "changed" ? "Drop this browser's changes and show the version that comes with the website" : "This layout comes with the website and has no changes in this browser"}
+                  >
+                    Reset…
+                  </button>
+                ) : (
+                  <button onClick={() => start("delete")} disabled={busy || !canDelete} title={deleteTitle}>
+                    Delete…
+                  </button>
+                )}
+              </div>
+              <div className="actions actions--compact">
+                <button
+                  onClick={() => picker.current?.click()}
+                  disabled={busy}
+                  title={isWebsite ? "Open a layout file you saved or got from someone; it is kept in this browser" : "Add a layout file you downloaded or got from someone to layouts/"}
+                >
+                  Open file…
+                </button>
+                {isWebsite && (
+                  <button onClick={() => downloadLayout(store.getState().layout)} disabled={busy || status !== "ready"} title="Download this layout as a JSON file, to keep it or share it">
+                    Save to file
+                  </button>
+                )}
+                <input
+                  ref={picker}
+                  type="file"
+                  accept=".json,application/json"
+                  hidden
+                  onChange={(e) => {
+                    openFile(e.target.files?.[0]);
+                    e.target.value = "";
+                  }}
+                />
+              </div>
+            </>
           )}
 
-          {mode && mode !== "delete" && (
+          {(mode === "new" || mode === "duplicate" || mode === "rename") && (
             <form
               className="layout-form"
               onSubmit={(e) => {
@@ -178,9 +252,15 @@ export function LayoutMenu() {
 
           {mode === "delete" && (
             <div className="layout-form">
-              <p>
-                Delete <b>{name}</b>? The file is moved to <code>layouts/.trash/</code>, so it can be restored.
-              </p>
+              {isWebsite ? (
+                <p>
+                  Delete <b>{name}</b> from this browser? This can't be undone; use <b>Save to file</b> first to keep a copy.
+                </p>
+              ) : (
+                <p>
+                  Delete <b>{name}</b>? The file is moved to <code>layouts/.trash/</code>, so it can be restored.
+                </p>
+              )}
               <div className="actions actions--compact">
                 <button className="danger" onClick={() => void run(() => manager.remove(file), true)} disabled={busy}>
                   Delete
@@ -192,7 +272,34 @@ export function LayoutMenu() {
             </div>
           )}
 
-          {error && <p className="notice notice--error">{error}</p>}
+          {mode === "reset" && (
+            <div className="layout-form">
+              <p>
+                Reset <b>{name}</b> to the version that comes with the website? The changes made in this browser are dropped; Undo brings them back.
+              </p>
+              <div className="actions actions--compact">
+                <button className="danger" onClick={() => void run(() => manager.reset(file), true)} disabled={busy}>
+                  Reset
+                </button>
+                <button onClick={() => setMode(null)} disabled={busy}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="notice notice--error" role="alert">
+              {error.message}
+              {error.details && (
+                <ul className="notice__list">
+                  {error.details.map((d, i) => (
+                    <li key={i}>{d}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

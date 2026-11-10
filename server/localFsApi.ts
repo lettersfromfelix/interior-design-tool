@@ -12,7 +12,8 @@
  *
  * Static assets (GLB models, textures, the floor-plan underlay) are served by Vite itself from the repository root.
  * The server listens on 127.0.0.1 only; requests from other hosts are rejected, and writes must come from the app's
- * own origin. Only layouts/*.json can be written.
+ * own origin. Only layouts/*.json can be written. The website build has no server: server/staticSite.ts writes the
+ * same listings as files instead.
  */
 import { promises as fs } from "node:fs";
 import type { IncomingMessage, ServerResponse } from "node:http";
@@ -25,6 +26,7 @@ import {
   isDataDir,
   isLayoutName,
   LAYOUT_BASE_HEADER,
+  MAX_LAYOUT_BYTES,
   type AssetEntry,
   type DataDir,
   type FileEntry,
@@ -33,8 +35,8 @@ import {
   type WriteResponse,
 } from "../src/core/files.ts";
 
+export { MAX_LAYOUT_BYTES };
 export const MAX_FILE_BYTES = 2 * 1024 * 1024;
-export const MAX_LAYOUT_BYTES = 1024 * 1024;
 const WATCHED_RE = /\.(json|glb|gltf|bin|png|jpe?g|webp|ktx2)$/i;
 const ASSET_RE = /\.(glb|gltf|bin|png|jpe?g|webp|ktx2)$/i;
 
@@ -240,11 +242,11 @@ function readBody(req: IncomingMessage, limit: number): Promise<string> {
 }
 
 /** three.js decoders for compressed GLB models, served from node_modules (no CDN, works offline). */
-const VENDOR: Record<string, string> = {
+export const VENDOR: Record<string, string> = {
   draco: "node_modules/three/examples/jsm/libs/draco",
   basis: "node_modules/three/examples/jsm/libs/basis",
 };
-const VENDOR_FILE_RE = /^[a-z0-9_.-]+\.(js|wasm)$/i;
+export const VENDOR_FILE_RE = /^[a-z0-9_.-]+\.(js|wasm)$/i;
 
 /** Absolute path of a vendor file, or null if it is not one of the decoder files. */
 export function vendorFile(root: string, urlPath: string): string | null {

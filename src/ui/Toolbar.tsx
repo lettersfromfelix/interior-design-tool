@@ -1,15 +1,18 @@
+import { isWebsite } from "../data/backend";
 import type { ViewMode } from "../state/store";
 import { countIssues, useAllIssues } from "./issues";
+import { downloadLayout } from "./layoutFiles";
 import { LayoutMenu } from "./LayoutMenu";
-import { useApp } from "./store";
+import { useApp, useAppStore } from "./store";
 
 function SaveStatus() {
   const layout = useApp((s) => s.layout);
   const setSidePanel = useApp((s) => s.setSidePanel);
   if (layout.status === "loading") return null;
   if (layout.status === "invalid") {
+    const title = isWebsite ? "This layout has errors (see Issues). Reset or delete it in the layout menu." : `${layout.file} has errors. Fix the file; it reloads automatically.`;
     return (
-      <button className="save save--error" onClick={() => setSidePanel("issues")} title={`${layout.file} has errors. Fix the file; it reloads automatically.`}>
+      <button className="save save--error" onClick={() => setSidePanel("issues")} title={title}>
         ⚠ Layout not saved: file has errors
       </button>
     );
@@ -22,10 +25,25 @@ function SaveStatus() {
     );
   }
   const dirty = layout.revision !== layout.savedRevision || layout.pendingText !== undefined;
+  const kept = isWebsite ? "✓ Kept in this browser" : "✓ Saved";
+  const title = isWebsite
+    ? "Your changes are kept in this browser, also after a reload. Save downloads the layout as a file, to keep it or share it."
+    : `Saved automatically to ${layout.file}`;
   return (
-    <span className="save" title={`Saved automatically to ${layout.file}`}>
-      {dirty ? "Saving…" : layout.diskText === undefined ? "Nothing placed yet" : "✓ Saved"}
+    <span className="save" title={title}>
+      {dirty ? "Saving…" : layout.diskText === undefined ? "Nothing placed yet" : kept}
     </span>
+  );
+}
+
+/** Website: download the working layout as a JSON file (Ctrl+S). */
+function SaveButton() {
+  const store = useAppStore();
+  const ready = useApp((s) => s.layout.status === "ready");
+  return (
+    <button onClick={() => downloadLayout(store.getState().layout)} disabled={!ready} title="Save: download this layout as a JSON file, to keep it or share it (Ctrl+S)">
+      ⤓ Save
+    </button>
   );
 }
 
@@ -79,7 +97,8 @@ const VIEWS: { view: ViewMode; label: string; title: string }[] = [
 
 export function Toolbar() {
   const name = useApp((s) => s.data.apartment?.name);
-  const hasUnderlay = useApp((s) => !!s.data.apartment?.underlay);
+  // the underlay image is local only (never on the website, not in git): without it there is nothing to show
+  const hasUnderlay = useApp((s) => !!s.data.apartment?.underlay && s.data.underlayAvailable);
   const view = useApp((s) => s.view);
   const setView = useApp((s) => s.setView);
   const underlay = useApp((s) => s.underlay);
@@ -99,6 +118,7 @@ export function Toolbar() {
       </button>
       <div className="brand">{name ?? "Apartment planner"}</div>
       <LayoutMenu />
+      {isWebsite && <SaveButton />}
       <div className="segmented" role="group" aria-label="View">
         {VIEWS.map((v) => (
           <button key={v.view} className={view === v.view ? "active" : ""} aria-pressed={view === v.view} onClick={() => setView(v.view)} title={v.title}>

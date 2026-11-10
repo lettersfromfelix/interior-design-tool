@@ -295,7 +295,7 @@ export class Engine {
     });
     this.furniture.setMaterials(this.mats);
     this.rebuildApartment(this.store.getState());
-    this.underlay.set(ap.underlay, data.version, ap.ceilingHeight + 20);
+    this.underlay.set(data.underlayAvailable ? ap.underlay : undefined, data.version, ap.ceilingHeight + 20);
     if (!this.fitted.has(this.view)) this.fit();
   }
 

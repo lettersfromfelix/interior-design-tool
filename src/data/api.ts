@@ -1,4 +1,4 @@
-/** Client side of the local file API (see server/localFsApi.ts). */
+/** Client side of the local file API (see server/localFsApi.ts): the "disk" file backend of `npm start`. */
 import {
   contentTag,
   FS_CHANGE_EVENT,
@@ -9,22 +9,15 @@ import {
   type TrashResponse,
   type WriteResponse,
 } from "../core/files";
+import { LayoutConflictError, type DirListing, type FileBackend, type PutLayoutOptions } from "./fileBackend";
 
-export async function fetchDir(dir: DataDir): Promise<Pick<FilesResponse, "files" | "assets">> {
+export { LayoutConflictError, type PutLayoutOptions };
+
+export async function fetchDir(dir: DataDir): Promise<DirListing> {
   const res = await fetch(`/api/files?dir=${dir}`, { cache: "no-store" });
   if (!res.ok) throw new Error(`Could not read the ${dir}/ folder (HTTP ${res.status}). Is the tool running via "npm start"?`);
   const body = (await res.json()) as FilesResponse;
   return { files: body.files, assets: body.assets ?? [] };
-}
-
-/** The layout file on disk is not the version the write was based on (it was changed outside the app). */
-export class LayoutConflictError extends Error {}
-
-export interface PutLayoutOptions {
-  /** Let the request finish while the page is being closed. */
-  keepalive?: boolean;
-  /** Texts of the versions this one is based on (`undefined`: the file didn't exist); omitted = overwrite. */
-  base?: readonly (string | undefined)[];
 }
 
 /** Write layouts/<name>. Throws LayoutConflictError if the file on disk is none of the `base` versions. */
@@ -64,6 +57,8 @@ export function onFsChange(cb: (change: FsChange) => void): () => void {
   return () => hot.off(FS_CHANGE_EVENT, cb);
 }
 
-/** URL for a repository-relative asset path (underlay, textures, GLB models). */
+export const diskBackend: FileBackend = { kind: "disk", fetchDir, putLayout, trashLayout, onFsChange };
+
+/** URL for a repository-relative asset path (underlay, textures, GLB models); the website lives below a base path. */
 export const assetUrl = (repoPath: string, version?: number): string =>
-  `/${repoPath.replace(/^\/+/, "")}${version ? `?v=${version}` : ""}`;
+  `${import.meta.env.BASE_URL}${repoPath.replace(/^\/+/, "")}${version ? `?v=${version}` : ""}`;

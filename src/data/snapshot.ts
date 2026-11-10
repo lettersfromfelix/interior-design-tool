@@ -12,6 +12,8 @@ export interface DataSnapshot {
   materials: ReadonlyMap<string, MaterialPreset>;
   issues: Issue[];
   areaChecks: AreaCheck[];
+  /** The underlay image of apartment.json is there (it is local only: git-ignored and never on the website). */
+  underlayAvailable: boolean;
   /** Set if the file API itself failed (not a data problem). */
   loadError?: string;
 }
@@ -22,4 +24,5 @@ export const emptySnapshot = (): DataSnapshot => ({
   materials: new Map(),
   issues: [],
   areaChecks: [],
+  underlayAvailable: false,
 });

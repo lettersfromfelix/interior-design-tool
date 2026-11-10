@@ -1,9 +1,11 @@
 import { useEffect } from "react";
+import { isWebsite } from "../data/backend";
 import { duplicate, nudgeSelected, remove, rotateSelected, selectedItem } from "./actions";
 import { AidBar } from "./AidBar";
 import { IssueLine } from "./components";
 import { DaylightBar, WalkBar } from "./DaylightBar";
 import { ErrorBoundary } from "./ErrorBoundary";
+import { downloadLayout } from "./layoutFiles";
 import { LeftPanel } from "./panels/LeftPanel";
 import { SidePanel } from "./SidePanel";
 import { useApp, useAppStore } from "./store";
@@ -16,9 +18,9 @@ function DataError() {
   return (
     <div className="overlay-card" role="alert">
       <h2>The apartment could not be loaded</h2>
-      <p>Fix the problems below and save the file. The view reloads automatically.</p>
+      <p>{isWebsite ? "Check the connection and reload the page." : "Fix the problems below and save the file. The view reloads automatically."}</p>
       <ul className="issues">
-        {loadError && <IssueLine issue={{ severity: "error", file: "file API", path: "", message: loadError }} />}
+        {loadError && <IssueLine issue={{ severity: "error", file: isWebsite ? "website" : "file API", path: "", message: loadError }} />}
         {issues
           .filter((i) => i.severity === "error")
           .map((i, n) => (
@@ -45,7 +47,8 @@ function Banners() {
           setSidePanel("issues");
         }}
       >
-        <code>{invalid}</code> has errors, so furniture can't be changed or saved. Fix the file (see Issues); it reloads automatically.
+        <code>{invalid}</code> has errors, so furniture can't be changed or saved.{" "}
+        {isWebsite ? "See Issues; reset or delete it in the layout menu." : "Fix the file (see Issues); it reloads automatically."}
       </button>
     );
   }
@@ -84,6 +87,9 @@ function useShortcuts(): void {
         if (key === "d" && item) {
           e.preventDefault(); // the browser would add a bookmark
           duplicate(store, item.uid);
+        } else if (key === "s" && isWebsite) {
+          e.preventDefault(); // the website's Save downloads the layout instead of the page
+          if (s.layout.status === "ready") downloadLayout(s.layout);
         } else if (key === "z" && !e.shiftKey) {
           e.preventDefault();
           s.undo();

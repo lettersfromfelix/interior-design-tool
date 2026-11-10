@@ -1,4 +1,5 @@
 import { createStore } from "zustand/vanilla";
+import type { LayoutOrigin } from "../core/files";
 import { emptyLayout } from "../core/layout/commands";
 import { DEFAULT_AIDS, readAids, type Aids } from "../core/placement/aids";
 import type { LayoutFile } from "../core/schema/layout";
@@ -76,6 +77,8 @@ export interface LayoutInfo {
   items: number;
   createdFrom?: string;
   updatedAt?: string;
+  /** Website only: published with the website, published and changed in this browser, or only in this browser. */
+  origin?: LayoutOrigin;
 }
 
 /** A second layout shown next to the working one, read-only. */

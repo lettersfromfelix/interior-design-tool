@@ -10,6 +10,8 @@
   "scripts": {
     "start": "vite --open",
     "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --open",
     "validate": "tsx tools/validate.ts",
     "checklist": "tsx tools/gen-checklist.ts",
     "schemas": "tsx tools/gen-schemas.ts",

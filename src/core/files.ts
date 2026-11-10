@@ -1,4 +1,4 @@
-/** Wire types of the local file API (server/localFsApi.ts), shared by server and client. */
+/** Wire types of the file API, shared by the dev server (server/localFsApi.ts), the website build and the client. */
 // with ".ts": the Vite config loads this file through server/localFsApi.ts (Vite's native config loader needs it)
 import { hashText } from "./hash.ts";
 
@@ -15,7 +15,14 @@ export interface FileEntry {
   /** Last modification, ms since epoch. */
   mtime?: number;
   error?: string;
+  /**
+   * Website only, for layouts: "site" = published with the website, "changed" = published, with changes kept in this
+   * browser, "browser" = only in this browser (made here or opened from a file).
+   */
+  origin?: LayoutOrigin;
 }
+
+export type LayoutOrigin = "site" | "changed" | "browser";
 
 export interface FilesResponse {
   dir: DataDir;
@@ -29,6 +36,7 @@ export interface AssetEntry {
   /** Repository-relative path with forward slashes, e.g. "catalogue/stool/model.glb". */
   path: string;
   size: number;
+  /** Last modification, ms since epoch; on the website a hash of the content (it only versions the file's URL). */
   mtime: number;
 }
 
@@ -38,11 +46,14 @@ export interface WriteResponse {
   mtime: number;
 }
 
-/** Response of DELETE /api/layouts/<name>.json: where the file went. */
+/** Response of DELETE /api/layouts/<name>.json: where the file went (empty on the website: removed from the browser). */
 export interface TrashResponse {
   path: string;
   trashed: string;
 }
+
+/** Largest layout file that is written or opened, bytes. */
+export const MAX_LAYOUT_BYTES = 1024 * 1024;
 
 /** Layout file names: letters, digits, space, ".", "_" and "-", ending in ".json"; no folders. */
 export const LAYOUT_NAME_RE = /^[A-Za-z0-9][A-Za-z0-9 ._-]{0,79}\.json$/;

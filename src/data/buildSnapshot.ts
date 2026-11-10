@@ -1,17 +1,17 @@
 import { validateApartment } from "../core/validate/apartment";
 import { issue, type Issue } from "../core/validate/issues";
 import { validateMaterials } from "../core/validate/materials";
-import type { FileEntry } from "../core/files";
+import type { AssetEntry, FileEntry } from "../core/files";
 import type { DataSnapshot } from "./snapshot";
 
 export const APARTMENT_FILE = "data/apartment.json";
 export const MATERIALS_FILE = "data/materials.json";
 
 /**
- * Build a validated snapshot from the raw files of the data/ folder.
+ * Build a validated snapshot from the raw files of the data/ folder (and its images, to know if the underlay is there).
  * Never throws: every problem becomes an issue. Without a valid apartment the status is "error".
  */
-export function buildSnapshot(dataFiles: readonly FileEntry[], version: number): DataSnapshot {
+export function buildSnapshot(dataFiles: readonly FileEntry[], version: number, assets: readonly AssetEntry[] = []): DataSnapshot {
   const issues: Issue[] = [];
   const byPath = new Map(dataFiles.map((f) => [f.path, f]));
   const read = (p: string): string | undefined => {
@@ -31,6 +31,7 @@ export function buildSnapshot(dataFiles: readonly FileEntry[], version: number):
   const apText = read(APARTMENT_FILE);
   const ap = apText !== undefined ? validateApartment(apText, mats?.byId) : undefined;
   if (ap) issues.push(...ap.issues);
+  const underlay = ap?.apartment?.underlay?.image;
 
   return {
     status: ap?.apartment ? "ready" : "error",
@@ -39,5 +40,6 @@ export function buildSnapshot(dataFiles: readonly FileEntry[], version: number):
     materials: mats?.byId ?? new Map(),
     issues,
     areaChecks: ap?.areaChecks ?? [],
+    underlayAvailable: !!underlay && assets.some((a) => a.path === underlay),
   };
 }

@@ -4,9 +4,10 @@ import type { LayoutFile } from "../core/schema/layout";
 import { issue } from "../core/validate/issues";
 import { parseLayout } from "../core/validate/layout";
 import { DEFAULT_LAYOUT_FILE, type AppStore, type LayoutInfo } from "../state/store";
-import { fetchDir, onFsChange } from "./api";
+import { backend as defaultBackend } from "./backend";
 import { buildSnapshot } from "./buildSnapshot";
 import { buildCatalogue, type DirListing } from "./catalogue";
+import type { FileBackend } from "./fileBackend";
 
 /** A layout in layouts/ itself (not in a subfolder such as .trash/). */
 const LAYOUT_FILE_RE = /^layouts\/[^/]+\.json$/;
@@ -14,11 +15,12 @@ const LAYOUT_FILE_RE = /^layouts\/[^/]+\.json$/;
 /** What the layout menu shows about a file: its name and size, also when the file has errors. */
 function layoutInfo(f: FileEntry): LayoutInfo {
   const fallback = f.path.slice("layouts/".length, -".json".length);
-  if (f.text === undefined) return { file: f.path, name: fallback, valid: false, items: 0 };
+  const origin = f.origin ? { origin: f.origin } : {};
+  if (f.text === undefined) return { file: f.path, name: fallback, valid: false, items: 0, ...origin };
   const res = parseLayout(f.text, f.path);
   if (res.layout) {
     const { name, items, createdFrom, updatedAt } = res.layout;
-    return { file: f.path, name, valid: true, items: items.length, createdFrom, updatedAt };
+    return { file: f.path, name, valid: true, items: items.length, createdFrom, updatedAt, ...origin };
   }
   let name = fallback;
   try {
@@ -27,13 +29,14 @@ function layoutInfo(f: FileEntry): LayoutInfo {
   } catch {
     // not JSON: keep the file name
   }
-  return { file: f.path, name, valid: false, items: 0 };
+  return { file: f.path, name, valid: false, items: 0, ...origin };
 }
 
 /**
- * Loads the data folders through the file API, validates them and puts the result into the store:
+ * Loads the data folders through the file backend, validates them and puts the result into the store:
  * data/ (apartment, materials), catalogue/ (furniture), the list of layouts in layouts/, the working layout and the
- * layout it is compared with. Reloads a folder automatically when its files change on disk (e.g. when GHCP edits them).
+ * layout it is compared with. Locally, it reloads a folder automatically when its files change on disk (e.g. when
+ * GHCP edits them); on the website, when another tab changes a layout.
  */
 export class Repository {
   private readonly versions: Record<DataDir, number> = { data: 0, catalogue: 0, layouts: 0 };
@@ -47,10 +50,13 @@ export class Repository {
   private unsubscribe: (() => void) | undefined;
   private unsubscribeStore: (() => void) | undefined;
 
-  constructor(private readonly store: AppStore) {}
+  constructor(
+    private readonly store: AppStore,
+    private readonly files: FileBackend = defaultBackend,
+  ) {}
 
   async start(): Promise<void> {
-    this.unsubscribe = onFsChange((change) => this.schedule(change.dir));
+    this.unsubscribe = this.files.onFsChange((change) => this.schedule(change.dir));
     this.unsubscribeStore = this.store.subscribe((s, prev) => {
       if (s.compare?.file !== prev.compare?.file) this.applyCompare();
     });
@@ -81,10 +87,10 @@ export class Repository {
   async reload(dir: DataDir): Promise<void> {
     const version = ++this.versions[dir];
     try {
-      const listing = await fetchDir(dir);
+      const listing = await this.files.fetchDir(dir);
       if (version !== this.versions[dir]) return; // a newer reload is running
       if (dir === "data") {
-        this.store.getState().setData(buildSnapshot(listing.files, version));
+        this.store.getState().setData(buildSnapshot(listing.files, version, listing.assets));
         this.rebuildCatalogue(); // presets and the ceiling height may have changed
       } else if (dir === "catalogue") {
         this.catalogueListing = listing;

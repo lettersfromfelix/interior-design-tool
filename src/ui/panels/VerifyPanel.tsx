@@ -42,6 +42,7 @@ function CheckRow({ check }: { check: Check }) {
 
 export function VerifyPanel() {
   const ap = useApp((s) => s.data.apartment);
+  const underlay = useApp((s) => s.data.underlayAvailable);
   const areaChecks = useApp((s) => s.data.areaChecks);
   const select = useApp((s) => s.selectElement);
   const uncertain = useMemo(() => (ap ? groupUncertain(uncertainValues(ap)) : []), [ap]);
@@ -54,9 +55,16 @@ export function VerifyPanel() {
       <section>
         <h3>How to verify the apartment</h3>
         <ol className="steps">
-          <li>
-            In <b>2D</b>, turn on <b>Plan underlay</b>. Walls, doors and windows should sit exactly on the lines of the original plan.
-          </li>
+          {underlay ? (
+            <li>
+              In <b>2D</b>, turn on <b>Plan underlay</b>. Walls, doors and windows should sit exactly on the lines of the original plan.
+            </li>
+          ) : (
+            <li>
+              The floor-plan underlay isn't available here: it is made from the original plan, which stays private. In the local tool,{" "}
+              <code>python tools/floorplan/underlay.py</code> creates it.
+            </li>
+          )}
           <li>Room areas are compared with the areas printed on the plan (tolerance ±1.5 %).</li>
           <li>
             Measure the checklist items on site. Click an item to see exactly what to measure. Send the numbers to GHCP, who updates{" "}

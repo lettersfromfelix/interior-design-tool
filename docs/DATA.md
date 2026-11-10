@@ -12,9 +12,9 @@ in its **Issues** panel.
 |---|---|
 | `data/apartment.json` | The fixed apartment: rooms, walls, doors, windows, kitchen, built-ins, checklist |
 | `data/materials.json` | Material presets (colours, wood, fabric, metal, paint, floors, …) |
-| `data/underlay/floorplan.png` | The original plan, cropped (no address), for the 2D underlay |
+| `data/underlay/floorplan.png` | Local only (git-ignored, never on the website): the original plan, cropped (no address), for the 2D underlay. After a fresh clone, `python tools/floorplan/underlay.py` makes it again from `reference/floorplan.pdf` |
 | `catalogue/**` | Furniture, one item per file; the format is in [`CATALOGUE.md`](../CATALOGUE.md) |
-| `layouts/*.json` | Placed furniture, one layout per file; the app autosaves the one you are editing |
+| `layouts/*.json` | Placed furniture, one layout per file; the app autosaves the one you are editing. They also come with the [website](#the-website-static-build) |
 
 ## Units and coordinate system
 
@@ -309,6 +309,10 @@ How the app treats the files:
   and each placed item on a single line when it fits into 120 characters.
 - **Deleting** moves the file to `layouts/.trash/<name>.<time>.json` (ignored by git and never emptied by the app).
   To restore a layout, move it back to `layouts/` and give it its old name.
+- **Opening a file.** **Open file…** in the layout menu adds a layout file, e.g. one saved on the website or sent by
+  someone. It is checked like any layout file; an invalid one is refused, and the menu lists its problems. A valid
+  one is copied unchanged into `layouts/` under a free name based on its file name (`variant.json`, `variant-2.json`,
+  …) and opened.
 - **Edited outside the app.** The app reloads it within about a second. Local changes that weren't saved yet are
   dropped in favour of the file (the reload can be undone). This also holds if the file changes just before an
   autosave: every save names the version of the file it is based on, and the server refuses it (409) if the file on
@@ -331,3 +335,36 @@ How the app treats the files:
 
 Images and 3D models (`/data/…`, `/catalogue/…`) are served by Vite itself from the repository folder. Changes on
 disk are pushed to the app as `fs:change` events over Vite's HMR connection; the app then re-reads the folder.
+
+## The website (static build)
+
+`npm run build` makes a static copy of the app in `dist/`, for https://lettersfromfelix.github.io/interior-design-tool/
+(all URLs live below `/interior-design-tool/`). The **Website** workflow (`.github/workflows/pages.yml`) runs
+`npm run validate`, the tests, the type check, the linter and the build on every push to `main`, then publishes
+`dist/` on GitHub Pages. If a step fails, the previous version stays online. `npm run preview` serves the last build
+at http://127.0.0.1:5181/interior-design-tool/ for a check before pushing.
+
+There is no server, so `server/staticSite.ts` lists the data folders at build time instead of the file API:
+
+| File | Content |
+|---|---|
+| `files/data.json`, `files/catalogue.json`, `files/layouts.json` | What `GET /api/files?dir=…` returns for that folder: every `.json` file with its text, plus the assets |
+| `catalogue/…`, `data/…` | The models and images of those folders, at their repository paths |
+| `vendor/draco/…`, `vendor/basis/…` | The decoders for compressed GLB models |
+
+`data/underlay/` is never part of the build, even where it exists, so the website has no **Plan underlay**.
+
+On the website (`src/data/siteBackend.ts`):
+
+- **Layouts.** The files in `layouts/` at build time come with the website as starting points. Changes are kept
+  in the browser's `localStorage` (key `interior-design-tool.layouts.v1`, the layout text exactly as in a file), per
+  browser and device, so a reload or a closed tab loses nothing. A changed layout that came with the website is
+  marked "changed in this browser"; **Reset…** drops the changes and shows the published version again (Undo brings
+  them back). Layouts made in the browser (**New…**, **Duplicate…**, **Open file…**) can be deleted. Clearing the
+  browser's site data deletes them all.
+- **Save** (**⤓ Save** or <kbd>Ctrl</kbd>+<kbd>S</kbd>, also **Save to file** in the layout menu) downloads the open
+  layout as `<file name>.json`, formatted like the files in `layouts/`. **Open file…** adds such a file, checked
+  like any layout, and keeps it in the browser.
+- **Conflicts.** As on disk, every save names the version it is based on; a change made meanwhile in another tab
+  wins and is loaded instead. Tabs tell each other about changes.
+- **No live reload.** New furniture, data or published layouts appear after the next push to `main` and its rebuild.

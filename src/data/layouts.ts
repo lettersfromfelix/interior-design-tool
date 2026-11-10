@@ -1,12 +1,17 @@
 /**
- * Several layouts, one file each in layouts/: open, create, duplicate, rename, delete (to layouts/.trash/) and
- * compare. Opening another layout saves the working one first.
+ * Several layouts, one file each in layouts/ (on the website: kept in the browser): open, create, duplicate, rename,
+ * delete (to layouts/.trash/), reset (website), open a layout file, and compare. Opening another layout saves the
+ * working one first.
  */
+import { MAX_LAYOUT_BYTES } from "../core/files";
 import { emptyLayout, renameLayout } from "../core/layout/commands";
 import { serializeLayout } from "../core/layout/serialize";
 import type { LayoutFile } from "../core/schema/layout";
+import { issue, type Issue } from "../core/validate/issues";
+import { parseLayout } from "../core/validate/layout";
 import { DEFAULT_LAYOUT_FILE, type AppStore } from "../state/store";
-import { putLayout, trashLayout } from "./api";
+import { backend as defaultBackend } from "./backend";
+import type { FileBackend } from "./fileBackend";
 import type { LayoutSync } from "./layoutSync";
 import type { Repository } from "./repository";
 
@@ -35,22 +40,37 @@ export function uniqueLayoutFile(name: string, taken: Iterable<string>): string 
 
 const fileName = (file: string) => file.slice(file.lastIndexOf("/") + 1);
 
+/** A file that was opened is not a valid layout; `issues` says why. */
+export class LayoutImportError extends Error {
+  constructor(
+    readonly fileName: string,
+    readonly issues: readonly Issue[],
+  ) {
+    super(`${fileName} is not a valid layout file, so it was not opened.`);
+  }
+}
+
 export class LayoutManager {
   constructor(
     private readonly store: AppStore,
     private readonly sync: LayoutSync,
     private readonly repo: Repository,
+    private readonly files: FileBackend = defaultBackend,
   ) {}
 
   /** Make `file` the working layout. The current one is saved first; if that fails it stays open. */
   async open(file: string): Promise<void> {
     const s = this.store.getState();
     if (s.layout.file === file) return;
-    if (!(await this.sync.settle())) {
-      throw new Error(`${s.layout.file} could not be saved, so it stays open (nothing is lost). Try again in a moment.`);
-    }
+    await this.settle();
     this.store.getState().openLayout(file);
     await this.repo.reload("layouts");
+  }
+
+  private async settle(): Promise<void> {
+    if (!(await this.sync.settle())) {
+      throw new Error(`${this.store.getState().layout.file} could not be saved, so it stays open (nothing is lost). Try again in a moment.`);
+    }
   }
 
   /** Create a layout (empty, or a copy of the working one) and open it. Returns its file. */
@@ -67,10 +87,49 @@ export class LayoutManager {
     }
     const file = uniqueLayoutFile(clean, [...s.layouts.map((l) => l.file), s.layout.file]);
     // base [undefined]: only if the file doesn't exist yet
-    await putLayout(fileName(file), serializeLayout(doc, new Date().toISOString()), { base: [undefined] });
+    await this.files.putLayout(fileName(file), serializeLayout(doc, new Date().toISOString()), { base: [undefined] });
     this.store.getState().dropHistory(file);
     await this.open(file);
     return file;
+  }
+
+  /**
+   * Add a layout file (e.g. one that was downloaded or shared) as a new layout and open it: locally it is written to
+   * layouts/, on the website it is kept in the browser. It is checked like any layout file; an invalid one is refused
+   * with its problems (LayoutImportError). Returns the new layout's file.
+   */
+  async importFile(name: string, text: string): Promise<string> {
+    if (new TextEncoder().encode(text).length > MAX_LAYOUT_BYTES) {
+      throw new LayoutImportError(name, [issue("error", name, "", "the file is larger than 1 MB")]);
+    }
+    const res = parseLayout(text, name);
+    if (!res.layout) throw new LayoutImportError(name, res.issues);
+    await this.settle();
+    const s = this.store.getState();
+    const file = uniqueLayoutFile(name.replace(/\.json$/i, "") || res.layout.name, [...s.layouts.map((l) => l.file), s.layout.file]);
+    await this.files.putLayout(fileName(file), text, { base: [undefined] });
+    this.store.getState().dropHistory(file);
+    await this.open(file);
+    return file;
+  }
+
+  /**
+   * Website: forget this browser's changes to a layout that comes with the website, so the published version is shown
+   * again. For the working layout, Undo brings the changes back.
+   */
+  async reset(file: string): Promise<void> {
+    let base: string | undefined;
+    if (this.store.getState().layout.file === file) {
+      await this.sync.settle();
+      base = this.store.getState().layout.diskText;
+    } else {
+      base = this.repo.layoutText(file);
+    }
+    try {
+      await this.files.trashLayout(fileName(file), [base]);
+    } finally {
+      await this.repo.reload("layouts");
+    }
   }
 
   /** The working layout's name (the file keeps its name). */
@@ -93,7 +152,7 @@ export class LayoutManager {
     }
     if (this.store.getState().compare?.file === file) this.store.getState().setCompare(null);
     try {
-      if (base !== undefined) await trashLayout(fileName(file), [base]);
+      if (base !== undefined) await this.files.trashLayout(fileName(file), [base]);
       this.store.getState().dropHistory(file);
     } finally {
       await this.repo.reload("layouts");

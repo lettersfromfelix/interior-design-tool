@@ -1,21 +1,25 @@
 import { serializeLayout } from "../core/layout/serialize";
 import type { AppStore } from "../state/store";
-import { LayoutConflictError, putLayout } from "./api";
+import { backend as defaultBackend } from "./backend";
+import { LayoutConflictError, type FileBackend } from "./fileBackend";
 
 export interface LayoutSyncOptions {
   /** The file was changed on disk since the app read it (a save was refused): reload it. */
   onConflict?: () => void;
   delayMs?: number;
   retryMs?: number;
+  files?: FileBackend;
 }
 
 const fileName = (file: string) => file.slice(file.lastIndexOf("/") + 1);
 
 /**
- * Autosave: writes the working layout shortly after every change, so there is never an "unsaved" state.
- * - Every write names the version of the file it is based on. The server refuses it if the file was changed outside
- *   the app in the meantime (by you or GHCP); that version wins and is loaded instead, as with any external edit.
- * - Nothing is written while the file on disk is invalid, so a broken file is never overwritten.
+ * Autosave: writes the working layout shortly after every change, so there is never an "unsaved" state (locally to
+ * layouts/, on the website into the browser).
+ * - Every write names the version of the file it is based on. The write is refused if the file was changed outside
+ *   the app in the meantime (by you or GHCP, or in another tab); that version wins and is loaded instead, as with any
+ *   external edit.
+ * - Nothing is written while the file is invalid, so a broken file is never overwritten.
  */
 export class LayoutSync {
   private timer: ReturnType<typeof setTimeout> | undefined;
@@ -25,6 +29,7 @@ export class LayoutSync {
   private readonly onConflict: () => void;
   private readonly delayMs: number;
   private readonly retryMs: number;
+  private readonly files: FileBackend;
 
   constructor(
     private readonly store: AppStore,
@@ -33,6 +38,7 @@ export class LayoutSync {
     this.onConflict = options.onConflict ?? (() => {});
     this.delayMs = options.delayMs ?? 500;
     this.retryMs = options.retryMs ?? 3000;
+    this.files = options.files ?? defaultBackend;
   }
 
   start(): void {
@@ -72,7 +78,7 @@ export class LayoutSync {
     this.store.getState().saveStarted(file, text);
     let next: number | undefined = this.delayMs; // for changes made while saving
     try {
-      await putLayout(fileName(file), text, { base: [layout.diskText] });
+      await this.files.putLayout(fileName(file), text, { base: [layout.diskText] });
       this.store.getState().saveFinished(file, text, revision);
     } catch (err) {
       if (err instanceof LayoutConflictError) {
@@ -113,7 +119,7 @@ export class LayoutSync {
     if (!this.dirty || (inFlight && layout.revision === inFlight.revision)) return;
     const base = inFlight ? [layout.diskText, inFlight.text] : [layout.diskText];
     const text = serializeLayout(layout.doc, new Date().toISOString());
-    void putLayout(fileName(layout.file), text, { keepalive: true, base }).catch(() => {});
+    void this.files.putLayout(fileName(layout.file), text, { keepalive: true, base }).catch(() => {});
   }
 
   private onPageHide = (): void => this.flushOnExit();

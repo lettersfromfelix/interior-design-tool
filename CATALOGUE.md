@@ -2,7 +2,8 @@
 
 The catalogue is data. **To add a piece of furniture, only create files in `catalogue/`. Never change code in
 `src/`.** The app discovers new files by itself and shows them in its **Furniture** panel within about a second:
-no registration, no restart, no build step.
+no registration, no restart, no build step. The [website](README.md#the-website) shows them after the next push to
+`main`, which rebuilds it automatically.
 
 This is the reference for writing items, for you and for GHCP. The [checklist](#checklist-for-adding-an-item-ghcp)
 at the end is the short version.
@@ -179,8 +180,9 @@ plane from (x 50, y 100) up to (x 0, y 150). `floor-lamp-arc.json` builds its ar
 
 ### 3D models (GLB / glTF)
 
-1. Get the model: a manufacturer's download page (often under planning, CAD or BIM files) or Sketchfab. Check the
-   licence, and prefer light models (a few MB): every placed copy is drawn.
+1. Get the model: a manufacturer's download page (often under planning, CAD or BIM files) or Sketchfab. The
+   repository and the website are **public**, so only use a model whose licence allows publishing it, and credit
+   the author in `notes` if the licence asks for that. Prefer light models (a few MB): every placed copy is drawn.
 2. Make a folder `catalogue/<id>/` with the model (e.g. `model.glb`) and `item.json`.
 3. Take `dimensions` from the product page, not from the model.
 4. Set `"geometry": { "type": "model", "src": "model.glb" }`, then `fit`, `rotation` and `materialMap` as needed.
@@ -208,8 +210,8 @@ plane from (x 50, y 100) up to (x 0, y 150). `floor-lamp-arc.json` builds its ar
   ```
 
 - `.glb` (one file) is easiest. `.gltf` works if its `.bin` and textures sit next to it.
-- Draco- and Meshopt-compressed meshes and KTX2 textures are supported; the decoders are served locally, so no
-  network is needed.
+- Draco- and Meshopt-compressed meshes and KTX2 textures are supported; the decoders are served locally (and are
+  part of the website), so no network is needed.
 - A model file that exists but can't be loaded shows as a red box, and the Issues panel says why.
 
 ### `materialSlots`
@@ -502,3 +504,6 @@ The other starter items show the remaining features:
 6. Check it in the app: the thumbnail, then place it, compare it with the room and try its materials. If you can't
    see the app, say so, and ask the user to check it.
 7. Don't place it in a layout unless you're asked to: the files in `layouts/` are the user's.
+8. Commit and push only when the user asks. A push to `main` publishes the item on the website after the automatic
+   rebuild (a few minutes; the **Website** workflow in the Actions tab shows its progress). Everything in
+   `catalogue/` is public: no photos, nothing made from them, and only models you may publish.

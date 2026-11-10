@@ -1149,6 +1149,12 @@ button.save {
   color: #8e1c1c;
 }
 
+.notice__list {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  overflow-wrap: anywhere;
+}
+
 .notice--button {
   cursor: pointer;
 }

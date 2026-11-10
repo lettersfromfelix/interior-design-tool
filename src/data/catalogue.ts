@@ -34,7 +34,7 @@ export interface DirListing {
 
 export const emptyCatalogue = (): CatalogueSnapshot => ({ status: "loading", version: 0, entries: new Map(), issues: [] });
 
-const urlFor = (repoPath: string, rev: string) => `/${repoPath.split("/").map(encodeURIComponent).join("/")}?rev=${rev}`;
+const urlFor = (repoPath: string, rev: string) => `${import.meta.env.BASE_URL}${repoPath.split("/").map(encodeURIComponent).join("/")}?rev=${rev}`;
 
 /** Validate the catalogue folder against the current materials and apartment. Never throws. */
 export function buildCatalogue(

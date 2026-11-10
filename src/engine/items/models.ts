@@ -202,10 +202,11 @@ export class ModelLibrary {
 
   private gltfLoader(): GLTFLoader {
     if (!this.loader) {
+      const vendor = `${import.meta.env.BASE_URL}vendor`;
       const loader = new GLTFLoader();
-      loader.setDRACOLoader(new DRACOLoader().setDecoderPath("/vendor/draco/"));
+      loader.setDRACOLoader(new DRACOLoader().setDecoderPath(`${vendor}/draco/`));
       loader.setMeshoptDecoder(MeshoptDecoder);
-      if (this.renderer) loader.setKTX2Loader(new KTX2Loader().setTranscoderPath("/vendor/basis/").detectSupport(this.renderer));
+      if (this.renderer) loader.setKTX2Loader(new KTX2Loader().setTranscoderPath(`${vendor}/basis/`).detectSupport(this.renderer));
       this.loader = loader;
     }
     return this.loader;
