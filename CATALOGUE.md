@@ -186,7 +186,7 @@ plane from (x 50, y 100) up to (x 0, y 150). `floor-lamp-arc.json` builds its ar
 2. Make a folder `catalogue/<id>/` with the model (e.g. `model.glb`) and `item.json`.
 3. Take `dimensions` from the product page, not from the model.
 4. Set `"geometry": { "type": "model", "src": "model.glb" }`, then `fit`, `rotation` and `materialMap` as needed.
-5. If the item isn't box-shaped (round, L-shaped, open below), add `collisionParts`.
+5. If the item isn't box-shaped (round, L-shaped, open below), add `collisionParts` and `"collision": "parts"`.
 6. Run `npm run validate` and check the item in the app: the dot on the rotation ring marks the front (+z).
 
 ```json
@@ -285,7 +285,8 @@ Collisions are checked when **Collisions** in the placement bar is set to **Warn
 - `"box"` (the default for 3D models): the whole `dimensions` box.
 - `"none"`: never collides. For things you walk on, such as rugs.
 - `collisionParts`: for a model, a few parts that describe its shape better than the box, e.g. one cylinder for a
-  round stool. They use the part format; their `material` is required but ignored.
+  round stool. Set `"collision": "parts"` to use them (a model's default is still the box). They use the part
+  format; their `material` is required but ignored.
 
 Because each block reaches from its part's lowest to its highest point, a long tilted part blocks everything under its
 outline: a straight lamp arm leaning over a sofa would block the sofa. Split such parts into a few shorter ones. Arcs
