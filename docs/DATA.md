@@ -219,7 +219,7 @@ without `--force`. After measuring, edit `data/apartment.json` directly.
 
 Patterns are generated in the browser at real-world scale (a 60 cm tile is 60 cm), so no image files are needed.
 Groups in use: `paint`, `floor`, `kitchen`, `door`, `frame`, `glass`, `ceramic`, `metal`, `wood`, `lacquer`,
-`fabric`, `leather`. New presets and groups can be added freely. Unknown ids show an issue with suggestions and fall
+`plastic`, `fabric`, `leather`. New presets and groups can be added freely. Unknown ids show an issue with suggestions and fall
 back to neutral grey. Catalogue items offer presets per material slot, by id or by group (`"fabric.*"`).
 
 ## `layouts/*.json`

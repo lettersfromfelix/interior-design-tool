@@ -227,7 +227,7 @@ plane from (x 50, y 100) up to (x 0, y 150). `floor-lamp-arc.json` builds its ar
 - A group means every preset in it, including the ones that exist for the apartment: `metal.*` also offers
   `metal.railing`, and `glass.*` offers `glass.black` (the hob) and `glass.clear`. When only some fit, list them.
 - The choice is stored per placed item in the layout file. Picking the default again removes it.
-- Presets live in `data/materials.json`, in groups: `wood`, `lacquer`, `fabric`, `leather`, `metal`, `glass`,
+- Presets live in `data/materials.json`, in groups: `wood`, `lacquer`, `plastic`, `fabric`, `leather`, `metal`, `glass`,
   `ceramic`, and `paint`, `floor`, `kitchen`, `door`, `frame` for the apartment. For a new colour or finish, add a
   preset there; see [docs/DATA.md](docs/DATA.md#datamaterialsjson).
 

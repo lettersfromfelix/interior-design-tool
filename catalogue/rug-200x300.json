@@ -14,8 +14,8 @@
     ]
   },
   "materialSlots": {
-    "rug": { "label": "Rug", "default": "fabric.wool-sand", "allowed": ["fabric.*"] }
+    "rug": { "label": "Rug", "default": "fabric.wool-beige", "allowed": ["fabric.*"] }
   },
   "collision": "none",
-  "notes": "Generic example with typical sizes, not a specific product. Furniture can stand on it: it takes no part in collision checks."
+  "notes": "Generic example with typical sizes, not a specific product. Beige by default, as the user asked for a beige 200 × 300 cm rug; any fabric can be picked. Furniture can stand on it: it takes no part in collision checks."
 }

@@ -1,0 +1,47 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "sofa-bubble-curve",
+  "name": "Sofa, Roche Bobois Bubble Curve",
+  "category": "seating",
+  "tags": ["living room", "curved", "roche bobois", "bubble"],
+  "dimensions": { "width": 248, "depth": 132, "height": 80 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "back petals", "shape": "lathe", "profile": [[0, 2], [7.1, 2.8], [13.1, 5.3], [17.1, 8.9], [18.5, 13.1], [18.5, 62.4], [17.1, 69.2], [13.1, 74.9], [7.1, 78.7], [0, 80]], "position": { "x": 15.3, "y": 0, "z": -46.9 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "back petals", "shape": "lathe", "profile": [[0, 2], [7.1, 2.8], [13.1, 5.3], [17.1, 8.9], [18.5, 13.1], [18.5, 62.4], [17.1, 69.2], [13.1, 74.9], [7.1, 78.7], [0, 80]], "position": { "x": 45.6, "y": 0, "z": -42.4 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "back petals", "shape": "lathe", "profile": [[0, 2], [7.1, 2.8], [13.1, 5.3], [17.1, 8.9], [18.5, 13.1], [18.5, 62.4], [17.1, 69.2], [13.1, 74.9], [7.1, 78.7], [0, 80]], "position": { "x": 74.8, "y": 0, "z": -33.3 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "arm petals", "shape": "lathe", "profile": [[0, 2], [6.9, 2.8], [12.7, 5.2], [16.6, 8.7], [18, 12.8], [18, 60.9], [16.6, 67.4], [12.7, 73], [6.9, 76.7], [0, 78]], "position": { "x": 95, "y": 0, "z": -24.2 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "arm petals", "shape": "lathe", "profile": [[0, 2], [6.9, 2.8], [12.7, 5.2], [16.6, 8.7], [18, 12.8], [18, 52.9], [16.6, 59.4], [12.7, 65], [6.9, 68.7], [0, 70]], "position": { "x": 105.8, "y": 0, "z": 1.9 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "arm petals", "shape": "lathe", "profile": [[0, 2], [6.9, 2.8], [12.7, 5.2], [16.6, 8.7], [18, 12.8], [18, 40.9], [16.6, 47.4], [12.7, 53], [6.9, 56.7], [0, 58]], "position": { "x": 99.7, "y": 0, "z": 29.5 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "arm petals", "shape": "lathe", "profile": [[0, 2], [6.9, 2.8], [12.7, 5.2], [16.6, 8.7], [18, 12.8], [18, 27.9], [16.6, 34.4], [12.7, 40], [6.9, 43.7], [0, 45]], "position": { "x": 81.1, "y": 0, "z": 47.5 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "front petals", "shape": "lathe", "profile": [[0, 2], [5.4, 2.6], [9.9, 4.5], [12.9, 7.2], [14, 10.4], [14, 22.7], [12.9, 27.8], [9.9, 32.1], [5.4, 35], [0, 36]], "position": { "x": 11.5, "y": 0, "z": 35.4 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "front petals", "shape": "lathe", "profile": [[0, 2], [5.4, 2.6], [9.9, 4.5], [12.9, 7.2], [14, 10.4], [14, 22.7], [12.9, 27.8], [9.9, 32.1], [5.4, 35], [0, 36]], "position": { "x": 34.2, "y": 0, "z": 38.8 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "front petals", "shape": "lathe", "profile": [[0, 2], [5.4, 2.6], [9.9, 4.5], [12.9, 7.2], [14, 10.4], [14, 22.7], [12.9, 27.8], [9.9, 32.1], [5.4, 35], [0, 36]], "position": { "x": 56.2, "y": 0, "z": 45.6 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "back cushions", "shape": "sphere", "radius": 10, "scale": { "x": 1.6, "y": 1.4, "z": 1.5 }, "position": { "x": 0, "y": 46, "z": -16 }, "material": "upholstery" },
+      { "name": "back cushions", "shape": "sphere", "radius": 10, "scale": { "x": 1.6, "y": 1.4, "z": 1.5 }, "position": { "x": 25.4, "y": 46, "z": -14.1 }, "rotation": { "y": 8.4 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "back cushions", "shape": "sphere", "radius": 10, "scale": { "x": 1.6, "y": 1.4, "z": 1.5 }, "position": { "x": 50.3, "y": 46, "z": -8.5 }, "rotation": { "y": 16.9 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "back cushions", "shape": "sphere", "radius": 10, "scale": { "x": 1.6, "y": 1.4, "z": 1.5 }, "position": { "x": 74.1, "y": 46, "z": 0.7 }, "rotation": { "y": 25.4 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "seat bubbles", "shape": "sphere", "radius": 10, "scale": { "x": 1.6, "y": 1, "z": 1.3 }, "position": { "x": 0, "y": 31, "z": 7 }, "material": "upholstery" },
+      { "name": "seat bubbles", "shape": "sphere", "radius": 10, "scale": { "x": 1.6, "y": 1, "z": 1.3 }, "position": { "x": 23.9, "y": 31, "z": 8.8 }, "rotation": { "y": 8.5 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "seat bubbles", "shape": "sphere", "radius": 10, "scale": { "x": 1.6, "y": 1, "z": 1.3 }, "position": { "x": 47.3, "y": 31, "z": 14.1 }, "rotation": { "y": 17 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "seat bubbles", "shape": "sphere", "radius": 10, "scale": { "x": 1.6, "y": 1, "z": 1.3 }, "position": { "x": 69.7, "y": 31, "z": 22.7 }, "rotation": { "y": 25.5 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "seat bubbles", "shape": "sphere", "radius": 10, "scale": { "x": 1.6, "y": 1, "z": 1.3 }, "position": { "x": 12, "y": 31, "z": 23.5 }, "rotation": { "y": 4.4 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "seat bubbles", "shape": "sphere", "radius": 10, "scale": { "x": 1.6, "y": 1, "z": 1.3 }, "position": { "x": 35.6, "y": 31, "z": 27.1 }, "rotation": { "y": 13.2 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "seat bubbles", "shape": "sphere", "radius": 10, "scale": { "x": 1.6, "y": 1, "z": 1.3 }, "position": { "x": 58.4, "y": 31, "z": 34.4 }, "rotation": { "y": 22 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "feet", "shape": "box", "size": { "x": 5, "y": 2, "z": 5 }, "position": { "x": 96, "y": 1, "z": -36 }, "repeat": { "count": 2, "step": { "x": 0, "y": 0, "z": 81 } }, "mirror": ["x"], "material": "feet" },
+      { "name": "seat base", "shape": "lathe", "profile": [[130, 2], [205, 2], [205, 30], [130, 30], [130, 2]], "arc": 18, "position": { "x": 0, "y": 0, "z": 169 }, "rotation": { "y": 243 }, "material": "upholstery" },
+      { "name": "seat base", "shape": "lathe", "profile": [[130, 2], [205, 2], [205, 30], [130, 30], [130, 2]], "arc": 18, "position": { "x": 0, "y": 0, "z": 169 }, "rotation": { "y": 261 }, "material": "upholstery" },
+      { "name": "seat base", "shape": "lathe", "profile": [[130, 2], [205, 2], [205, 30], [130, 30], [130, 2]], "arc": 18, "position": { "x": 0, "y": 0, "z": 169 }, "rotation": { "y": 279 }, "material": "upholstery" }
+    ]
+  },
+  "materialSlots": {
+    "upholstery": { "label": "Upholstery", "default": "fabric.chocolate", "allowed": ["fabric.*"] },
+    "feet": { "label": "Feet", "default": "wood.wenge", "allowed": ["wood.wenge"] }
+  },
+  "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
+  "productUrl": "https://www.roche-bobois.com/de-CH/produkt/bubble-curve-3--4-sitzer-sofa---gerundet/4765.html",
+  "notes": "Roche Bobois Bubble Curve, curved 3/4-seat sofa (design Sacha Lakic): W 248 × D 132 × H 80 cm, seat height 38 cm, from Roche Bobois' product page and technical sheet FA565. Built from upright stuffed tubes and cushion bubbles that follow the sheet's drawings: the back curves gently, the front curves inwards between the rounded arms, so the seat is about 115 cm deep in the middle while the arms reach 132 cm; the arms step down from 78 to 45 cm. Feet in solid beech, wengé stain. Chocolate brown by default; Roche Bobois makes this sofa only in its Bamboo, Orsetto Flex, Passion, Signature, Smile Flex and Techno 2D/3D/4D fabrics, so pick the exact colour in the store. The clearance zone is the legroom in front of the seat."
+}

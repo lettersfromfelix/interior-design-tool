@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "tv-tripod-55",
+  "name": "TV on a wooden tripod, 55 inch",
+  "category": "media",
+  "tags": ["living room", "television", "tv stand", "tripod"],
+  "dimensions": { "width": 123, "depth": 53.3, "height": 147 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "front legs", "shape": "cylinder", "radius": 1.9, "radiusTop": 1.4, "height": 131.94, "position": { "x": 20, "y": 63.29, "z": 19.66 }, "rotation": { "x": -4.1, "z": 17.65 }, "mirror": ["x"], "material": "legs" },
+      { "name": "back leg", "shape": "cylinder", "radius": 1.9, "radiusTop": 1.4, "height": 131.65, "position": { "x": 0, "y": 63.29, "z": -4.84 }, "rotation": { "x": 17.69 }, "material": "legs" },
+      { "name": "head", "shape": "cylinder", "radius": 3.2, "height": 9, "position": { "x": 0, "y": 126, "z": 15.16 }, "material": "metal" },
+      { "name": "VESA plate", "shape": "box", "size": { "x": 40, "y": 30, "z": 0.6 }, "position": { "x": 0, "y": 113, "z": 20.86 }, "material": "metal" },
+      { "name": "TV back", "shape": "box", "size": { "x": 92, "y": 50, "z": 3.4 }, "cornerRadius": 1, "position": { "x": 0, "y": 110, "z": 22.86 }, "material": "frame" },
+      { "name": "TV frame", "shape": "box", "size": { "x": 123, "y": 71, "z": 1.8 }, "cornerRadius": 0.4, "position": { "x": 0, "y": 111.5, "z": 25.46 }, "material": "frame" },
+      { "name": "screen", "shape": "box", "size": { "x": 121.8, "y": 68.5, "z": 0.3 }, "position": { "x": 0, "y": 111.5, "z": 26.51 }, "material": "screen" }
+    ]
+  },
+  "materialSlots": {
+    "legs": { "label": "Legs", "default": "wood.oak-natural", "allowed": ["wood.*"] },
+    "metal": { "label": "Head and mount", "default": "metal.black-matte", "allowed": ["metal.black-matte", "metal.stainless"] },
+    "frame": { "label": "TV frame", "default": "metal.black-matte", "allowed": ["metal.black-matte", "metal.stainless"] },
+    "screen": { "label": "Screen", "default": "glass.black", "allowed": ["glass.black"] }
+  },
+  "notes": "Built to the user's description, not a specific product: a 55-inch TV mounted on a wooden tripod. The tripod follows a typical wooden TV stand (for example RFIVER: 139 cm high, 85 × 53 cm on the floor), with two legs at the front and one at the back; the TV is the same as the 55-inch TV item (123 × 71 cm, 16:9 screen of 121.8 × 68.5 cm). The screen's centre is 111.5 cm above the floor (bottom edge 76 cm), a good height to watch from a sofa; real stands can be adjusted. Wall snap puts the rear foot against the wall."
+}

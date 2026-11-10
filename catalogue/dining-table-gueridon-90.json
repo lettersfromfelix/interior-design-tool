@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "dining-table-gueridon-90",
+  "name": "Dining table, Vitra Guéridon Ø 90",
+  "category": "table",
+  "tags": ["dining", "round", "gueridon", "jean prouve"],
+  "dimensions": { "width": 90, "depth": 90, "height": 74 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "legs", "shape": "extrusion", "points": [[16.4, 71], [11.3, 71], [4.2, 55], [38.2, 0], [42.5, 0]], "height": 4, "position": { "x": -2, "y": 0, "z": 0 }, "rotation": { "x": -90, "y": 90 }, "repeatAround": { "count": 3, "step": 120 }, "material": "wood" },
+      { "name": "crossbar", "shape": "cylinder", "radius": 1.1, "height": 5, "position": { "x": 0, "y": 55, "z": 2.5 }, "rotation": { "x": 90 }, "repeatAround": { "count": 3, "step": 120 }, "material": "metal" },
+      { "name": "linking plates", "shape": "cylinder", "radius": 3.5, "height": 5.6, "position": { "x": 0, "y": 55, "z": 7.5 }, "rotation": { "z": 90 }, "repeatAround": { "count": 3, "step": 120 }, "material": "metal" },
+      { "name": "top", "shape": "lathe", "profile": [[0, 0], [45, 0], [45, 2.4], [44.4, 3], [0, 3]], "position": { "x": 0, "y": 71, "z": 0 }, "material": "wood" }
+    ]
+  },
+  "materialSlots": {
+    "wood": { "label": "Top and legs", "default": "wood.oak-dark", "allowed": ["wood.oak-dark", "wood.walnut", "wood.oak-natural"] },
+    "metal": { "label": "Crossbar", "default": "metal.black-matte", "allowed": ["metal.black-matte"] }
+  },
+  "surfaces": [{ "name": "top", "height": 74, "width": 63, "depth": 63 }],
+  "productUrl": "https://www.vitra.com/en-ch/product/details/gueridon",
+  "notes": "Vitra Guéridon (design Jean Prouvé, 1949), Ø 90 cm and 74 cm high, as on Vitra's product page and dimension drawing. Three solid-wood legs, one pointing to the front, joined by a black tubular steel crossbar with round linking plates; their shape follows Vitra's drawing (the feet stand on a circle of Ø 85 cm). Vitra makes it in natural oak, American walnut and dark oak; dark oak is the default, for the dark brown asked for. The surface is the largest square on the round top (63 × 63 cm). No clearance zone of its own; the chairs around it carry theirs."
+}
