@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "bench-shoe-oak",
+  "name": "Shoe bench, oak",
+  "category": "seating",
+  "tags": ["entree", "hallway", "shoes", "bench"],
+  "dimensions": { "width": 100, "depth": 34, "height": 52 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "legs", "shape": "cylinder", "radius": 1.6, "radiusTop": 2, "height": 43, "position": { "x": 46.5, "y": 21.5, "z": 14 }, "mirror": ["x", "z"], "material": "wood" },
+      { "name": "top", "shape": "box", "size": { "x": 100, "y": 3, "z": 34 }, "cornerRadius": 0.8, "position": { "x": 0, "y": 44.5, "z": 0 }, "material": "wood" },
+      { "name": "shelf rails", "shape": "box", "size": { "x": 3, "y": 3, "z": 28 }, "position": { "x": 45, "y": 9.5, "z": 0 }, "mirror": ["x"], "material": "wood" },
+      { "name": "shelf slats", "shape": "box", "size": { "x": 90, "y": 1.6, "z": 4.2 }, "position": { "x": 0, "y": 11.8, "z": -12.6 }, "repeat": { "count": 5, "step": { "x": 0, "y": 0, "z": 6.3 } }, "material": "wood" },
+      { "name": "cushion", "shape": "box", "size": { "x": 58, "y": 6, "z": 30 }, "cornerRadius": 2.6, "position": { "x": -19, "y": 49, "z": 0 }, "material": "cushion" }
+    ]
+  },
+  "materialSlots": {
+    "wood": { "label": "Wood", "default": "wood.oak-natural", "allowed": ["wood.*", "lacquer.*"] },
+    "cushion": { "label": "Cushion", "default": "fabric.linen-natural", "allowed": ["fabric.*", "leather.*"] }
+  },
+  "clearance": { "front": 45, "note": "Room to sit and put on shoes" },
+  "notes": "Own design, not a specific product: a narrow oak bench for the Entrée, 100 × 34 cm, with a slatted shoe shelf below and a linen cushion on one half of the seat. Seat height 46 cm, 52 cm with the cushion. Clearance: 45 cm in front to sit and put on shoes."
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "sideboard-usm-haller-2x2",
+  "name": "Sideboard, USM Haller 2 × 2",
+  "category": "storage",
+  "tags": ["living room", "office", "usm", "modular", "chrome"],
+  "dimensions": { "width": 154, "depth": 39, "height": 75 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "balls, level 1", "shape": "sphere", "radius": 2, "position": { "x": -75, "y": 3, "z": 17.5 }, "mirror": ["z"], "repeat": { "count": 3, "step": { "x": 75, "y": 0, "z": 0 } }, "plan": "hidden", "material": "frame" },
+      { "name": "tubes along, level 1", "shape": "cylinder", "radius": 0.95, "height": 71, "position": { "x": -37.5, "y": 3, "z": 17.5 }, "rotation": { "z": 90 }, "mirror": ["z"], "repeat": { "count": 2, "step": { "x": 75, "y": 0, "z": 0 } }, "material": "frame" },
+      { "name": "tubes across, level 1", "shape": "cylinder", "radius": 0.95, "height": 31, "position": { "x": -75, "y": 3, "z": 0 }, "rotation": { "x": 90 }, "repeat": { "count": 3, "step": { "x": 75, "y": 0, "z": 0 } }, "material": "frame" },
+      { "name": "balls, level 2", "shape": "sphere", "radius": 2, "position": { "x": -75, "y": 38, "z": 17.5 }, "mirror": ["z"], "repeat": { "count": 3, "step": { "x": 75, "y": 0, "z": 0 } }, "plan": "hidden", "material": "frame" },
+      { "name": "tubes along, level 2", "shape": "cylinder", "radius": 0.95, "height": 71, "position": { "x": -37.5, "y": 38, "z": 17.5 }, "rotation": { "z": 90 }, "mirror": ["z"], "repeat": { "count": 2, "step": { "x": 75, "y": 0, "z": 0 } }, "material": "frame" },
+      { "name": "tubes across, level 2", "shape": "cylinder", "radius": 0.95, "height": 31, "position": { "x": -75, "y": 38, "z": 0 }, "rotation": { "x": 90 }, "repeat": { "count": 3, "step": { "x": 75, "y": 0, "z": 0 } }, "material": "frame" },
+      { "name": "balls, level 3", "shape": "sphere", "radius": 2, "position": { "x": -75, "y": 73, "z": 17.5 }, "mirror": ["z"], "repeat": { "count": 3, "step": { "x": 75, "y": 0, "z": 0 } }, "plan": "hidden", "material": "frame" },
+      { "name": "tubes along, level 3", "shape": "cylinder", "radius": 0.95, "height": 71, "position": { "x": -37.5, "y": 73, "z": 17.5 }, "rotation": { "z": 90 }, "mirror": ["z"], "repeat": { "count": 2, "step": { "x": 75, "y": 0, "z": 0 } }, "material": "frame" },
+      { "name": "tubes across, level 3", "shape": "cylinder", "radius": 0.95, "height": 31, "position": { "x": -75, "y": 73, "z": 0 }, "rotation": { "x": 90 }, "repeat": { "count": 3, "step": { "x": 75, "y": 0, "z": 0 } }, "material": "frame" },
+      { "name": "upright tubes", "shape": "cylinder", "radius": 0.95, "height": 31, "position": { "x": -75, "y": 20.5, "z": 17.5 }, "mirror": ["z"], "repeat": { "count": 3, "step": { "x": 75, "y": 0, "z": 0 } }, "material": "frame" },
+      { "name": "upright tubes, upper", "shape": "cylinder", "radius": 0.95, "height": 31, "position": { "x": -75, "y": 55.5, "z": 17.5 }, "mirror": ["z"], "repeat": { "count": 3, "step": { "x": 75, "y": 0, "z": 0 } }, "material": "frame" },
+      { "name": "glides", "shape": "cylinder", "radius": 1.1, "height": 1, "position": { "x": -75, "y": 0.5, "z": 17.5 }, "mirror": ["z"], "repeat": { "count": 3, "step": { "x": 75, "y": 0, "z": 0 } }, "plan": "hidden", "material": "frame" },
+      { "name": "shelves", "shape": "box", "size": { "x": 148.4, "y": 0.6, "z": 33.4 }, "position": { "x": 0, "y": 3.6, "z": 0 }, "repeat": { "count": 3, "step": { "x": 0, "y": 35, "z": 0 } }, "material": "panels" },
+      { "name": "side panels", "shape": "box", "size": { "x": 0.6, "y": 31, "z": 33.4 }, "position": { "x": 75, "y": 20.5, "z": 0 }, "mirror": ["x"], "repeat": { "count": 2, "step": { "x": 0, "y": 35, "z": 0 } }, "material": "panels" },
+      { "name": "back panels", "shape": "box", "size": { "x": 71.4, "y": 31, "z": 0.6 }, "position": { "x": 37.5, "y": 20.5, "z": -17.5 }, "mirror": ["x"], "repeat": { "count": 2, "step": { "x": 0, "y": 35, "z": 0 } }, "material": "panels" },
+      { "name": "doors", "shape": "box", "size": { "x": 71.4, "y": 31, "z": 0.6 }, "position": { "x": 37.5, "y": 20.5, "z": 17.5 }, "mirror": ["x"], "repeat": { "count": 2, "step": { "x": 0, "y": 35, "z": 0 } }, "material": "panels" },
+      { "name": "locks", "shape": "cylinder", "radius": 0.8, "height": 0.6, "position": { "x": 37.5, "y": 33, "z": 18.1 }, "rotation": { "x": 90 }, "mirror": ["x"], "repeat": { "count": 2, "step": { "x": 0, "y": 35, "z": 0 } }, "plan": "hidden", "material": "frame" }
+    ]
+  },
+  "materialSlots": {
+    "panels": { "label": "Panels", "default": "lacquer.ruby-red", "allowed": ["lacquer.*"] },
+    "frame": { "label": "Tubes and balls", "default": "metal.chrome", "allowed": ["metal.chrome"] }
+  },
+  "surfaces": [{ "name": "top", "height": 74, "width": 148, "depth": 33 }],
+  "clearance": { "front": 60, "note": "Room to open the doors" },
+  "productUrl": "https://www.usm.com/en/products/usm-haller/",
+  "notes": "USM Haller (design Fritz Haller and Paul Schärer, 1965), configured as a sideboard of 2 × 2 compartments 75 cm wide, 35 cm high and 35 cm deep, with drop-down doors: about 154 × 39 × 75 cm outside (modula24 USM dimension guide, einrichten-design). Chrome tubes and balls with powder-coated steel panels; ruby red stands in for USM's ruby red, and the other lacquers for its colour range. Clearance: 60 cm for the doors."
+}

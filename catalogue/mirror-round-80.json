@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "mirror-round-80",
+  "name": "Mirror, round Ø 80, oak",
+  "category": "decor",
+  "tags": ["entree", "hallway", "bathroom", "bedroom", "mirror"],
+  "dimensions": { "width": 80, "depth": 4, "height": 80 },
+  "placement": { "type": "wall", "defaultElevation": 95, "minElevation": 30, "maxElevation": 180 },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "back board", "shape": "cylinder", "radius": 37.6, "height": 1.2, "position": { "x": 0, "y": 40, "z": -1.4 }, "rotation": { "x": 90 }, "plan": "hidden", "material": "frame" },
+      { "name": "mirror", "shape": "cylinder", "radius": 37.6, "height": 0.5, "position": { "x": 0, "y": 40, "z": -0.4 }, "rotation": { "x": 90 }, "material": "mirror" },
+      { "name": "frame", "shape": "torus", "radius": 38.4, "tube": 1.6, "position": { "x": 0, "y": 40, "z": 0.3 }, "rotation": { "x": 90 }, "material": "frame" }
+    ]
+  },
+  "materialSlots": {
+    "frame": { "label": "Frame", "default": "wood.oak-natural", "allowed": ["wood.*", "metal.brass", "metal.black-matte"] },
+    "mirror": { "label": "Mirror", "default": "glass.mirror", "allowed": ["glass.mirror"] }
+  },
+  "notes": "Own design, not a specific product: a round mirror Ø 80 cm in a rounded solid oak frame. Hangs on the wall; at the default height its centre is at 135 cm, eye height for most people."
+}

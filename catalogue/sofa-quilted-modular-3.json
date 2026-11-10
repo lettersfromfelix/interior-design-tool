@@ -1,0 +1,33 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "sofa-quilted-modular-3",
+  "name": "Sofa, quilted modular 3-seater",
+  "category": "seating",
+  "tags": ["living room", "boucle", "modular", "quilted"],
+  "dimensions": { "width": 264, "depth": 96, "height": 68 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "base", "shape": "box", "size": { "x": 262, "y": 26, "z": 94 }, "cornerRadius": 8, "position": { "x": 0, "y": 13, "z": 0 }, "material": "upholstery" },
+      { "name": "back", "shape": "box", "size": { "x": 228, "y": 36, "z": 22 }, "cornerRadius": 8, "position": { "x": 0, "y": 44, "z": -37 }, "material": "upholstery" },
+      { "name": "arms", "shape": "box", "size": { "x": 14, "y": 50, "z": 95 }, "cornerRadius": 7, "position": { "x": 121, "y": 25, "z": -0.5 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "seat quilting, row 1", "shape": "sphere", "radius": 1, "scale": { "x": 15.57, "y": 10, "z": 13.8 }, "position": { "x": -101.33, "y": 30, "z": -9.4 }, "repeat": { "count": 9, "step": { "x": 25.33, "y": 0, "z": 0 } }, "material": "upholstery" },
+      { "name": "seat quilting, row 2", "shape": "sphere", "radius": 1, "scale": { "x": 15.57, "y": 10, "z": 13.8 }, "position": { "x": -101.33, "y": 30, "z": 12.6 }, "repeat": { "count": 9, "step": { "x": 25.33, "y": 0, "z": 0 } }, "material": "upholstery" },
+      { "name": "seat quilting, row 3", "shape": "sphere", "radius": 1, "scale": { "x": 15.57, "y": 10, "z": 13.8 }, "position": { "x": -101.33, "y": 30, "z": 34.2 }, "repeat": { "count": 9, "step": { "x": 25.33, "y": 0, "z": 0 } }, "material": "upholstery" },
+      { "name": "front quilting", "shape": "sphere", "radius": 1, "scale": { "x": 15.57, "y": 10.5, "z": 5 }, "position": { "x": -101.33, "y": 13, "z": 43 }, "repeat": { "count": 9, "step": { "x": 25.33, "y": 0, "z": 0 } }, "material": "upholstery" },
+      { "name": "back quilting, row 1", "shape": "sphere", "radius": 1, "scale": { "x": 15.57, "y": 8, "z": 8 }, "position": { "x": -101.33, "y": 47, "z": -24 }, "repeat": { "count": 9, "step": { "x": 25.33, "y": 0, "z": 0 } }, "material": "upholstery" },
+      { "name": "back quilting, row 2", "shape": "sphere", "radius": 1, "scale": { "x": 15.57, "y": 8, "z": 8 }, "position": { "x": -101.33, "y": 60, "z": -24 }, "repeat": { "count": 9, "step": { "x": 25.33, "y": 0, "z": 0 } }, "material": "upholstery" },
+      { "name": "arm quilting, top", "shape": "sphere", "radius": 1, "scale": { "x": 9.5, "y": 8, "z": 17 }, "position": { "x": 123, "y": 52, "z": -31 }, "mirror": ["x"], "repeat": { "count": 3, "step": { "x": 0, "y": 0, "z": 31 } }, "material": "upholstery" },
+      { "name": "arm quilting, front", "shape": "sphere", "radius": 1, "scale": { "x": 9.5, "y": 11, "z": 5 }, "position": { "x": 123, "y": 14, "z": 43 }, "mirror": ["x"], "repeat": { "count": 2, "step": { "x": 0, "y": 22, "z": 0 } }, "material": "upholstery" },
+      { "name": "arm quilting, outside, lower", "shape": "sphere", "radius": 1, "scale": { "x": 4, "y": 11.5, "z": 16.5 }, "position": { "x": 128, "y": 13.5, "z": -31 }, "mirror": ["x"], "repeat": { "count": 3, "step": { "x": 0, "y": 0, "z": 31 } }, "material": "upholstery" },
+      { "name": "arm quilting, outside, upper", "shape": "sphere", "radius": 1, "scale": { "x": 4, "y": 11.5, "z": 16.5 }, "position": { "x": 128, "y": 36, "z": -31 }, "mirror": ["x"], "repeat": { "count": 3, "step": { "x": 0, "y": 0, "z": 31 } }, "material": "upholstery" }
+    ]
+  },
+  "materialSlots": {
+    "upholstery": { "label": "Upholstery", "default": "fabric.boucle-cream", "allowed": ["fabric.*", "leather.*"] }
+  },
+  "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
+  "notes": "Own design, inspired by Mario Bellini's Camaleonda (B&B Italia, 1970), not the product itself: three deep quilted seat modules between two quilted arms, standing directly on the floor. Seat height 40 cm, arm height 60 cm, seat depth about 64 cm. Clearance: 45 cm of legroom in front."
+}

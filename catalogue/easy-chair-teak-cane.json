@@ -1,0 +1,32 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "easy-chair-teak-cane",
+  "name": "Easy chair, teak and cane",
+  "category": "seating",
+  "tags": ["living room", "reading", "cane", "jeanneret"],
+  "dimensions": { "width": 60, "depth": 72, "height": 76 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "front legs", "shape": "box", "size": { "x": 4, "y": 62.61, "z": 4 }, "position": { "x": 26.5, "y": 28, "z": 17 }, "rotation": { "x": -26.57 }, "mirror": ["x"], "material": "wood" },
+      { "name": "rear legs", "shape": "box", "size": { "x": 4, "y": 63.53, "z": 4 }, "position": { "x": 26.5, "y": 28, "z": -18 }, "rotation": { "x": 28.18 }, "mirror": ["x"], "material": "wood" },
+      { "name": "armrests", "shape": "box", "size": { "x": 6, "y": 3, "z": 66 }, "cornerRadius": 1, "position": { "x": 26.5, "y": 57.5, "z": 1 }, "mirror": ["x"], "material": "wood" },
+      { "name": "side stretchers", "shape": "box", "size": { "x": 3, "y": 4, "z": 46 }, "cornerRadius": 0.5, "position": { "x": 26.5, "y": 17, "z": -0.8 }, "mirror": ["x"], "material": "wood" },
+      { "name": "seat rails", "shape": "box", "size": { "x": 3, "y": 4, "z": 50 }, "cornerRadius": 0.5, "position": { "x": 23, "y": 36.5, "z": 2 }, "rotation": { "x": -5 }, "mirror": ["x"], "material": "wood" },
+      { "name": "seat front rail", "shape": "box", "size": { "x": 44, "y": 5, "z": 3 }, "cornerRadius": 0.5, "position": { "x": 0, "y": 38.6, "z": 26 }, "material": "wood" },
+      { "name": "seat rear rail", "shape": "box", "size": { "x": 44, "y": 5, "z": 3 }, "cornerRadius": 0.5, "position": { "x": 0, "y": 34.2, "z": -21.8 }, "material": "wood" },
+      { "name": "seat cane", "shape": "box", "size": { "x": 41, "y": 1.2, "z": 46 }, "position": { "x": 0, "y": 37.6, "z": 2 }, "rotation": { "x": -5 }, "material": "cane" },
+      { "name": "back uprights", "shape": "box", "size": { "x": 4, "y": 40.78, "z": 3 }, "position": { "x": 21, "y": 55.5, "z": -27.96 }, "rotation": { "x": -17 }, "mirror": ["x"], "material": "wood" },
+      { "name": "back top rail", "shape": "box", "size": { "x": 46, "y": 6, "z": 3 }, "cornerRadius": 0.8, "position": { "x": 0, "y": 71.5, "z": -32.85 }, "rotation": { "x": -17 }, "material": "wood" },
+      { "name": "back cane", "shape": "box", "size": { "x": 38, "y": 27, "z": 1.2 }, "position": { "x": 0, "y": 57.5, "z": -28.57 }, "rotation": { "x": -17 }, "material": "cane" }
+    ]
+  },
+  "materialSlots": {
+    "wood": { "label": "Frame", "default": "wood.teak", "allowed": ["wood.teak", "wood.oak-natural", "wood.ash-black", "wood.walnut"] },
+    "cane": { "label": "Seat and back", "default": "cane.natural", "allowed": ["cane.*"] }
+  },
+  "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
+  "notes": "Own design, inspired by Pierre Jeanneret's chairs for Chandigarh (1950s), not a reproduction: solid teak with inverted-V side frames under the armrests and a woven cane seat and back. Seat height 38 cm, armrests 59 cm. Clearance: 45 cm of legroom in front."
+}

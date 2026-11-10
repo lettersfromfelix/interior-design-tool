@@ -1,0 +1,43 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "coat-rack-hang-it-all",
+  "name": "Coat rack, Hang It All",
+  "category": "decor",
+  "tags": ["entree", "hallway", "coat hooks", "vitra", "eames"],
+  "dimensions": { "width": 50.5, "depth": 17, "height": 37 },
+  "placement": { "type": "wall", "defaultElevation": 140, "minElevation": 80, "maxElevation": 190 },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "frame, horizontal", "shape": "cylinder", "radius": 0.3, "height": 45, "position": { "x": 0, "y": 1.2, "z": -7.6 }, "rotation": { "z": 90 }, "repeat": { "count": 3, "step": { "x": 0, "y": 12.7, "z": 0 } }, "material": "frame" },
+      { "name": "frame, sides", "shape": "cylinder", "radius": 0.3, "height": 25.4, "position": { "x": 22.5, "y": 13.9, "z": -7.6 }, "mirror": ["x"], "material": "frame" },
+      { "name": "stalk, bottom row, centre", "shape": "cylinder", "radius": 0.3, "height": 13.99, "position": { "x": 0, "y": 4.8, "z": -1.6 }, "rotation": { "x": 59.04 }, "plan": "hidden", "material": "frame" },
+      { "name": "ball, bottom row, centre", "shape": "sphere", "radius": 2.6, "position": { "x": 0, "y": 9, "z": 5.9 }, "material": "balls3" },
+      { "name": "stalk, bottom row, inner pair", "shape": "cylinder", "radius": 0.3, "height": 13.99, "position": { "x": 11.25, "y": 4.8, "z": -1.6 }, "rotation": { "x": 59.04 }, "mirror": ["x"], "plan": "hidden", "material": "frame" },
+      { "name": "ball, bottom row, inner pair", "shape": "sphere", "radius": 2.6, "position": { "x": 11.25, "y": 9, "z": 5.9 }, "mirror": ["x"], "material": "balls4" },
+      { "name": "stalk, bottom row, outer pair", "shape": "cylinder", "radius": 0.3, "height": 13.99, "position": { "x": 22.5, "y": 4.8, "z": -1.6 }, "rotation": { "x": 59.04 }, "mirror": ["x"], "plan": "hidden", "material": "frame" },
+      { "name": "ball, bottom row, outer pair", "shape": "sphere", "radius": 2.6, "position": { "x": 22.5, "y": 9, "z": 5.9 }, "mirror": ["x"], "material": "balls1" },
+      { "name": "stalk, middle row, inner pair", "shape": "cylinder", "radius": 0.3, "height": 13.99, "position": { "x": 5.6, "y": 17.5, "z": -1.6 }, "rotation": { "x": 59.04 }, "mirror": ["x"], "plan": "hidden", "material": "frame" },
+      { "name": "ball, middle row, inner pair", "shape": "sphere", "radius": 2.6, "position": { "x": 5.6, "y": 21.7, "z": 5.9 }, "mirror": ["x"], "material": "balls2" },
+      { "name": "stalk, middle row, outer pair", "shape": "cylinder", "radius": 0.3, "height": 13.99, "position": { "x": 16.9, "y": 17.5, "z": -1.6 }, "rotation": { "x": 59.04 }, "mirror": ["x"], "plan": "hidden", "material": "frame" },
+      { "name": "ball, middle row, outer pair", "shape": "sphere", "radius": 2.6, "position": { "x": 16.9, "y": 21.7, "z": 5.9 }, "mirror": ["x"], "material": "balls5" },
+      { "name": "stalk, top row, centre", "shape": "cylinder", "radius": 0.3, "height": 13.99, "position": { "x": 0, "y": 30.2, "z": -1.6 }, "rotation": { "x": 59.04 }, "plan": "hidden", "material": "frame" },
+      { "name": "ball, top row, centre", "shape": "sphere", "radius": 2.6, "position": { "x": 0, "y": 34.4, "z": 5.9 }, "material": "balls1" },
+      { "name": "stalk, top row, inner pair", "shape": "cylinder", "radius": 0.3, "height": 13.99, "position": { "x": 11.25, "y": 30.2, "z": -1.6 }, "rotation": { "x": 59.04 }, "mirror": ["x"], "plan": "hidden", "material": "frame" },
+      { "name": "ball, top row, inner pair", "shape": "sphere", "radius": 2.6, "position": { "x": 11.25, "y": 34.4, "z": 5.9 }, "mirror": ["x"], "material": "balls5" },
+      { "name": "stalk, top row, outer pair", "shape": "cylinder", "radius": 0.3, "height": 13.99, "position": { "x": 22.5, "y": 30.2, "z": -1.6 }, "rotation": { "x": 59.04 }, "mirror": ["x"], "plan": "hidden", "material": "frame" },
+      { "name": "ball, top row, outer pair", "shape": "sphere", "radius": 2.6, "position": { "x": 22.5, "y": 34.4, "z": 5.9 }, "mirror": ["x"], "material": "balls2" }
+    ]
+  },
+  "materialSlots": {
+    "frame": { "label": "Frame", "default": "lacquer.white", "allowed": ["lacquer.white", "metal.black-matte", "metal.chrome"] },
+    "balls1": { "label": "Balls 1", "default": "lacquer.ruby-red", "allowed": ["lacquer.*", "wood.*"] },
+    "balls2": { "label": "Balls 2", "default": "lacquer.cobalt", "allowed": ["lacquer.*", "wood.*"] },
+    "balls3": { "label": "Balls 3", "default": "lacquer.ochre", "allowed": ["lacquer.*", "wood.*"] },
+    "balls4": { "label": "Balls 4", "default": "lacquer.olive", "allowed": ["lacquer.*", "wood.*"] },
+    "balls5": { "label": "Balls 5", "default": "lacquer.beige", "allowed": ["lacquer.*", "wood.*"] }
+  },
+  "productUrl": "https://www.vitra.com/en-ch/product/hang-it-all",
+  "notes": "Vitra Hang It All (design Charles & Ray Eames, 1953): W 50.5 × D 17 × H 37 cm, coated steel wire with 14 lacquered wooden balls (Scandinavia Design, Utility Design). The colours are a multicolour mix; each of the five ball groups can be changed, or all set to wood. Hangs on the wall; at the default elevation it spans 140 to 177 cm above the floor."
+}

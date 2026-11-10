@@ -231,9 +231,9 @@ in `color2`, and `flecks` adds small dark flecks (`fleckColor`, default a dark `
 floor's limestone tiles use all three, the bathroom's ceramic tiles only a little `variation`. With any of the three,
 one texture holds a block of 5 × 5 different tiles, so the pattern repeats only every five tiles.
 Groups in use: `paint`, `floor`, `kitchen`, `stone`, `tile`, `door`, `frame`, `glass`, `ceramic`, `metal`, `wood`,
-`lacquer`, `plastic`, `fabric`, `leather`. New presets and groups can be added freely. Unknown ids show an issue with
-suggestions and fall back to neutral grey. Catalogue items offer presets per material slot, by id or by group
-(`"fabric.*"`).
+`lacquer`, `plastic`, `fabric`, `leather`, `cane`, `paper`, `plant`. New presets and groups can be added freely.
+Unknown ids show an issue with suggestions and fall back to neutral grey. Catalogue items offer presets per material
+slot, by id or by group (`"fabric.*"`).
 
 ## `layouts/*.json`
 

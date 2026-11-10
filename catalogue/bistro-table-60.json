@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "bistro-table-60",
+  "name": "Bistro table, Fermob Ø 60",
+  "category": "table",
+  "tags": ["balcony", "outdoor", "folding", "fermob", "round"],
+  "dimensions": { "width": 60, "depth": 60, "height": 74 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "top", "shape": "lathe", "profile": [[0, 72.6], [29.2, 72.6], [30, 73.1], [30, 74], [0, 74]], "position": { "x": 0, "y": 0, "z": 0 }, "material": "metal" },
+      { "name": "top frame", "shape": "torus", "radius": 26, "tube": 0.55, "position": { "x": 0, "y": 72, "z": 0 }, "plan": "hidden", "material": "metal" },
+      { "name": "legs", "shape": "box", "size": { "x": 2.6, "y": 74.1, "z": 0.8 }, "position": { "x": 14.75, "y": 35.8, "z": 14.75 }, "rotation": { "x": -10.68, "z": 10.5 }, "mirror": ["x", "z"], "material": "metal" },
+      { "name": "cross brace", "shape": "box", "size": { "x": 2.2, "y": 49.5, "z": 0.7 }, "position": { "x": 0, "y": 22, "z": 0 }, "rotation": { "x": 90, "z": -45 }, "material": "metal" },
+      { "name": "cross brace 2", "shape": "box", "size": { "x": 2.2, "y": 49.5, "z": 0.7 }, "position": { "x": 0, "y": 22, "z": 0 }, "rotation": { "x": 90, "z": 45 }, "material": "metal" },
+      { "name": "feet", "shape": "cylinder", "radius": 1.4, "height": 1, "position": { "x": 21.5, "y": 0.5, "z": 21.5 }, "mirror": ["x", "z"], "plan": "hidden", "material": "metal" }
+    ]
+  },
+  "materialSlots": {
+    "metal": { "label": "Colour", "default": "metal.powder-rosemary", "allowed": ["metal.powder-rosemary", "metal.powder-red-ochre", "metal.powder-clay", "metal.black-matte"] }
+  },
+  "surfaces": [{ "name": "top", "height": 74, "width": 42, "depth": 42 }],
+  "productUrl": "https://www.fermob.com/en/products/bistro-table-o60cm",
+  "notes": "Fermob Bistro round table Ø 60 cm, H 74 cm, folding, lacquered steel (Garden & Terrace, Bracken Interiors). The folding base is simplified to four flat-bar legs with a cross brace. Fermob makes it in 24 colours; the rosemary green, red ochre and clay grey here are approximations. Sized for the round balconies."
+}

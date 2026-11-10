@@ -1,0 +1,31 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "pendant-lamp-ph5",
+  "name": "Pendant lamp, PH 5",
+  "category": "lighting",
+  "tags": ["dining", "louis poulsen", "danish"],
+  "dimensions": { "width": 50, "depth": 50, "height": 118 },
+  "placement": { "type": "ceiling" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "canopy", "shape": "cylinder", "radius": 5.5, "height": 2.5, "position": { "x": 0, "y": 116.75, "z": 0 }, "material": "fittings" },
+      { "name": "cord", "shape": "cylinder", "radius": 0.35, "height": 87.3, "position": { "x": 0, "y": 71.85, "z": 0 }, "material": "fittings" },
+      { "name": "top cap", "shape": "cylinder", "radius": 5.6, "height": 1.6, "position": { "x": 0, "y": 27.4, "z": 0 }, "material": "shades" },
+      { "name": "top shade", "shape": "lathe", "profile": [[25, 11], [23, 14.6], [20, 18.2], [16.2, 21.3], [12, 23.8], [8, 25.6], [5.4, 26.4], [5.3, 26.07], [7.87, 25.27], [11.84, 23.49], [16, 21.01], [19.75, 17.95], [22.71, 14.4], [24.69, 10.83], [25, 11]], "position": { "x": 0, "y": 0, "z": 0 }, "material": "shades" },
+      { "name": "middle shade", "shape": "lathe", "profile": [[17.8, 5.6], [16, 8.2], [13.3, 10.8], [10.2, 12.8], [7.4, 14], [7.26, 13.68], [10.03, 12.49], [13.08, 10.53], [15.74, 7.97], [17.51, 5.4], [17.8, 5.6]], "position": { "x": 0, "y": 0, "z": 0 }, "material": "shades" },
+      { "name": "bottom shade", "shape": "lathe", "profile": [[11.2, 0], [10.2, 2.4], [8.4, 4.6], [6.2, 6.3], [4.6, 7], [4.46, 6.68], [6.01, 6], [8.16, 4.35], [9.9, 2.22], [10.88, -0.13], [11.2, 0]], "position": { "x": 0, "y": 0, "z": 0 }, "material": "shades" },
+      { "name": "red cone", "shape": "lathe", "profile": [[5.6, 14.5], [4.4, 18], [3.2, 21.5], [2.92, 21.4], [4.12, 17.9], [5.32, 14.4], [5.6, 14.5]], "position": { "x": 0, "y": 0, "z": 0 }, "plan": "hidden", "material": "inner" },
+      { "name": "diffuser", "shape": "cylinder", "radius": 4.4, "height": 0.6, "position": { "x": 0, "y": 6.6, "z": 0 }, "plan": "hidden", "material": "light" }
+    ]
+  },
+  "materialSlots": {
+    "shades": { "label": "Shades", "default": "lacquer.white", "allowed": ["lacquer.*", "metal.brass"] },
+    "inner": { "label": "Inner cone", "default": "lacquer.ruby-red", "allowed": ["lacquer.*"] },
+    "fittings": { "label": "Cord and canopy", "default": "lacquer.white", "allowed": ["lacquer.white", "metal.black-matte"] },
+    "light": { "label": "Light", "default": "glass.opal-lit", "allowed": ["glass.opal-lit"] }
+  },
+  "productUrl": "https://www.louispoulsen.com/en/catalog/private/pendants/ph-5",
+  "notes": "Louis Poulsen PH 5 (design Poul Henningsen, 1958): shade Ø 50 cm × H 26.7 cm, cable up to 3 m (Casa di Luce, Utility Design). The three nested shades and the red inner cone follow the classic version; the curves are simplified. Hangs from the ceiling: the 118 cm height includes the cord, so with the 255 cm ceiling the shade's bottom is 137 cm above the floor, 63 cm above a 74 cm dining table."
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "desk-oak-140",
+  "name": "Desk 140, oak",
+  "category": "table",
+  "tags": ["office", "study", "workspace", "zimmer 13.0"],
+  "dimensions": { "width": 140, "depth": 65, "height": 75 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "top", "shape": "box", "size": { "x": 140, "y": 2.6, "z": 65 }, "cornerRadius": 1.1, "position": { "x": 0, "y": 73.7, "z": 0 }, "material": "wood" },
+      { "name": "legs", "shape": "cylinder", "radius": 1.7, "radiusTop": 2.3, "height": 72.4, "position": { "x": 64, "y": 36.2, "z": 27.5 }, "mirror": ["x", "z"], "material": "wood" },
+      { "name": "side aprons", "shape": "box", "size": { "x": 2.4, "y": 8, "z": 50 }, "position": { "x": 63.8, "y": 68.4, "z": 0 }, "mirror": ["x"], "material": "wood" },
+      { "name": "back apron", "shape": "box", "size": { "x": 124, "y": 8, "z": 2.4 }, "position": { "x": 0, "y": 68.4, "z": -28.6 }, "material": "wood" },
+      { "name": "drawer front", "shape": "box", "size": { "x": 70, "y": 7.6, "z": 1.8 }, "cornerRadius": 0.4, "position": { "x": 0, "y": 68.4, "z": 29.4 }, "material": "wood" },
+      { "name": "front aprons", "shape": "box", "size": { "x": 26.6, "y": 8, "z": 2.4 }, "position": { "x": 49.3, "y": 68.4, "z": 29 }, "mirror": ["x"], "material": "wood" },
+      { "name": "drawer pull", "shape": "extrusion", "height": 1.2, "points": [[3.4, 0], [3.28, -0.88], [2.94, -1.7], [2.4, -2.4], [1.7, -2.94], [0.88, -3.28], [0, -3.4], [-0.88, -3.28], [-1.7, -2.94], [-2.4, -2.4], [-2.94, -1.7], [-3.28, -0.88], [-3.4, 0]], "position": { "x": 0, "y": 71, "z": 31.5 }, "rotation": { "x": -90 }, "material": "pulls" }
+    ]
+  },
+  "materialSlots": {
+    "wood": { "label": "Wood", "default": "wood.oak-natural", "allowed": ["wood.*"] },
+    "pulls": { "label": "Pull", "default": "wood.walnut-dark", "allowed": ["wood.*", "metal.brass"] }
+  },
+  "surfaces": [{ "name": "top", "height": 75, "width": 136, "depth": 61 }],
+  "notes": "Own design, not a specific product: a solid oak writing desk with tapered round legs and one wide, slim drawer under the top, with a walnut half-moon pull like the kitchen's. Top 75 cm high, 25 mm thick; 64 cm of knee room under the drawer. Pairs with \"Desk chair, Capitol Complex\"."
+}

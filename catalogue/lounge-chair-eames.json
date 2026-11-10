@@ -1,0 +1,46 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "lounge-chair-eames",
+  "name": "Lounge chair, Eames",
+  "category": "seating",
+  "tags": ["living room", "reading", "mid-century", "vitra", "eames"],
+  "dimensions": { "width": 84, "depth": 85, "height": 84 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "base leg 1", "shape": "extrusion", "height": 3, "points": [[2, -2.4], [25, -1.6], [27.5, -0.9], [28, 0], [27.5, 0.9], [25, 1.6], [2, 2.4]], "position": { "x": 0, "y": 8.5, "z": 10.29 }, "rotation": { "y": 90, "z": -12 }, "material": "base" },
+      { "name": "glide 1", "shape": "cylinder", "radius": 1.6, "height": 2, "position": { "x": 0, "y": 1, "z": 36.79 }, "plan": "hidden", "material": "base" },
+      { "name": "base leg 2", "shape": "extrusion", "height": 3, "points": [[2, -2.4], [25, -1.6], [27.5, -0.9], [28, 0], [27.5, 0.9], [25, 1.6], [2, 2.4]], "position": { "x": 0, "y": 8.5, "z": 10.29 }, "rotation": { "y": 162, "z": -12 }, "material": "base" },
+      { "name": "glide 2", "shape": "cylinder", "radius": 1.6, "height": 2, "position": { "x": -25.2, "y": 1, "z": 18.48 }, "plan": "hidden", "material": "base" },
+      { "name": "base leg 3", "shape": "extrusion", "height": 3, "points": [[2, -2.4], [25, -1.6], [27.5, -0.9], [28, 0], [27.5, 0.9], [25, 1.6], [2, 2.4]], "position": { "x": 0, "y": 8.5, "z": 10.29 }, "rotation": { "y": 234, "z": -12 }, "material": "base" },
+      { "name": "glide 3", "shape": "cylinder", "radius": 1.6, "height": 2, "position": { "x": -15.58, "y": 1, "z": -11.15 }, "plan": "hidden", "material": "base" },
+      { "name": "base leg 4", "shape": "extrusion", "height": 3, "points": [[2, -2.4], [25, -1.6], [27.5, -0.9], [28, 0], [27.5, 0.9], [25, 1.6], [2, 2.4]], "position": { "x": 0, "y": 8.5, "z": 10.29 }, "rotation": { "y": 306, "z": -12 }, "material": "base" },
+      { "name": "glide 4", "shape": "cylinder", "radius": 1.6, "height": 2, "position": { "x": 15.58, "y": 1, "z": -11.15 }, "plan": "hidden", "material": "base" },
+      { "name": "base leg 5", "shape": "extrusion", "height": 3, "points": [[2, -2.4], [25, -1.6], [27.5, -0.9], [28, 0], [27.5, 0.9], [25, 1.6], [2, 2.4]], "position": { "x": 0, "y": 8.5, "z": 10.29 }, "rotation": { "y": 18, "z": -12 }, "material": "base" },
+      { "name": "glide 5", "shape": "cylinder", "radius": 1.6, "height": 2, "position": { "x": 25.2, "y": 1, "z": 18.48 }, "plan": "hidden", "material": "base" },
+      { "name": "hub", "shape": "cylinder", "radius": 4.5, "height": 7, "position": { "x": 0, "y": 10, "z": 10.29 }, "material": "base" },
+      { "name": "swivel", "shape": "cylinder", "radius": 3, "height": 9, "position": { "x": 0, "y": 17.5, "z": 10.29 }, "material": "base" },
+      { "name": "seat shell", "shape": "box", "size": { "x": 66, "y": 3.5, "z": 50 }, "cornerRadius": 1.6, "position": { "x": 0, "y": 24.42, "z": 16.3 }, "rotation": { "x": -8 }, "material": "shell" },
+      { "name": "seat cushion", "shape": "box", "size": { "x": 60, "y": 11, "z": 52 }, "cornerRadius": 5, "position": { "x": 0, "y": 31.6, "z": 16.29 }, "rotation": { "x": -8 }, "material": "cushions" },
+      { "name": "back shell", "shape": "box", "size": { "x": 66, "y": 40, "z": 3.5 }, "cornerRadius": 1.6, "position": { "x": 0, "y": 44.75, "z": -26.58 }, "rotation": { "x": -27 }, "material": "shell" },
+      { "name": "back cushion", "shape": "box", "size": { "x": 60, "y": 37, "z": 10 }, "cornerRadius": 4.5, "position": { "x": 0, "y": 47.81, "z": -20.56 }, "rotation": { "x": -27 }, "material": "cushions" },
+      { "name": "headrest shell", "shape": "box", "size": { "x": 60, "y": 18, "z": 3.5 }, "cornerRadius": 1.6, "position": { "x": 0, "y": 72.78, "z": -38.58 }, "rotation": { "x": -17 }, "material": "shell" },
+      { "name": "headrest cushion", "shape": "box", "size": { "x": 54, "y": 16, "z": 10 }, "cornerRadius": 4.5, "position": { "x": 0, "y": 74.76, "z": -32.13 }, "rotation": { "x": -17 }, "material": "cushions" },
+      { "name": "arm braces", "shape": "box", "size": { "x": 1.6, "y": 22, "z": 6 }, "position": { "x": 34.8, "y": 39.5, "z": 8.29 }, "rotation": { "x": -8 }, "mirror": ["x"], "material": "base" },
+      { "name": "arm mounts", "shape": "box", "size": { "x": 4, "y": 3.5, "z": 14 }, "position": { "x": 33.5, "y": 52, "z": -23.71 }, "mirror": ["x"], "material": "base" },
+      { "name": "arm shells", "shape": "box", "size": { "x": 9, "y": 2, "z": 50 }, "cornerRadius": 0.8, "position": { "x": 37.5, "y": 52.2, "z": 4.29 }, "rotation": { "x": -6 }, "mirror": ["x"], "material": "shell" },
+      { "name": "arm cushions", "shape": "box", "size": { "x": 8, "y": 4.5, "z": 48 }, "cornerRadius": 2.2, "position": { "x": 37.5, "y": 55.2, "z": 4.29 }, "rotation": { "x": -6 }, "mirror": ["x"], "material": "cushions" },
+      { "name": "back braces", "shape": "box", "size": { "x": 5, "y": 44, "z": 1.4 }, "position": { "x": 17, "y": 46.66, "z": -30.22 }, "rotation": { "x": -27 }, "mirror": ["x"], "material": "base" }
+    ]
+  },
+  "materialSlots": {
+    "shell": { "label": "Shells", "default": "wood.walnut", "allowed": ["wood.walnut", "wood.palisander", "wood.oak-natural", "wood.ash-black", "wood.oak-dark"] },
+    "cushions": { "label": "Cushions", "default": "leather.black", "allowed": ["leather.*", "fabric.*"] },
+    "base": { "label": "Base and arms", "default": "metal.black-matte", "allowed": ["metal.black-matte", "metal.chrome"] }
+  },
+  "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
+  "productUrl": "https://www.vitra.com/en-ch/product/lounge-chair",
+  "notes": "Vitra Eames Lounge Chair, classic size (design Charles & Ray Eames, 1956): W 84 × D 85 × H 84 cm (the depth grows to 91 cm when reclined), seat height 38 cm, seat depth 57 cm, as listed by Finnish Design Shop. Moulded plywood shells (walnut, palisander, oak or black ash), leather cushions, five-star aluminium swivel base. The shell angles are taken from photos. Pairs with \"Ottoman, Eames\". Clearance: 45 cm of legroom in front."
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "sideboard-fluted-walnut-180",
+  "name": "Sideboard 180, fluted walnut",
+  "category": "storage",
+  "tags": ["living room", "dining", "fluted", "walnut"],
+  "dimensions": { "width": 180, "depth": 46, "height": 72 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "base legs, front", "shape": "box", "size": { "x": 2, "y": 12, "z": 2 }, "position": { "x": 85, "y": 6, "z": 16 }, "mirror": ["x"], "material": "base" },
+      { "name": "base legs, back", "shape": "box", "size": { "x": 2, "y": 12, "z": 2 }, "position": { "x": 85, "y": 6, "z": -20 }, "mirror": ["x"], "material": "base" },
+      { "name": "base rails, long", "shape": "box", "size": { "x": 168, "y": 1.6, "z": 2 }, "position": { "x": 0, "y": 11.2, "z": 16 }, "repeat": { "count": 2, "step": { "x": 0, "y": 0, "z": -36 } }, "material": "base" },
+      { "name": "base rails, short", "shape": "box", "size": { "x": 2, "y": 1.6, "z": 34 }, "position": { "x": 85, "y": 11.2, "z": -2 }, "mirror": ["x"], "material": "base" },
+      { "name": "body", "shape": "box", "size": { "x": 178, "y": 58, "z": 42 }, "position": { "x": 0, "y": 41, "z": -2 }, "material": "wood" },
+      { "name": "top", "shape": "box", "size": { "x": 180, "y": 2, "z": 44 }, "cornerRadius": 0.6, "position": { "x": 0, "y": 71, "z": -1 }, "material": "wood" },
+      { "name": "flutes", "shape": "cylinder", "radius": 1.45, "height": 54, "position": { "x": -85.55, "y": 41, "z": 19 }, "repeat": { "count": 60, "step": { "x": 2.9, "y": 0, "z": 0 } }, "plan": "hidden", "material": "wood" },
+      { "name": "door gaps", "shape": "box", "size": { "x": 0.3, "y": 54, "z": 1.6 }, "position": { "x": -43.5, "y": 41, "z": 19.6 }, "repeat": { "count": 3, "step": { "x": 43.5, "y": 0, "z": 0 } }, "plan": "hidden", "material": "base" },
+      { "name": "knobs", "shape": "cylinder", "radius": 1.1, "height": 2.2, "position": { "x": 40.5, "y": 56, "z": 21.55 }, "rotation": { "x": 90 }, "mirror": ["x"], "repeat": { "count": 2, "step": { "x": 6, "y": 0, "z": 0 } }, "plan": "hidden", "material": "metal" }
+    ]
+  },
+  "materialSlots": {
+    "wood": { "label": "Wood", "default": "wood.walnut", "allowed": ["wood.*", "lacquer.*"] },
+    "base": { "label": "Base", "default": "metal.black-matte", "allowed": ["metal.black-matte", "metal.brass"] },
+    "metal": { "label": "Knobs", "default": "metal.brass", "allowed": ["metal.brass", "metal.black-matte"] }
+  },
+  "surfaces": [{ "name": "top", "height": 72, "width": 176, "depth": 40, "center": [0, -1] }],
+  "clearance": { "front": 60, "note": "Room to open the doors" },
+  "notes": "Own design, not a specific product: a walnut sideboard with four fluted doors and small brass knobs on a slim black steel base. 180 × 46 × 72 cm. Clearance: 60 cm for the doors."
+}

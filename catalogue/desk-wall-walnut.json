@@ -1,0 +1,31 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "desk-wall-walnut",
+  "name": "Wall desk, walnut",
+  "category": "table",
+  "tags": ["office", "study", "workspace", "floating", "small spaces"],
+  "dimensions": { "width": 110, "depth": 45, "height": 45 },
+  "placement": { "type": "wall", "defaultElevation": 63, "minElevation": 40, "maxElevation": 110 },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "drawer box", "shape": "box", "size": { "x": 50, "y": 8, "z": 37.5 }, "position": { "x": -24, "y": 4, "z": 0.75 }, "material": "wood" },
+      { "name": "drawer front", "shape": "box", "size": { "x": 49.6, "y": 7.6, "z": 1.6 }, "cornerRadius": 0.3, "position": { "x": -24, "y": 4.1, "z": 20.3 }, "material": "wood" },
+      { "name": "knob", "shape": "cylinder", "radius": 1, "height": 1.4, "position": { "x": -24, "y": 4.1, "z": 21.8 }, "rotation": { "x": 90 }, "plan": "hidden", "material": "metal" },
+      { "name": "desk board", "shape": "box", "size": { "x": 110, "y": 4, "z": 45 }, "cornerRadius": 0.8, "position": { "x": 0, "y": 10, "z": 0 }, "material": "wood" },
+      { "name": "back panel", "shape": "box", "size": { "x": 106, "y": 33, "z": 1.6 }, "cornerRadius": 0.4, "position": { "x": 0, "y": 28.5, "z": -21.7 }, "material": "wood" },
+      { "name": "side cheeks", "shape": "extrusion", "height": 2, "points": [[22.5, 12], [2.5, 12], [2.8, 17.73], [3.71, 23.29], [5.18, 28.5], [7.18, 33.21], [9.64, 37.28], [12.5, 40.58], [15.66, 43.01], [19.03, 44.5], [22.5, 45]], "position": { "x": 55, "y": 0, "z": 0 }, "rotation": { "x": -90, "y": -90 }, "mirror": ["x"], "material": "wood" },
+      { "name": "shelf", "shape": "box", "size": { "x": 106, "y": 1.8, "z": 14 }, "cornerRadius": 0.4, "position": { "x": 0, "y": 30, "z": -13.9 }, "material": "wood" }
+    ]
+  },
+  "materialSlots": {
+    "wood": { "label": "Wood", "default": "wood.walnut", "allowed": ["wood.*", "lacquer.*"] },
+    "metal": { "label": "Knob", "default": "metal.brass", "allowed": ["metal.brass", "metal.black-matte"] }
+  },
+  "surfaces": [
+    { "name": "desk", "height": 12, "width": 106, "depth": 41, "center": [0, 1] },
+    { "name": "shelf", "height": 31, "width": 104, "depth": 12, "center": [0, -13.5] }
+  ],
+  "notes": "Own design, not a specific product: a floating walnut desk that hangs on the wall, with a drawer under the board and a shelf in a niche above it. 110 × 45 cm. At the default elevation of 63 cm the board's top is 75 cm above the floor; the height can be changed in Inspect. Knee room under the drawer: 63 cm; 17 cm under the shelf."
+}

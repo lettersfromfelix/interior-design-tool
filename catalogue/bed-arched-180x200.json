@@ -1,0 +1,33 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "bed-arched-180x200",
+  "name": "Bed 180 × 200, arched headboard",
+  "category": "bed",
+  "tags": ["bedroom", "double bed", "upholstered", "boucle"],
+  "dimensions": { "width": 194, "depth": 216, "height": 112 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "feet", "shape": "cylinder", "radius": 2.5, "height": 6, "position": { "x": 88, "y": 3, "z": 96 }, "mirror": ["x", "z"], "plan": "hidden", "material": "feet" },
+      { "name": "headboard feet", "shape": "cylinder", "radius": 2.5, "height": 6, "position": { "x": 88, "y": 3, "z": -103 }, "mirror": ["x"], "plan": "hidden", "material": "feet" },
+      { "name": "base", "shape": "box", "size": { "x": 194, "y": 30, "z": 206 }, "cornerRadius": 6, "position": { "x": 0, "y": 21, "z": 5 }, "material": "frame" },
+      { "name": "headboard", "shape": "extrusion", "height": 10, "points": [[97, 0], [97, 44], [96.06, 54.77], [93.26, 65.21], [88.69, 75], [82.49, 83.85], [74.85, 91.49], [66, 97.69], [56.21, 102.26], [45.77, 105.06], [35, 106], [-35, 106], [-45.77, 105.06], [-56.21, 102.26], [-66, 97.69], [-74.85, 91.49], [-82.49, 83.85], [-88.69, 75], [-93.26, 65.21], [-96.06, 54.77], [-97, 44], [-97, 0]], "position": { "x": 0, "y": 6, "z": -98 }, "rotation": { "x": -90 }, "material": "frame" },
+      { "name": "mattress", "shape": "box", "size": { "x": 180, "y": 22, "z": 200 }, "cornerRadius": 5, "position": { "x": 0, "y": 47, "z": 6 }, "material": "bedding" },
+      { "name": "duvet", "shape": "box", "size": { "x": 186, "y": 9, "z": 146 }, "cornerRadius": 4, "position": { "x": 0, "y": 62, "z": 31 }, "material": "duvet" },
+      { "name": "throw", "shape": "box", "size": { "x": 192, "y": 5, "z": 42 }, "cornerRadius": 2.5, "position": { "x": 0, "y": 67.5, "z": 82 }, "material": "throw" },
+      { "name": "pillows", "shape": "box", "size": { "x": 74, "y": 14, "z": 46 }, "cornerRadius": 7, "position": { "x": 42, "y": 65, "z": -68 }, "mirror": ["x"], "material": "bedding" },
+      { "name": "cushions", "shape": "box", "size": { "x": 52, "y": 34, "z": 13 }, "cornerRadius": 6.5, "position": { "x": 30, "y": 76, "z": -40 }, "rotation": { "x": -18 }, "mirror": ["x"], "material": "throw" }
+    ]
+  },
+  "materialSlots": {
+    "frame": { "label": "Bed and headboard", "default": "fabric.boucle-cream", "allowed": ["fabric.*", "leather.*"] },
+    "bedding": { "label": "Mattress and pillows", "default": "fabric.cotton-white", "allowed": ["fabric.*"] },
+    "duvet": { "label": "Duvet", "default": "fabric.linen-natural", "allowed": ["fabric.*"] },
+    "throw": { "label": "Throw and cushions", "default": "fabric.velvet-rust", "allowed": ["fabric.*"] },
+    "feet": { "label": "Feet", "default": "wood.oak-dark", "allowed": ["wood.*", "metal.black-matte", "metal.brass"] }
+  },
+  "clearance": { "left": 60, "right": 60, "note": "Room to get in and make the bed" },
+  "notes": "Own design, not a specific product: an upholstered bed for a 180 × 200 cm mattress with a tall headboard whose upper corners are rounded into an arch. 194 × 216 cm, headboard 112 cm; mattress top 58 cm. Shown made up, with a throw and two cushions. Clearance: 60 cm on both sides to get in and make the bed."
+}

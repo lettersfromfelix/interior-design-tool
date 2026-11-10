@@ -1,0 +1,41 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "display-cabinet-oak",
+  "name": "Display cabinet, oak and glass",
+  "category": "storage",
+  "tags": ["living room", "dining", "vitrine", "glass", "books"],
+  "dimensions": { "width": 90, "depth": 40, "height": 178 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "legs", "shape": "cylinder", "radius": 1.5, "radiusTop": 2, "height": 12, "position": { "x": 42, "y": 6, "z": 17 }, "mirror": ["x", "z"], "material": "wood" },
+      { "name": "bottom", "shape": "box", "size": { "x": 90, "y": 3, "z": 40 }, "cornerRadius": 0.5, "position": { "x": 0, "y": 13.5, "z": 0 }, "material": "wood" },
+      { "name": "top", "shape": "box", "size": { "x": 90, "y": 3, "z": 40 }, "cornerRadius": 0.5, "position": { "x": 0, "y": 176.5, "z": 0 }, "material": "wood" },
+      { "name": "corner posts", "shape": "box", "size": { "x": 3, "y": 160, "z": 3 }, "position": { "x": 43.5, "y": 95, "z": 18.5 }, "mirror": ["x", "z"], "material": "wood" },
+      { "name": "back", "shape": "box", "size": { "x": 84, "y": 160, "z": 1.5 }, "position": { "x": 0, "y": 95, "z": -19.25 }, "material": "wood" },
+      { "name": "side glass", "shape": "box", "size": { "x": 0.6, "y": 160, "z": 34 }, "position": { "x": 43.5, "y": 95, "z": 0 }, "mirror": ["x"], "material": "glass" },
+      { "name": "door stiles", "shape": "box", "size": { "x": 2.4, "y": 160, "z": 2 }, "position": { "x": 40.8, "y": 95, "z": 18 }, "mirror": ["x"], "material": "wood" },
+      { "name": "door stiles, centre", "shape": "box", "size": { "x": 2.4, "y": 160, "z": 2 }, "position": { "x": 1.3, "y": 95, "z": 18 }, "mirror": ["x"], "material": "wood" },
+      { "name": "door rails", "shape": "box", "size": { "x": 36.4, "y": 2.4, "z": 2 }, "position": { "x": 21.1, "y": 16.2, "z": 18 }, "mirror": ["x"], "repeat": { "count": 2, "step": { "x": 0, "y": 157.6, "z": 0 } }, "material": "wood" },
+      { "name": "door glass", "shape": "box", "size": { "x": 36.4, "y": 155.2, "z": 0.5 }, "position": { "x": 21.1, "y": 95, "z": 18 }, "mirror": ["x"], "material": "glass" },
+      { "name": "glass shelves", "shape": "box", "size": { "x": 83, "y": 0.8, "z": 32 }, "position": { "x": 0, "y": 55, "z": -1.5 }, "repeat": { "count": 3, "step": { "x": 0, "y": 40, "z": 0 } }, "material": "glass" },
+      { "name": "knobs", "shape": "cylinder", "radius": 0.9, "height": 1.4, "position": { "x": 3.2, "y": 95, "z": 19.7 }, "rotation": { "x": 90 }, "mirror": ["x"], "plan": "hidden", "material": "metal" }
+    ]
+  },
+  "materialSlots": {
+    "wood": { "label": "Wood", "default": "wood.oak-natural", "allowed": ["wood.*", "lacquer.*"] },
+    "glass": { "label": "Glass", "default": "glass.clear", "allowed": ["glass.clear", "glass.smoke"] },
+    "metal": { "label": "Knobs", "default": "metal.brass", "allowed": ["metal.brass", "metal.black-matte"] }
+  },
+  "surfaces": [
+    { "name": "bottom", "height": 15, "width": 82, "depth": 32, "center": [0, -1.5], "maxItemHeight": 38 },
+    { "name": "shelf 1", "height": 55.4, "width": 82, "depth": 32, "center": [0, -1.5], "maxItemHeight": 38 },
+    { "name": "shelf 2", "height": 95.4, "width": 82, "depth": 32, "center": [0, -1.5], "maxItemHeight": 38 },
+    { "name": "shelf 3", "height": 135.4, "width": 82, "depth": 32, "center": [0, -1.5], "maxItemHeight": 38 },
+    { "name": "top", "height": 178, "width": 86, "depth": 36 }
+  ],
+  "clearance": { "front": 60, "note": "Room to open the doors" },
+  "notes": "Own design, not a specific product: a slender oak vitrine with glass sides, two glass doors and three glass shelves on short tapered legs. Things up to 38 cm high can stand on the bottom and on each shelf. Clearance: 60 cm for the doors."
+}

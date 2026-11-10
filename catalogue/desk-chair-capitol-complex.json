@@ -1,0 +1,36 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "desk-chair-capitol-complex",
+  "name": "Desk chair, Capitol Complex",
+  "category": "seating",
+  "tags": ["office", "study", "cane", "cassina", "jeanneret"],
+  "dimensions": { "width": 51, "depth": 58, "height": 81 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "front legs", "shape": "box", "size": { "x": 4, "y": 65.15, "z": 4 }, "position": { "x": 23, "y": 31, "z": 16 }, "rotation": { "x": -17.88 }, "mirror": ["x"], "material": "wood" },
+      { "name": "rear legs", "shape": "box", "size": { "x": 4, "y": 67.62, "z": 4 }, "position": { "x": 23, "y": 31, "z": -13.5 }, "rotation": { "x": 23.53 }, "mirror": ["x"], "material": "wood" },
+      { "name": "armrests", "shape": "box", "size": { "x": 5, "y": 3, "z": 39 }, "cornerRadius": 1, "position": { "x": 23, "y": 63.5, "z": 6.5 }, "mirror": ["x"], "material": "wood" },
+      { "name": "side stretchers", "shape": "box", "size": { "x": 3, "y": 3.5, "z": 41.6 }, "position": { "x": 23, "y": 14, "z": -0.5 }, "mirror": ["x"], "material": "wood" },
+      { "name": "stretcher", "shape": "box", "size": { "x": 42, "y": 3, "z": 3 }, "position": { "x": 0, "y": 14, "z": -0.5 }, "material": "wood" },
+      { "name": "seat front rail", "shape": "box", "size": { "x": 42, "y": 4.5, "z": 3 }, "position": { "x": 0, "y": 40.8, "z": 20.5 }, "material": "wood" },
+      { "name": "seat rear rail", "shape": "box", "size": { "x": 42, "y": 4.5, "z": 3 }, "position": { "x": 0, "y": 40.8, "z": -19.5 }, "material": "wood" },
+      { "name": "seat side rails", "shape": "box", "size": { "x": 3, "y": 4.5, "z": 37 }, "position": { "x": 19.5, "y": 40.8, "z": 0.5 }, "mirror": ["x"], "material": "wood" },
+      { "name": "seat cane", "shape": "box", "size": { "x": 37, "y": 1.2, "z": 37 }, "position": { "x": 0, "y": 42.4, "z": 0.5 }, "material": "cane" },
+      { "name": "back posts", "shape": "box", "size": { "x": 2.6, "y": 17.07, "z": 2.6 }, "position": { "x": 16, "y": 49.5, "z": -20.25 }, "rotation": { "x": -5.04 }, "mirror": ["x"], "material": "wood" },
+      { "name": "back rail, top", "shape": "lathe", "arc": 120, "profile": [[26, 77.5], [28.6, 77.5], [28.6, 81], [26, 81], [26, 77.5]], "position": { "x": 0, "y": 0, "z": 1.1 }, "rotation": { "y": 210 }, "material": "wood" },
+      { "name": "back rail, bottom", "shape": "lathe", "arc": 120, "profile": [[26, 56.5], [28.6, 56.5], [28.6, 59.5], [26, 59.5], [26, 56.5]], "position": { "x": 0, "y": 0, "z": 1.1 }, "rotation": { "y": 210 }, "material": "wood" },
+      { "name": "back cane", "shape": "lathe", "arc": 120, "profile": [[26.8, 59.5], [27.8, 59.5], [27.8, 77.5], [26.8, 77.5], [26.8, 59.5]], "position": { "x": 0, "y": 0, "z": 1.1 }, "rotation": { "y": 210 }, "material": "cane" },
+      { "name": "back stiles", "shape": "box", "size": { "x": 3, "y": 24.5, "z": 3 }, "position": { "x": 23.6, "y": 68.75, "z": -12.55 }, "mirror": ["x"], "material": "wood" }
+    ]
+  },
+  "materialSlots": {
+    "wood": { "label": "Wood", "default": "wood.teak", "allowed": ["wood.teak", "wood.oak-natural", "wood.ash-black"] },
+    "cane": { "label": "Seat and back", "default": "cane.natural", "allowed": ["cane.*"] }
+  },
+  "clearance": { "back": 45, "note": "Room to push the chair back from the desk" },
+  "productUrl": "https://www.cassina.com/ww/en/products/capitol-complex-office-chair.html",
+  "notes": "Cassina 051 Capitol Complex Office Chair (Hommage à Pierre Jeanneret, 1950s design, reissued 2019): H 81 × W 51 × D 58 cm, seat height 43 cm (1stDibs listing). Solid teak or oak with inverted-V side supports carrying the armrests, a seat in woven Vienna cane and a curved cane backrest band (Cassina). Clearance: 45 cm behind it to push back from the desk."
+}

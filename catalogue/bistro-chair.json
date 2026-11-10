@@ -1,0 +1,30 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "bistro-chair",
+  "name": "Bistro chair, Fermob",
+  "category": "seating",
+  "tags": ["balcony", "outdoor", "folding", "fermob", "dining"],
+  "dimensions": { "width": 42, "depth": 50, "height": 82 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "front legs", "shape": "box", "size": { "x": 2.5, "y": 46.22, "z": 0.9 }, "position": { "x": 19.6, "y": 23, "z": 21.25 }, "rotation": { "x": -5.59 }, "mirror": ["x"], "material": "metal" },
+      { "name": "rear legs", "shape": "box", "size": { "x": 2.5, "y": 47.13, "z": 0.9 }, "position": { "x": 19.6, "y": 23.5, "z": -19.25 }, "rotation": { "x": 4.26 }, "mirror": ["x"], "material": "metal" },
+      { "name": "back uprights", "shape": "box", "size": { "x": 2.5, "y": 36.19, "z": 0.9 }, "position": { "x": 18.8, "y": 64.25, "z": -21 }, "rotation": { "x": -11.15, "z": 1.27 }, "mirror": ["x"], "material": "metal" },
+      { "name": "seat rails", "shape": "box", "size": { "x": 0.9, "y": 2.6, "z": 38 }, "position": { "x": 19.6, "y": 45, "z": 1 }, "mirror": ["x"], "material": "metal" },
+      { "name": "seat slats", "shape": "box", "size": { "x": 38.2, "y": 0.7, "z": 4.3 }, "position": { "x": 0, "y": 46.3, "z": 16 }, "repeat": { "count": 7, "step": { "x": 0, "y": 0, "z": -5.3 } }, "material": "metal" },
+      { "name": "back slats", "shape": "box", "size": { "x": 37, "y": 6.5, "z": 0.7 }, "position": { "x": 0, "y": 64, "z": -21.4 }, "rotation": { "x": -11 }, "repeat": { "count": 2, "step": { "x": 0, "y": 11, "z": -2.1 } }, "material": "metal" },
+      { "name": "crossbar", "shape": "box", "size": { "x": 39.2, "y": 2.2, "z": 0.8 }, "position": { "x": 0, "y": 13, "z": 21.6 }, "material": "metal" },
+      { "name": "rear crossbar", "shape": "box", "size": { "x": 39.2, "y": 2.2, "z": 0.8 }, "position": { "x": 0, "y": 15, "z": -19.6 }, "material": "metal" },
+      { "name": "feet", "shape": "cylinder", "radius": 1, "height": 0.8, "position": { "x": 19.6, "y": 0.4, "z": 23.5 }, "mirror": ["x"], "plan": "hidden", "material": "metal" }
+    ]
+  },
+  "materialSlots": {
+    "metal": { "label": "Colour", "default": "metal.powder-rosemary", "allowed": ["metal.powder-rosemary", "metal.powder-red-ochre", "metal.powder-clay", "metal.black-matte"] }
+  },
+  "clearance": { "back": 45, "note": "Room to pull the chair out from the table" },
+  "productUrl": "https://www.fermob.com/en/products/bistro-chair",
+  "notes": "Fermob Bistro folding chair: W 42 × D 50 × H 82 cm, seat height 46 cm (Archiproducts, Made in Design). Lacquered steel frame with curved steel slats, designed in 1889; the frame is simplified. Pairs with \"Bistro table, Fermob Ø 60\". Clearance: 45 cm behind it to pull it out."
+}

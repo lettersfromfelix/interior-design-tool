@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "lounge-chair-pacha",
+  "name": "Lounge chair, Gubi Pacha",
+  "category": "seating",
+  "tags": ["living room", "reading", "low", "gubi", "pierre paulin"],
+  "dimensions": { "width": 85, "depth": 77, "height": 65 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "base", "shape": "box", "size": { "x": 46, "y": 8, "z": 40 }, "cornerRadius": 3, "position": { "x": 0, "y": 4, "z": 3 }, "material": "base" },
+      { "name": "seat", "shape": "sphere", "radius": 1, "scale": { "x": 42, "y": 14.5, "z": 34.5 }, "position": { "x": 0, "y": 22.5, "z": 3.5 }, "material": "upholstery" },
+      { "name": "back", "shape": "sphere", "radius": 1, "scale": { "x": 40.5, "y": 25, "z": 18 }, "position": { "x": 0, "y": 40, "z": -20 }, "rotation": { "x": -8 }, "material": "upholstery" }
+    ]
+  },
+  "materialSlots": {
+    "upholstery": { "label": "Upholstery", "default": "fabric.velvet-rust", "allowed": ["fabric.*", "leather.*"] },
+    "base": { "label": "Base", "default": "lacquer.black", "allowed": ["lacquer.black", "metal.brass"] }
+  },
+  "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
+  "productUrl": "https://www.gubi.com/en/products/pacha-lounge-chair",
+  "notes": "Gubi Pacha Lounge Chair without armrests (design Pierre Paulin, 1975): W 85 × D 77 × H 65 cm, seat height 37 cm, seat depth 54 cm, per Gubi's fact sheet (via smow and Scandinavia Design). A low, fully upholstered shell on a small lacquered base; the swivel version is a little higher. Rust velvet is a suggestion. Clearance: 45 cm of legroom in front."
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "ottoman-eames",
+  "name": "Ottoman, Eames",
+  "category": "seating",
+  "tags": ["living room", "footstool", "mid-century", "vitra", "eames"],
+  "dimensions": { "width": 63, "depth": 56, "height": 42 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "base legs", "shape": "extrusion", "height": 2.8, "points": [[2, -2.2], [23, -1.5], [25, -0.8], [25.5, 0], [25, 0.8], [23, 1.5], [2, 2.2]], "position": { "x": 0, "y": 7.5, "z": 0 }, "rotation": { "y": 45, "z": -10 }, "repeatAround": { "count": 4, "step": 90 }, "material": "base" },
+      { "name": "glides", "shape": "cylinder", "radius": 1.5, "height": 2, "position": { "x": 16.97, "y": 1, "z": 16.97 }, "mirror": ["x", "z"], "plan": "hidden", "material": "base" },
+      { "name": "hub", "shape": "cylinder", "radius": 4, "height": 6, "position": { "x": 0, "y": 9, "z": 0 }, "material": "base" },
+      { "name": "column", "shape": "cylinder", "radius": 2.6, "height": 13, "position": { "x": 0, "y": 17.5, "z": 0 }, "material": "base" },
+      { "name": "shell", "shape": "box", "size": { "x": 62, "y": 3.5, "z": 54 }, "cornerRadius": 1.6, "position": { "x": 0, "y": 26.5, "z": 0 }, "rotation": { "x": 4 }, "material": "shell" },
+      { "name": "cushion", "shape": "box", "size": { "x": 57, "y": 11, "z": 50 }, "cornerRadius": 4.5, "position": { "x": 0, "y": 33.7, "z": 0.5 }, "rotation": { "x": 4 }, "material": "cushions" }
+    ]
+  },
+  "materialSlots": {
+    "shell": { "label": "Shell", "default": "wood.walnut", "allowed": ["wood.walnut", "wood.palisander", "wood.oak-natural", "wood.ash-black", "wood.oak-dark"] },
+    "cushions": { "label": "Cushion", "default": "leather.black", "allowed": ["leather.*", "fabric.*"] },
+    "base": { "label": "Base", "default": "metal.black-matte", "allowed": ["metal.black-matte", "metal.chrome"] }
+  },
+  "productUrl": "https://www.vitra.com/en-ch/product/lounge-chair",
+  "notes": "Vitra Eames Ottoman, classic size (design Charles & Ray Eames, 1956): W 63 × D 56 × H 42 cm, as listed by Finnish Design Shop. Moulded plywood shell with a leather cushion on a four-star aluminium base. Pairs with \"Lounge chair, Eames\"."
+}

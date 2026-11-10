@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "floor-lamp-ic-f2",
+  "name": "Floor lamp, Flos IC F2",
+  "category": "lighting",
+  "tags": ["living room", "reading", "flos", "globe", "brass"],
+  "dimensions": { "width": 38, "depth": 38, "height": 185.2 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "base", "shape": "lathe", "profile": [[0, 0], [19, 0], [19, 0.7], [18.3, 1.4], [12, 1.9], [0, 2]], "position": { "x": 0, "y": 0, "z": 0 }, "material": "metal" },
+      { "name": "stem", "shape": "cylinder", "radius": 0.6, "height": 152.6, "position": { "x": 0, "y": 78.3, "z": 0 }, "material": "metal" },
+      { "name": "cup", "shape": "torus", "radius": 3.6, "tube": 0.45, "position": { "x": 0, "y": 154.9, "z": 0 }, "plan": "hidden", "material": "metal" },
+      { "name": "globe", "shape": "sphere", "radius": 15, "position": { "x": 0, "y": 170.2, "z": 0 }, "material": "globe" }
+    ]
+  },
+  "materialSlots": {
+    "metal": { "label": "Base and stem", "default": "metal.brass", "allowed": ["metal.brass", "metal.black-matte", "metal.chrome"] },
+    "globe": { "label": "Globe", "default": "glass.opal-lit", "allowed": ["glass.opal-lit", "glass.opal"] }
+  },
+  "productUrl": "https://flos.com/en/products/floor/ic-lights/",
+  "notes": "Flos IC Lights F2 (design Michael Anastassiades, 2014): H 185.2 cm, round base Ø 38 cm, hand-blown opal glass sphere Ø 30 cm balanced on a slender stem, in brass or black (lights.co.uk). The globe is shown lit."
+}

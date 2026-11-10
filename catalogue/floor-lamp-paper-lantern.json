@@ -1,0 +1,41 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "floor-lamp-paper-lantern",
+  "name": "Floor lamp, paper lantern",
+  "category": "lighting",
+  "tags": ["living room", "bedroom", "washi", "akari", "japanese"],
+  "dimensions": { "width": 44, "depth": 44, "height": 150.4 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "legs", "shape": "cylinder", "radius": 0.55, "height": 32.44, "position": { "x": 11.3, "y": 13, "z": 0 }, "rotation": { "z": 36.73 }, "repeatAround": { "count": 3, "step": 120 }, "material": "frame" },
+      { "name": "feet", "shape": "cylinder", "radius": 1.2, "height": 0.8, "position": { "x": 21, "y": 0.4, "z": 0 }, "repeatAround": { "count": 3, "step": 120 }, "plan": "hidden", "material": "frame" },
+      { "name": "lower ring", "shape": "torus", "radius": 14.28, "tube": 0.35, "position": { "x": 0, "y": 9, "z": 0 }, "plan": "hidden", "material": "frame" },
+      { "name": "hub", "shape": "cylinder", "radius": 1.6, "height": 3, "position": { "x": 0, "y": 26, "z": 0 }, "material": "frame" },
+      { "name": "stem", "shape": "cylinder", "radius": 0.6, "height": 66, "position": { "x": 0, "y": 59, "z": 0 }, "material": "frame" },
+      { "name": "shade holder", "shape": "torus", "radius": 6, "tube": 0.3, "position": { "x": 0, "y": 74, "z": 0 }, "plan": "hidden", "material": "frame" },
+      { "name": "shade", "shape": "lathe", "profile": [[18.4, 72], [19.6, 83], [20.2, 98], [20.4, 111], [20.2, 124], [19.6, 139], [18.4, 150], [18.1, 149.97], [19.3, 138.98], [19.9, 123.99], [20.1, 111], [19.9, 98.01], [19.3, 83.02], [18.1, 72.03], [18.4, 72]], "position": { "x": 0, "y": 0, "z": 0 }, "material": "shade" },
+      { "name": "rib 1", "shape": "torus", "radius": 19.13, "tube": 0.2, "position": { "x": 0, "y": 78.5, "z": 0 }, "plan": "hidden", "material": "ribs" },
+      { "name": "rib 2", "shape": "torus", "radius": 19.7, "tube": 0.2, "position": { "x": 0, "y": 85, "z": 0 }, "plan": "hidden", "material": "ribs" },
+      { "name": "rib 3", "shape": "torus", "radius": 19.96, "tube": 0.2, "position": { "x": 0, "y": 91.5, "z": 0 }, "plan": "hidden", "material": "ribs" },
+      { "name": "rib 4", "shape": "torus", "radius": 20.22, "tube": 0.2, "position": { "x": 0, "y": 98, "z": 0 }, "plan": "hidden", "material": "ribs" },
+      { "name": "rib 5", "shape": "torus", "radius": 20.32, "tube": 0.2, "position": { "x": 0, "y": 104.5, "z": 0 }, "plan": "hidden", "material": "ribs" },
+      { "name": "rib 6", "shape": "torus", "radius": 20.42, "tube": 0.2, "position": { "x": 0, "y": 111, "z": 0 }, "plan": "hidden", "material": "ribs" },
+      { "name": "rib 7", "shape": "torus", "radius": 20.32, "tube": 0.2, "position": { "x": 0, "y": 117.5, "z": 0 }, "plan": "hidden", "material": "ribs" },
+      { "name": "rib 8", "shape": "torus", "radius": 20.22, "tube": 0.2, "position": { "x": 0, "y": 124, "z": 0 }, "plan": "hidden", "material": "ribs" },
+      { "name": "rib 9", "shape": "torus", "radius": 19.96, "tube": 0.2, "position": { "x": 0, "y": 130.5, "z": 0 }, "plan": "hidden", "material": "ribs" },
+      { "name": "rib 10", "shape": "torus", "radius": 19.7, "tube": 0.2, "position": { "x": 0, "y": 137, "z": 0 }, "plan": "hidden", "material": "ribs" },
+      { "name": "rib 11", "shape": "torus", "radius": 19.13, "tube": 0.2, "position": { "x": 0, "y": 143.5, "z": 0 }, "plan": "hidden", "material": "ribs" },
+      { "name": "bottom rim", "shape": "torus", "radius": 18.4, "tube": 0.4, "position": { "x": 0, "y": 72, "z": 0 }, "material": "frame" },
+      { "name": "top rim", "shape": "torus", "radius": 18.4, "tube": 0.4, "position": { "x": 0, "y": 150, "z": 0 }, "material": "frame" }
+    ]
+  },
+  "materialSlots": {
+    "shade": { "label": "Shade", "default": "paper.washi-lit", "allowed": ["paper.*"] },
+    "ribs": { "label": "Ribs", "default": "cane.natural", "allowed": ["cane.*", "paper.*", "metal.black-matte"] },
+    "frame": { "label": "Stand", "default": "metal.black-matte", "allowed": ["metal.black-matte", "metal.brass"] }
+  },
+  "notes": "Own design, inspired by Isamu Noguchi's Akari light sculptures, not a specific model: a washi-paper lantern, Ø 41 × 78 cm, with bamboo ribs, on a slender black tripod and stem. The shade is shown lit."
+}
