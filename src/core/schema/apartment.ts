@@ -23,6 +23,11 @@ export const Room = z.strictObject({
   /** Area printed on the floor plan (m²), used for the automatic area check. */
   labelledArea: z.number().positive().nullable().optional(),
   floorMaterial: MaterialId.optional(),
+  /**
+   * Degrees, clockwise seen from above: turns the floor's pattern (tiles, planks) so that it runs parallel to the
+   * room's walls, e.g. in a wing that is rotated on the plan. Default 0: along the plan's axes.
+   */
+  floorRotation: z.number().min(-360).max(360).optional(),
   wallMaterial: MaterialId.optional(),
   hasCeiling: z.boolean().optional(),
   provenance: Provenance,

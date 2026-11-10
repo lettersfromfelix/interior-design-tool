@@ -81,8 +81,12 @@ appears as `<part name>` and its fields as `<part name>.<field>`, e.g. `wall cab
   outline: [x, z][],          // polygon as in the plan (interior walls at their centre line,
                               // exterior walls at the inner face)
   labelledArea?: number,      // m² printed on the plan, checked automatically (±1.5 %)
-  floorMaterial?, wallMaterial?, hasCeiling?, provenance }
+  floorMaterial?, floorRotation?, wallMaterial?, hasCeiling?, provenance }
 ```
+
+`floorRotation` (degrees, clockwise seen from above) turns the floor's pattern so that tiles or planks run parallel to
+the room's walls. Zimmer 13.0 and the bathroom are in the west wing, which is rotated by −13.93° on the plan, so their
+floors use that angle. The bathroom also has its own `floorMaterial` (small beige tiles).
 
 ### Walls
 
@@ -152,9 +156,10 @@ optionally:
 - `repeatAround: { count, step }`, which adds copies rotated by a further `step` degrees each (clockwise from
   above) around the vertical axis through the item's origin (e.g. the bars of a round railing, chairs around a
   round table);
-- `plan: "solid" | "dashed"`, which sets how the part shows in the 2D plan. `solid` (the default) shows it as seen
-  from above. `dashed` shows only a dashed outline of its footprint, the drawing convention for things overhead
-  such as wall cabinets, so it doesn't hide what's below. In 3D it looks the same either way.
+- `plan: "solid" | "dashed" | "hidden"`, which sets how the part shows in the 2D plan. `solid` (the default) shows it
+  as seen from above. `dashed` shows only a dashed outline of its footprint, the drawing convention for things
+  overhead such as wall cabinets, so it doesn't hide what's below. `hidden` leaves it out of the plan, for small
+  details that would only clutter it (the kitchen's door handles, the rain shower). In 3D it looks the same either way.
 
 | `shape` | Fields |
 |---|---|
@@ -212,15 +217,23 @@ without `--force`. After measuring, edit `data/apartment.json` directly.
     roughness?: 0..1, metalness?: 0..1, opacity?: 0..1,
     emissive?: "#RRGGBB", emissiveIntensity?: number,
     pattern?: { type: "wood-grain" | "planks" | "tiles" | "weave" | "noise",
-                color2: "#RRGGBB", scale: number /* cm per repeat */, strength?: 0..1 },
+                color2: "#RRGGBB", scale: number /* cm per repeat */, strength?: 0..1,
+                // tiles only:
+                jointColor?: "#RRGGBB", jointWidth?: number /* cm, default 0.3 */,
+                variation?: 0..1, veins?: 0..1, flecks?: 0..1, fleckColor?: "#RRGGBB" },
     texture?: { map: "data/textures/….jpg", normalMap?: string, repeat: number /* cm */ }
   }] }
 ```
 
-Patterns are generated in the browser at real-world scale (a 60 cm tile is 60 cm), so no image files are needed.
-Groups in use: `paint`, `floor`, `kitchen`, `door`, `frame`, `glass`, `ceramic`, `metal`, `wood`, `lacquer`,
-`plastic`, `fabric`, `leather`. New presets and groups can be added freely. Unknown ids show an issue with suggestions and fall
-back to neutral grey. Catalogue items offer presets per material slot, by id or by group (`"fabric.*"`).
+Patterns are generated in the browser at real-world scale (a 40 cm tile is 40 cm), so no image files are needed.
+For `tiles`, `scale` is the tile's edge. `variation` makes the tiles differ in tone, `veins` adds soft clouds and veins
+in `color2`, and `flecks` adds small dark flecks (`fleckColor`, default a dark `color2`), as in natural stone: the
+floor's limestone tiles use all three, the bathroom's ceramic tiles only a little `variation`. With any of the three,
+one texture holds a block of 5 × 5 different tiles, so the pattern repeats only every five tiles.
+Groups in use: `paint`, `floor`, `kitchen`, `stone`, `tile`, `door`, `frame`, `glass`, `ceramic`, `metal`, `wood`,
+`lacquer`, `plastic`, `fabric`, `leather`. New presets and groups can be added freely. Unknown ids show an issue with
+suggestions and fall back to neutral grey. Catalogue items offer presets per material slot, by id or by group
+(`"fabric.*"`).
 
 ## `layouts/*.json`
 

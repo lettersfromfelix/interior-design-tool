@@ -1,4 +1,4 @@
-import { Box3, Color, DirectionalLight, Group, HemisphereLight, Vector3 } from "three";
+import { AmbientLight, Box3, Color, DirectionalLight, Group, HemisphereLight, Vector3 } from "three";
 import type { ViewMode } from "../state/store";
 import { configureCameraLayers } from "./layers";
 
@@ -21,11 +21,17 @@ const mix = (a: string, b: string, t: number) => new Color(a).lerp(new Color(b),
  * Default lighting: soft sky/ground light plus one directional light with shadows (3D views). Daylight: the
  * directional light becomes the sun at its real position; it shines through the windows, and the ceilings cast
  * shadows too, so only the windows let it in (in 2D as well: sun patches on the plan).
+ *
+ * There is no bounced light in real-time rendering, so two lights stand in for it: one from below for the light the
+ * floor throws back (ceilings and the undersides of things would otherwise be grey), and, while walking, a soft fill
+ * for the light bouncing around a room (the overview keeps more contrast, which helps to read the shapes).
  */
 export class Lights {
   readonly group = new Group();
   private readonly hemi = new HemisphereLight("#ffffff", "#d8d0c2", 1.5);
   private readonly sun = new DirectionalLight("#fff8ef", 1.9);
+  private readonly bounce = new DirectionalLight("#ffffff", 1.3);
+  private readonly fill = new AmbientLight("#ffffff", 0);
   private readonly center = new Vector3();
   private view: ViewMode = "2d";
   private daylight: SunLight | null = null;
@@ -38,7 +44,7 @@ export class Lights {
     s.radius = 3;
     // lintels and ceilings live on the 3D-only layer and must cast shadows too
     configureCameraLayers(s.camera, "3d");
-    this.group.add(this.hemi, this.sun, this.sun.target);
+    this.group.add(this.hemi, this.sun, this.sun.target, this.bounce, this.bounce.target, this.fill);
   }
 
   /** Aim the light and its shadow camera at the apartment. */
@@ -80,12 +86,20 @@ export class Lights {
     this.sun.target.position.copy(this.center);
     this.sun.position.copy(this.center).addScaledVector(dir, 4000);
     this.sun.target.updateMatrixWorld();
+    // straight up from below: lights only what faces down
+    this.bounce.target.position.copy(this.center);
+    this.bounce.position.copy(this.center).setY(-4000);
+    this.bounce.target.updateMatrixWorld();
+    const walk = this.view === "walk";
     if (!d) {
-      this.hemi.intensity = 1.5;
+      this.hemi.intensity = walk ? 1.1 : 1.5;
       this.hemi.color.set("#ffffff");
-      this.hemi.groundColor.set("#d8d0c2");
-      this.sun.intensity = 1.9;
+      // indoors the light from below comes from the floor and the walls too: less beige than outside
+      this.hemi.groundColor.set(walk ? "#e2ded6" : "#d8d0c2");
+      this.sun.intensity = walk ? 1.4 : 1.9;
       this.sun.color.set("#fff8ef");
+      this.bounce.intensity = 1.3;
+      this.fill.intensity = walk ? 1.0 : 0;
       // the default light isn't a real sun: its shadows help in the overview, but not inside the rooms while walking
       this.sun.castShadow = this.view === "3d";
       return;
@@ -98,5 +112,7 @@ export class Lights {
     this.hemi.intensity = 0.45 + 1.2 * day;
     this.hemi.color.copy(mix("#4a5878", "#eef3ff", day));
     this.hemi.groundColor.copy(mix("#2e2a24", "#d6cfc2", day));
+    this.bounce.intensity = 1.1 * day;
+    this.fill.intensity = walk ? 0.6 * day : 0;
   }
 }

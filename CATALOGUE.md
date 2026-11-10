@@ -132,8 +132,9 @@ Every part has a `position`, an optional `rotation`, a `material` (a slot name f
   (clockwise from +x, seen from above) that is `x = r·cos a`, `z = r·sin a`, with `rotation.y = a` if it should face
   outwards. For four identical legs on the diagonals, this and `mirror: ["x", "z"]` give the same result.
 - `plan: "dashed"`: in the 2D plan, draw only a dashed outline of the part's footprint, the drawing convention for
-  things overhead (a wall cabinet, a lamp's arc), so it doesn't hide what is below. The default, `"solid"`, draws it
-  as seen from above. In 3D both look the same.
+  things overhead (a wall cabinet, a lamp's arc), so it doesn't hide what is below. `plan: "hidden"`: leave the part
+  out of the plan altogether, for small details that would only clutter it (handles, a shower head). The default,
+  `"solid"`, draws it as seen from above. In 3D all three look the same.
 
 #### Rotating parts
 
@@ -228,8 +229,8 @@ plane from (x 50, y 100) up to (x 0, y 150). `floor-lamp-arc.json` builds its ar
   `metal.railing`, and `glass.*` offers `glass.black` (the hob) and `glass.clear`. When only some fit, list them.
 - The choice is stored per placed item in the layout file. Picking the default again removes it.
 - Presets live in `data/materials.json`, in groups: `wood`, `lacquer`, `plastic`, `fabric`, `leather`, `metal`, `glass`,
-  `ceramic`, and `paint`, `floor`, `kitchen`, `door`, `frame` for the apartment. For a new colour or finish, add a
-  preset there; see [docs/DATA.md](docs/DATA.md#datamaterialsjson).
+  `ceramic`, and `paint`, `floor`, `kitchen`, `stone`, `tile`, `door`, `frame` for the apartment. For a new colour or
+  finish, add a preset there; see [docs/DATA.md](docs/DATA.md#datamaterialsjson).
 
 ### `surfaces` (stacking)
 

@@ -255,7 +255,8 @@
                         "type": "string",
                         "enum": [
                           "solid",
-                          "dashed"
+                          "dashed",
+                          "hidden"
                         ]
                       },
                       "provenance": {
@@ -484,7 +485,8 @@
                         "type": "string",
                         "enum": [
                           "solid",
-                          "dashed"
+                          "dashed",
+                          "hidden"
                         ]
                       },
                       "provenance": {
@@ -697,7 +699,8 @@
                         "type": "string",
                         "enum": [
                           "solid",
-                          "dashed"
+                          "dashed",
+                          "hidden"
                         ]
                       },
                       "provenance": {
@@ -921,7 +924,8 @@
                         "type": "string",
                         "enum": [
                           "solid",
-                          "dashed"
+                          "dashed",
+                          "hidden"
                         ]
                       },
                       "provenance": {
@@ -1136,7 +1140,8 @@
                         "type": "string",
                         "enum": [
                           "solid",
-                          "dashed"
+                          "dashed",
+                          "hidden"
                         ]
                       },
                       "provenance": {
@@ -1360,7 +1365,8 @@
                         "type": "string",
                         "enum": [
                           "solid",
-                          "dashed"
+                          "dashed",
+                          "hidden"
                         ]
                       },
                       "provenance": {
@@ -1776,7 +1782,8 @@
                 "type": "string",
                 "enum": [
                   "solid",
-                  "dashed"
+                  "dashed",
+                  "hidden"
                 ]
               },
               "provenance": {
@@ -2005,7 +2012,8 @@
                 "type": "string",
                 "enum": [
                   "solid",
-                  "dashed"
+                  "dashed",
+                  "hidden"
                 ]
               },
               "provenance": {
@@ -2218,7 +2226,8 @@
                 "type": "string",
                 "enum": [
                   "solid",
-                  "dashed"
+                  "dashed",
+                  "hidden"
                 ]
               },
               "provenance": {
@@ -2442,7 +2451,8 @@
                 "type": "string",
                 "enum": [
                   "solid",
-                  "dashed"
+                  "dashed",
+                  "hidden"
                 ]
               },
               "provenance": {
@@ -2657,7 +2667,8 @@
                 "type": "string",
                 "enum": [
                   "solid",
-                  "dashed"
+                  "dashed",
+                  "hidden"
                 ]
               },
               "provenance": {
@@ -2881,7 +2892,8 @@
                 "type": "string",
                 "enum": [
                   "solid",
-                  "dashed"
+                  "dashed",
+                  "hidden"
                 ]
               },
               "provenance": {

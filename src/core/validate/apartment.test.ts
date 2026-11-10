@@ -50,7 +50,15 @@ describe("data/apartment.json", () => {
     };
     const top = (name: string) => box(name).position.y + box(name).size.y / 2;
     expect(top("wall cabinets")).toBeCloseTo(top("tall unit 42"), 5);
-    expect(box("wall cabinets").size.x).toBeCloseTo(box("base cabinets").size.x, 5);
+    // above the whole base run: the same extent along the kitchen as all base cabinets together
+    const extent = (name: string) => {
+      const xs = parts.flatMap((p) => (p.name === name && p.shape === "box" ? [p.position.x - p.size.x / 2, p.position.x + p.size.x / 2] : []));
+      return [Math.min(...xs), Math.max(...xs)];
+    };
+    const [wallMin, wallMax] = extent("wall cabinets");
+    const [baseMin, baseMax] = extent("base cabinets");
+    expect(wallMin).toBeCloseTo(baseMin, 5);
+    expect(wallMax).toBeCloseTo(baseMax, 5);
     // overhead: dashed in the plan, so the worktop, sink and hob below stay visible
     expect(box("wall cabinets").plan).toBe("dashed");
   });

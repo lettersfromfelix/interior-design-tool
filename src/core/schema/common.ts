@@ -64,8 +64,9 @@ const PartBase = z.strictObject({
   /**
    * How the part shows in the 2D plan. "solid" (default): as seen from above. "dashed": only as a dashed outline of its
    * footprint, the drawing convention for things overhead (e.g. wall cabinets), so it doesn't hide what is below it.
+   * "hidden": not at all, for small details that would only clutter the plan (handles, a shower head); 3D only.
    */
-  plan: z.enum(["solid", "dashed"]).optional(),
+  plan: z.enum(["solid", "dashed", "hidden"]).optional(),
   provenance: Provenance.optional(),
 });
 

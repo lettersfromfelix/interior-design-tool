@@ -21,6 +21,16 @@ export const MaterialPreset = z.strictObject({
       /** Size of one repeat in cm (tile edge, plank width, grain spacing, …). */
       scale: PositiveCm,
       strength: z.number().min(0).max(1).optional(),
+      /** Tiles: joint colour and width (cm). Default: a shade between `color` and `color2`, 0.3 cm. */
+      jointColor: HexColor.optional(),
+      jointWidth: z.number().positive().max(5).optional(),
+      /** Tiles: how much the tiles differ in tone (0 = all alike, 1 = strongly, as in natural stone). */
+      variation: z.number().min(0).max(1).optional(),
+      /** Tiles: soft clouds and veins in `color2` (0–1), as in marble or limestone. */
+      veins: z.number().min(0).max(1).optional(),
+      /** Tiles: small dark flecks (0–1), e.g. fossil fragments in limestone; colour `fleckColor` (default: dark `color2`). */
+      flecks: z.number().min(0).max(1).optional(),
+      fleckColor: HexColor.optional(),
     })
     .optional(),
   /** Optional image textures (paths relative to the repository root, e.g. data/textures/oak.jpg). */

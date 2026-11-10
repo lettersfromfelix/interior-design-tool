@@ -27,9 +27,21 @@ export interface ApartmentBuild {
   dispose(): void;
 }
 
-/** Floor polygon at y = 0 facing up. UVs are plan cm (x, -z). */
-function floorGeometry(outline: readonly Vec2[]): ShapeGeometry {
-  return new ShapeGeometry(new Shape(outline.map(([x, z]) => new Vector2(x, -z)))).rotateX(-Math.PI / 2);
+/** Floor polygon at y = 0 facing up. UVs are plan cm (x, -z), turned by `rotation` (degrees, clockwise from above). */
+function floorGeometry(outline: readonly Vec2[], rotation = 0): ShapeGeometry {
+  const g = new ShapeGeometry(new Shape(outline.map(([x, z]) => new Vector2(x, -z)))).rotateX(-Math.PI / 2);
+  if (rotation) {
+    // u runs along the plan direction (cos r, sin r), v along its perpendicular, so the pattern follows the walls
+    const uv = g.getAttribute("uv");
+    const c = Math.cos(rotation * DEG);
+    const s = Math.sin(rotation * DEG);
+    for (let i = 0; i < uv.count; i++) {
+      const u = uv.getX(i);
+      const v = uv.getY(i);
+      uv.setXY(i, u * c - v * s, u * s + v * c);
+    }
+  }
+  return g;
 }
 
 /** Ceiling polygon at y = height facing down (invisible from above, so the 3D view can look in). */
@@ -74,7 +86,10 @@ export function buildApartment(ap: ApartmentFile, mats: MaterialLibrary, surface
   // rooms: floor + ceiling
   for (const r of ap.rooms) {
     const g = new Group();
-    const floor = new Mesh(floorGeometry(r.outline), mats.get(surfaces?.floors?.[r.id] ?? r.floorMaterial ?? ap.defaults.floorMaterial));
+    const floor = new Mesh(
+      floorGeometry(r.outline, r.floorRotation),
+      mats.get(surfaces?.floors?.[r.id] ?? r.floorMaterial ?? ap.defaults.floorMaterial),
+    );
     floor.receiveShadow = true;
     g.add(floor);
     if (r.kind === "indoor" && r.hasCeiling !== false) {

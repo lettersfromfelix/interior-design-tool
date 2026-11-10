@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 from checklist import build_checklist, resolve_check_refs
-from fixtures import RAILING, balconies, bathroom, built_in_wardrobe, column, kitchen, prov, r1
+from fixtures import RAILING, WING_ANGLE, balconies, bathroom, built_in_wardrobe, column, kitchen, prov, r1
 from geom2d import Region, add, dot, left_normal, mul, polygon_area, sub
 from pdfgeom import ORIGIN_PT, REPO, load_plan
 from walls import attach_doors, sample_room_edges
@@ -33,6 +33,11 @@ LOCATION = {"latitude": 47.38, "longitude": 8.54, "timeZone": "Europe/Zurich"}  
 USER_DOOR_STYLES = {"d-entree-living": "glazed", "d-entree-zimmer-15-9": "solid", "d-living-zimmer-15-9": "solid"}
 # How far interior doors can be opened (you); balcony doors and the entrance door open 90° as drawn
 INTERIOR_DOOR_MAX_OPENING = 180
+# Floors that differ from the default stone tiles, and floors whose tiles follow the rotated west wing
+ROOM_FLOORS = {
+    "zimmer-13-0": {"floorRotation": WING_ANGLE},
+    "bath": {"floorMaterial": "floor.tile-beige-10", "floorRotation": WING_ANGLE},  # small beige tiles (IMG_4501)
+}
 
 ROOM_LABELS = {"Wohnen/Essen": ("living", "Wohnen/Essen"), "Bad": ("bath", "Bad"), "Entrée": ("entree", "Entrée")}
 
@@ -115,6 +120,7 @@ def build(force=False):
             "kind": "indoor",
             "outline": outline,
             "labelledArea": meta[rid]["labelledArea"],
+            **ROOM_FLOORS.get(rid, {}),
             "provenance": prov("high", "plan", f"Room fill polygon of the plan; computed area {area:.2f} m2 "
                                f"(printed {meta[rid]['labelledArea']} m2). Interior walls at their centre line (BWF)."),
         })

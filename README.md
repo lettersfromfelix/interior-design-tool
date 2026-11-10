@@ -155,4 +155,6 @@ refused if the file was changed outside the app in the meantime, so an edit by y
 ## Privacy
 
 The original floor plan and the photos contain the street address and the apartment's interior. They stay in
-`reference/`, which is gitignored. Only the cropped underlay without the address header is committed.
+`reference/`, which is gitignored. Only the cropped underlay without the address header is committed. Finishes seen
+in the photos (the stone floor, the tiles, the paint colours) are recreated as procedural patterns and colour values
+in `data/materials.json`; no photo, crop of one or texture made from one is committed.

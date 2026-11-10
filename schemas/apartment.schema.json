@@ -305,6 +305,11 @@
             "type": "string",
             "pattern": "^[a-z0-9-]+\\.[a-z0-9-]+$"
           },
+          "floorRotation": {
+            "type": "number",
+            "minimum": -360,
+            "maximum": 360
+          },
           "wallMaterial": {
             "type": "string",
             "pattern": "^[a-z0-9-]+\\.[a-z0-9-]+$"
@@ -949,7 +954,8 @@
                       "type": "string",
                       "enum": [
                         "solid",
-                        "dashed"
+                        "dashed",
+                        "hidden"
                       ]
                     },
                     "provenance": {
@@ -1178,7 +1184,8 @@
                       "type": "string",
                       "enum": [
                         "solid",
-                        "dashed"
+                        "dashed",
+                        "hidden"
                       ]
                     },
                     "provenance": {
@@ -1391,7 +1398,8 @@
                       "type": "string",
                       "enum": [
                         "solid",
-                        "dashed"
+                        "dashed",
+                        "hidden"
                       ]
                     },
                     "provenance": {
@@ -1615,7 +1623,8 @@
                       "type": "string",
                       "enum": [
                         "solid",
-                        "dashed"
+                        "dashed",
+                        "hidden"
                       ]
                     },
                     "provenance": {
@@ -1830,7 +1839,8 @@
                       "type": "string",
                       "enum": [
                         "solid",
-                        "dashed"
+                        "dashed",
+                        "hidden"
                       ]
                     },
                     "provenance": {
@@ -2054,7 +2064,8 @@
                       "type": "string",
                       "enum": [
                         "solid",
-                        "dashed"
+                        "dashed",
+                        "hidden"
                       ]
                     },
                     "provenance": {

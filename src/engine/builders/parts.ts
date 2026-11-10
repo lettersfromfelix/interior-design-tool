@@ -99,7 +99,8 @@ export type SlotMaterial = (slot: string) => Material;
 
 /**
  * Build all parts, including `repeat`, `repeatAround` and `mirror` copies. Meshes carry `userData.part` (the part name).
- * Parts with `plan: "dashed"` render in 3D only and get a dashed footprint outline in the 2D plan instead.
+ * Parts with `plan: "dashed"` render in 3D only and get a dashed footprint outline in the 2D plan instead; parts with
+ * `plan: "hidden"` render in 3D only.
  */
 export function buildParts(parts: readonly Part[], material: SlotMaterial): Group {
   const root = new Group();
@@ -123,6 +124,7 @@ export function buildParts(parts: readonly Part[], material: SlotMaterial): Grou
         mesh.receiveShadow = true;
         mesh.userData.part = part.name;
         pivot.add(mesh);
+        if (part.plan === "hidden") setLayer(mesh, Layer.ONLY_3D);
         if (outline) {
           setLayer(mesh, Layer.ONLY_3D);
           const line = new Line(outline, DASHED_OUTLINE);

@@ -9,8 +9,11 @@ notes can't point to the wrong item when checks are added or renumbered.
 """
 from __future__ import annotations
 
+import json
 import math
 import re
+
+from pdfgeom import REPO
 
 Y_MEAS = 100.0  # horizontal measurements are drawn 1 m above the floor
 CHECK_REF = re.compile(r"\{check:([a-z0-9:-]+)\}")
@@ -290,7 +293,9 @@ def build_checklist(ap):
         priority="nice", refs=[part["id"]], key="wall-thickness")
     add("M31", "North direction", "Optional: compass bearing of the kitchen wall direction (phone compass).",
         ap["north"]["planUpBearing"] + 90.0, priority="nice", unit="deg", key="north")
-    add("M32", "Bathroom fixtures", "Optional: positions and sizes of shower, washbasin, WC and washer/dryer.",
+    add("M32", "Bathroom fixtures",
+        "Optional: positions and sizes of shower, washbasin, WC and washer/dryer, and the heights of the granite shelf "
+        "(model: 115 cm) and of the black tiles on the installation wall (model: 80 cm).",
         0.0, priority="nice", refs=[f["id"] for f in ap["fixtures"] if f["id"].startswith("bath-")], key="bathroom")
 
     b0 = _polar(br["center"], br["rc"], br["first"])
@@ -305,4 +310,9 @@ def build_checklist(ap):
         "Floor to the underside of the wall cabinets, and their depth from the wall to the front of the doors. "
         "Also confirm that their top is level with the top of the tall units.",
         wall_cab["position"]["y"] - wall_cab["size"]["y"] / 2, refs=["kitchen"], key="kitchen-wall-cabinets")
+    floor = next(p for p in json.loads((REPO / "data" / "materials.json").read_text(encoding="utf-8"))["presets"]
+                 if p["id"] == ap["defaults"]["floorMaterial"])
+    add("M35", "Floor tiles - size",
+        "Optional: edge length of one stone floor tile, joint to joint (the model's tiles are estimated from the photos).",
+        floor["pattern"]["scale"], priority="nice", key="floor-tiles")
     return checks, keys

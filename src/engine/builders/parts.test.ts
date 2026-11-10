@@ -106,4 +106,15 @@ describe("parametric parts", () => {
     const distances = line.geometry.getAttribute("lineDistance");
     expect(distances.getX(distances.count - 1)).toBeCloseTo(2 * (200 + 35), 5);
   });
+
+  it("shows hidden parts in 3D only, without an outline in the plan", () => {
+    const handle: Part = { shape: "box", size: { x: 2.5, y: 24, z: 2 }, position: { x: 0, y: 160, z: 18 }, material: "m", plan: "hidden" };
+    const root = buildParts([handle], () => mat);
+    const lines: Line[] = [];
+    root.traverse((o) => {
+      if ((o as Line).isLine) lines.push(o as Line);
+    });
+    expect(meshes([handle])[0].layers.mask).toBe(1 << Layer.ONLY_3D);
+    expect(lines).toHaveLength(0);
+  });
 });

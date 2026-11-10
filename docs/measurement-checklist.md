@@ -52,5 +52,6 @@ Measure clear dimensions, finished wall surface to finished wall surface, at abo
 | **M25** | Balcony - inner diameter | Across the round balcony, from the inside of the railing to the inside of the railing, parallel to the façade. | 201.6 cm |  |
 | **M30** | Wall thickness at door reveals | Reveal depth at an interior door (expected 18 cm) and at a balcony door (outer wall). | 18.0 cm |  |
 | **M31** | North direction | Optional: compass bearing of the kitchen wall direction (phone compass). | 139° |  |
-| **M32** | Bathroom fixtures | Optional: positions and sizes of shower, washbasin, WC and washer/dryer. | – |  |
+| **M32** | Bathroom fixtures | Optional: positions and sizes of shower, washbasin, WC and washer/dryer, and the heights of the granite shelf (model: 115 cm) and of the black tiles on the installation wall (model: 80 cm). | – |  |
 | **M33** | Railings - bar spacing and bar size | Centre-to-centre distance between two neighbouring vertical bars, and the size of one flat bar (width × thickness). Check a French window and a balcony; are they the same? | 11.0 cm |  |
+| **M35** | Floor tiles - size | Optional: edge length of one stone floor tile, joint to joint (the model's tiles are estimated from the photos). | 40.0 cm |  |
