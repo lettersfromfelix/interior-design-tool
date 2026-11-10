@@ -7,7 +7,7 @@ import { LayoutConflictError } from "./fileBackend";
 import { LayoutImportError, LayoutManager } from "./layouts";
 import { LayoutSync } from "./layoutSync";
 import { Repository } from "./repository";
-import { LAYOUTS_KEY, siteBackend } from "./siteBackend";
+import { browserStorage, LAYOUTS_KEY, siteBackend } from "./siteBackend";
 
 const layoutText = (name: string, items = 0) =>
   serializeLayout({
@@ -116,6 +116,15 @@ describe("the website's file backend", () => {
     expect(await origins(files)).toEqual({ "layouts/default.json": "site", "layouts/demo.json": "site" });
     memory.set(LAYOUTS_KEY, JSON.stringify({ "layouts/a.json": { text: 5 }, "../b.json": { text: "{}" } }));
     expect(await origins(files)).toEqual({ "layouts/default.json": "site", "layouts/demo.json": "site" });
+  });
+
+  it("keeps layouts in memory, and says so, where the browser has no storage or blocks it", async () => {
+    const { storage, durable } = browserStorage(); // there is no window in the tests
+    expect(durable).toBe(false);
+    storage.setItem("k", "v");
+    expect(storage.getItem("k")).toBe("v");
+    expect(siteBackend("/site/", storage, { durable }).durable).toBe(false);
+    expect(website().files.durable).toBe(true);
   });
 
   it("reports its own writes and other tabs' changes", async () => {

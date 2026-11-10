@@ -231,10 +231,19 @@ interface Stored extends Preferences {
   layoutFile: string;
 }
 
+/** The browser's localStorage, or undefined where there is none or the browser blocks it (that access throws). */
+export function localStorageIfAllowed(): Storage | undefined {
+  try {
+    return typeof localStorage === "undefined" ? undefined : localStorage;
+  } catch {
+    return undefined;
+  }
+}
+
 function loadPrefs(): Stored {
   const fallback = { ...defaultPrefs, layoutFile: DEFAULT_LAYOUT_FILE };
   try {
-    const raw = typeof localStorage !== "undefined" ? localStorage.getItem(PREFS_KEY) : null;
+    const raw = localStorageIfAllowed()?.getItem(PREFS_KEY);
     if (!raw) return fallback;
     const p = JSON.parse(raw) as Partial<Stored>;
     return {
@@ -274,7 +283,7 @@ const reloadedSince = (layout: LayoutState, revision: number) => layout.status !
 
 const pushPast = (h: History, doc: LayoutFile): History => ({ past: [...h.past, doc].slice(-HISTORY_LIMIT), future: [] });
 
-export function createAppStore(persist = typeof localStorage !== "undefined") {
+export function createAppStore(persist = localStorageIfAllowed() !== undefined) {
   const stored = persist ? loadPrefs() : { ...defaultPrefs, layoutFile: DEFAULT_LAYOUT_FILE };
   const { layoutFile, ...prefs } = stored;
   /** Key of the last edit if it may be merged with the next one (slider gestures). */
@@ -461,7 +470,11 @@ export function createAppStore(persist = typeof localStorage !== "undefined") {
         walk: s.walk,
         layoutFile: s.layout.file,
       };
-      localStorage.setItem(PREFS_KEY, JSON.stringify(out));
+      try {
+        localStorage.setItem(PREFS_KEY, JSON.stringify(out));
+      } catch {
+        // storage full or blocked: the preferences just aren't remembered
+      }
     });
   }
   return store;

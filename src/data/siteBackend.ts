@@ -21,15 +21,18 @@ type Kept = Record<string, { text: string; mtime: number }>;
 
 const LAYOUT_PATH_RE = /^layouts\/[^/]+\.json$/;
 
-/** localStorage, or a store that only lives as long as the page if the browser doesn't allow storage. */
-export function browserStorage(): KeyValueStore {
+/**
+ * localStorage, or (durable: false) a store that only lives as long as the page, where the browser has no storage or
+ * blocks it (blocked site data makes every access throw).
+ */
+export function browserStorage(): { storage: KeyValueStore; durable: boolean } {
   try {
     const s = window.localStorage;
     s.getItem(LAYOUTS_KEY);
-    return s;
+    return { storage: s, durable: true };
   } catch {
     const memory = new Map<string, string>();
-    return { getItem: (k) => memory.get(k) ?? null, setItem: (k, v) => void memory.set(k, v) };
+    return { storage: { getItem: (k) => memory.get(k) ?? null, setItem: (k, v) => void memory.set(k, v) }, durable: false };
   }
 }
 
@@ -37,6 +40,8 @@ export interface SiteBackendOptions {
   fetch?: typeof fetch;
   /** Where "storage" events of other tabs arrive (the window). */
   events?: Pick<EventTarget, "addEventListener" | "removeEventListener">;
+  /** False if `storage` doesn't outlive the page (see browserStorage). */
+  durable?: boolean;
 }
 
 export function siteBackend(base: string, storage: KeyValueStore, options: SiteBackendOptions = {}): FileBackend {
@@ -94,6 +99,7 @@ export function siteBackend(base: string, storage: KeyValueStore, options: SiteB
 
   return {
     kind: "browser",
+    durable: options.durable ?? true,
 
     async fetchDir(dir) {
       const listing = await load(dir);

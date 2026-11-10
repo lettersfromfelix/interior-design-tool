@@ -1,6 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { addItem, emptyLayout, moveItem, renameLayout, setDoorOpening } from "../core/layout/commands";
-import { DEFAULT_DAYLIGHT, DEFAULT_LAYOUT_FILE, DEFAULT_WALK, HISTORY_LIMIT, createAppStore } from "./store";
+import { DEFAULT_DAYLIGHT, DEFAULT_LAYOUT_FILE, DEFAULT_WALK, HISTORY_LIMIT, createAppStore, localStorageIfAllowed } from "./store";
 
 const ready = () => {
   const store = createAppStore(false);
@@ -217,5 +217,30 @@ describe("views and preferences", () => {
     expect(s().walk).toEqual({ eyeHeight: 150, furniture: false });
     s().setSidePanelOpen(false);
     expect(s().sidePanelOpen).toBe(false);
+  });
+
+  it("starts, and remembers preferences, when the browser blocks storage or it is full", () => {
+    const blocked = () => {
+      throw new DOMException("The operation is insecure.", "SecurityError");
+    };
+    Object.defineProperty(globalThis, "localStorage", { configurable: true, get: blocked });
+    try {
+      expect(localStorageIfAllowed()).toBeUndefined();
+      const store = createAppStore();
+      expect(store.getState().layout.file).toBe(DEFAULT_LAYOUT_FILE);
+      store.getState().setLabels(false); // nothing to remember it in, and nothing breaks
+    } finally {
+      delete (globalThis as { localStorage?: unknown }).localStorage;
+    }
+    const full = { getItem: () => null, setItem: vi.fn(() => blocked()) };
+    Object.defineProperty(globalThis, "localStorage", { configurable: true, value: full });
+    try {
+      const store = createAppStore();
+      expect(() => store.getState().setLabels(false)).not.toThrow();
+      expect(full.setItem).toHaveBeenCalled();
+      expect(store.getState().labels).toBe(false);
+    } finally {
+      delete (globalThis as { localStorage?: unknown }).localStorage;
+    }
   });
 });

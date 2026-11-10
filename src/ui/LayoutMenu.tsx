@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { isWebsite } from "../data/backend";
+import { backend, isWebsite } from "../data/backend";
 import { LayoutImportError } from "../data/layouts";
 import type { LayoutInfo } from "../state/store";
 import { downloadLayout } from "./layoutFiles";
@@ -129,7 +129,9 @@ export function LayoutMenu() {
         <div className="layout-menu__pop" role="dialog" aria-label="Layouts">
           <div className="layout-menu__head">
             <b>Layouts</b>
-            <span className="muted small">{isWebsite ? "kept in this browser · Save downloads a file" : "one JSON file each in layouts/"}</span>
+            <span className="muted small">
+              {!isWebsite ? "one JSON file each in layouts/" : backend.durable ? "kept in this browser · Save downloads a file" : "kept only until this tab closes · Save downloads a file"}
+            </span>
           </div>
           <ul className="layout-list">
             {rows.map((l) => {

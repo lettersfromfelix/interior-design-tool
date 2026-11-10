@@ -361,7 +361,9 @@ On the website (`src/data/siteBackend.ts`):
   browser and device, so a reload or a closed tab loses nothing. A changed layout that came with the website is
   marked "changed in this browser"; **Reset…** drops the changes and shows the published version again (Undo brings
   them back). Layouts made in the browser (**New…**, **Duplicate…**, **Open file…**) can be deleted. Clearing the
-  browser's site data deletes them all.
+  browser's site data deletes them all. Where the browser blocks site data (every `localStorage` access throws),
+  layouts and preferences are kept in memory instead (`FileBackend.durable` is false), and the status bar and the
+  layout menu say that changes last only until the tab closes.
 - **Save** (**⤓ Save** or <kbd>Ctrl</kbd>+<kbd>S</kbd>, also **Save to file** in the layout menu) downloads the open
   layout as `<file name>.json`, formatted like the files in `layouts/`. **Open file…** adds such a file, checked
   like any layout, and keeps it in the browser.

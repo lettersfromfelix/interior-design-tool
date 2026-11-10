@@ -21,6 +21,8 @@ export interface PutLayoutOptions {
 
 export interface FileBackend {
   readonly kind: "disk" | "browser";
+  /** False if nothing outlives the page: the browser blocks storage, so layouts are kept only until the tab closes. */
+  readonly durable: boolean;
   /** All files of a data folder (JSON with their text, models and images without). */
   fetchDir(dir: DataDir): Promise<DirListing>;
   /** Write layouts/<name>. Throws LayoutConflictError if the file is none of the `base` versions. */

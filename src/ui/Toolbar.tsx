@@ -1,4 +1,4 @@
-import { isWebsite } from "../data/backend";
+import { backend, isWebsite } from "../data/backend";
 import type { ViewMode } from "../state/store";
 import { countIssues, useAllIssues } from "./issues";
 import { downloadLayout } from "./layoutFiles";
@@ -20,7 +20,17 @@ function SaveStatus() {
   if (layout.saveError) {
     return (
       <span className="save save--error" title={layout.saveError}>
-        ⚠ Could not save, retrying…
+        {isWebsite ? "⚠ Not kept in this browser" : "⚠ Could not save, retrying…"}
+      </span>
+    );
+  }
+  if (!backend.durable) {
+    return (
+      <span
+        className="save save--error"
+        title="This browser blocks site data, so the website can't keep your changes after this tab is closed. Use ⤓ Save to download the layout as a file."
+      >
+        ⚠ Kept only until this tab closes
       </span>
     );
   }

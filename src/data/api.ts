@@ -57,7 +57,7 @@ export function onFsChange(cb: (change: FsChange) => void): () => void {
   return () => hot.off(FS_CHANGE_EVENT, cb);
 }
 
-export const diskBackend: FileBackend = { kind: "disk", fetchDir, putLayout, trashLayout, onFsChange };
+export const diskBackend: FileBackend = { kind: "disk", durable: true, fetchDir, putLayout, trashLayout, onFsChange };
 
 /** URL for a repository-relative asset path (underlay, textures, GLB models); the website lives below a base path. */
 export const assetUrl = (repoPath: string, version?: number): string =>

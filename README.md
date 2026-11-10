@@ -41,7 +41,8 @@ repository's **Actions** tab). If a check fails, the previous version stays onli
 the file to anyone: they open it with **Open file…** in the layout menu, on the website or in the local tool, which
 copies it into `layouts/` (or put it into `layouts/` yourself). To publish a layout for everyone, put the file into
 `layouts/`, commit and push to `main`. Clearing the browser's site data deletes the layouts kept there, so save the
-ones you want to keep.
+ones you want to keep. If the browser blocks site data, the website still works, but the status bar says "⚠ Kept
+only until this tab closes": save before closing it.
 
 ## Status
 
