@@ -22,11 +22,11 @@ const mix = (a: string, b: string, t: number) => new Color(a).lerp(new Color(b),
  * directional light becomes the sun at its real position; it shines through the windows, and the ceilings cast
  * shadows too, so only the windows let it in (in 2D as well: sun patches on the plan).
  *
- * There is no bounced light in real-time rendering, so two lights stand in for it: in the overview, one from below
- * for the light the floor throws back (the undersides of things would otherwise be grey); while walking, a soft fill
- * for the light bouncing around a room instead (the overview keeps more contrast, which helps to read the shapes).
- * Both together would light the ceilings twice and make them glow: in the photos the white ceilings are only about
- * as bright as the light grey walls.
+ * There is no bounced light in real-time rendering, so two lights stand in for it: one from below for the light the
+ * floor throws back (the undersides of things would otherwise be grey), and, while walking, a soft fill for the light
+ * bouncing around a room (the overview keeps more contrast, which helps to read the shapes). While walking, the fill
+ * takes over most of the light from below: both at full strength would light the ceilings twice and make them glow.
+ * What remains keeps the white ceilings visibly lighter than the light grey walls, about 1.25 times as bright.
  */
 export class Lights {
   readonly group = new Group();
@@ -93,8 +93,8 @@ export class Lights {
     this.bounce.position.copy(this.center).setY(-4000);
     this.bounce.target.updateMatrixWorld();
     const walk = this.view === "walk";
-    // intensity 0 rather than hiding it: a different number of lights would recompile every shader on each switch
-    const bounce = walk ? 0 : 1;
+    // a lower intensity rather than hiding it: a different number of lights would recompile every shader on each switch
+    const bounce = walk ? 0.42 : 1;
     if (!d) {
       this.hemi.intensity = walk ? 1.1 : 1.5;
       this.hemi.color.set("#ffffff");
