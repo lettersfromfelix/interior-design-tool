@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "wall-panel-slats-80x80",
+  "name": "Wall panel, wood slats 80 × 80",
+  "category": "decor",
+  "tags": ["living room", "bedroom", "acoustic panel", "slats", "wood", "wall", "chocolate and blue"],
+  "dimensions": { "width": 80, "depth": 2.2, "height": 80 },
+  "placement": { "type": "wall", "defaultElevation": 100, "minElevation": 0, "maxElevation": 175 },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "felt backing", "shape": "box", "size": { "x": 80, "y": 80, "z": 0.9 }, "position": { "x": 0, "y": 40, "z": -0.65 }, "material": "felt" },
+      { "name": "slats", "shape": "box", "size": { "x": 80, "y": 2.7, "z": 1.3 }, "cornerRadius": 0.15, "position": { "x": -38, "y": 40, "z": 0.45 }, "rotation": { "z": 90 }, "repeat": { "count": 20, "step": { "x": 4, "y": 0, "z": 0 } }, "material": "wood" }
+    ]
+  },
+  "materialSlots": {
+    "wood": { "label": "Slats", "default": "wood.oak-dark", "allowed": ["wood.*", "lacquer.*"] },
+    "felt": { "label": "Felt", "default": "fabric.felt-black", "allowed": ["fabric.*"] }
+  },
+  "notes": "Own design in the style of a slatted acoustic panel, not a specific product: 20 dark oak slats (2.7 × 1.3 cm, 4 cm apart) on 0.9 cm black felt, 80 × 80 cm and 2.2 cm deep, as the user asked for dark brown wooden panels 80 cm wide. Hangs with its bottom 100 cm above the floor by default, so its centre is at 140 cm, level with the other slat panel's; change the height per placed panel."
+}

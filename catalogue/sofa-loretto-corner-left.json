@@ -1,0 +1,39 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "sofa-loretto-corner-left",
+  "name": "Sofa, Cosmopolitan Loretto corner, chaise left",
+  "category": "seating",
+  "tags": ["living room", "velvet", "cosmopolitan design", "loretto", "puffy", "corner sofa", "chaise", "chocolate and blue"],
+  "dimensions": { "width": 250, "depth": 147, "height": 68 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "feet", "shape": "cylinder", "radius": 2.5, "height": 1.5, "position": { "x": -110, "y": 0.75, "z": -64 }, "repeat": { "count": 3, "step": { "x": 110, "y": 0, "z": 0 } }, "plan": "hidden", "material": "legs" },
+      { "name": "feet", "shape": "cylinder", "radius": 2.5, "height": 1.5, "position": { "x": -110, "y": 0.75, "z": 17 }, "repeat": { "count": 3, "step": { "x": 110, "y": 0, "z": 0 } }, "plan": "hidden", "material": "legs" },
+      { "name": "feet", "shape": "cylinder", "radius": 2.5, "height": 1.5, "position": { "x": -110, "y": 0.75, "z": 64 }, "repeat": { "count": 2, "step": { "x": 80, "y": 0, "z": 0 } }, "plan": "hidden", "material": "legs" },
+      { "name": "left arm cushions, lower", "shape": "box", "size": { "x": 30, "y": 33.25, "z": 49 }, "cornerRadius": 13, "position": { "x": -110, "y": 18.12, "z": -49 }, "repeat": { "count": 2, "step": { "x": 0, "y": 0, "z": 49 } }, "material": "upholstery" },
+      { "name": "left arm cushions, upper", "shape": "box", "size": { "x": 30, "y": 33.25, "z": 49 }, "cornerRadius": 13, "position": { "x": -110, "y": 51.38, "z": -49 }, "repeat": { "count": 2, "step": { "x": 0, "y": 0, "z": 49 } }, "material": "upholstery" },
+      { "name": "chaise, outer front cushion", "shape": "box", "size": { "x": 30, "y": 38.5, "z": 49 }, "cornerRadius": 13.5, "position": { "x": -110, "y": 20.75, "z": 49 }, "material": "upholstery" },
+      { "name": "right arm cushions, lower", "shape": "box", "size": { "x": 30, "y": 33.25, "z": 50 }, "cornerRadius": 13, "position": { "x": 110, "y": 18.12, "z": -48.5 }, "repeat": { "count": 2, "step": { "x": 0, "y": 0, "z": 50 } }, "material": "upholstery" },
+      { "name": "right arm cushions, upper", "shape": "box", "size": { "x": 30, "y": 33.25, "z": 50 }, "cornerRadius": 13, "position": { "x": 110, "y": 51.38, "z": -48.5 }, "repeat": { "count": 2, "step": { "x": 0, "y": 0, "z": 50 } }, "material": "upholstery" },
+      { "name": "back, lower cushions", "shape": "box", "size": { "x": 47.5, "y": 33.25, "z": 30 }, "cornerRadius": 13, "position": { "x": -71.25, "y": 18.12, "z": -58.5 }, "repeat": { "count": 4, "step": { "x": 47.5, "y": 0, "z": 0 } }, "material": "upholstery" },
+      { "name": "back cushions", "shape": "box", "size": { "x": 47.5, "y": 33.25, "z": 28 }, "cornerRadius": 13, "position": { "x": -71.25, "y": 51.38, "z": -58.5 }, "rotation": { "x": -4 }, "repeat": { "count": 4, "step": { "x": 47.5, "y": 0, "z": 0 } }, "material": "upholstery" },
+      { "name": "seat cushions, rear", "shape": "box", "size": { "x": 47.5, "y": 35.5, "z": 22 }, "cornerRadius": 10.5, "position": { "x": -71.25, "y": 19.25, "z": -32.5 }, "repeat": { "count": 4, "step": { "x": 47.5, "y": 0, "z": 0 } }, "material": "upholstery" },
+      { "name": "seat cushions, front", "shape": "box", "size": { "x": 47.5, "y": 38.5, "z": 48 }, "cornerRadius": 14, "position": { "x": 23.75, "y": 20.75, "z": 2.5 }, "repeat": { "count": 2, "step": { "x": 47.5, "y": 0, "z": 0 } }, "material": "upholstery" },
+      { "name": "chaise, middle cushions", "shape": "box", "size": { "x": 47.5, "y": 38.5, "z": 46 }, "cornerRadius": 14, "position": { "x": -71.25, "y": 20.75, "z": 1.5 }, "repeat": { "count": 2, "step": { "x": 47.5, "y": 0, "z": 0 } }, "material": "upholstery" },
+      { "name": "chaise, front cushions", "shape": "box", "size": { "x": 47.5, "y": 38.5, "z": 49 }, "cornerRadius": 14, "position": { "x": -71.25, "y": 20.75, "z": 49 }, "repeat": { "count": 2, "step": { "x": 47.5, "y": 0, "z": 0 } }, "material": "upholstery" }
+    ]
+  },
+  "materialSlots": {
+    "upholstery": { "label": "Upholstery", "default": "fabric.velvet-chocolate", "allowed": ["fabric.*"] },
+    "legs": { "label": "Feet", "default": "plastic.deep-black", "allowed": ["plastic.deep-black", "metal.black-matte"] }
+  },
+  "surfaces": [
+    { "name": "seat", "height": 40, "width": 190, "depth": 70, "center": [0, -8.5] },
+    { "name": "chaise", "height": 40, "width": 95, "depth": 117, "center": [-47.5, 15] }
+  ],
+  "productUrl": "https://eyeondesign.de/products/naroznik-aksamitny-3-osobowy-lewostronny-loretto-czekoladowy",
+  "notes": "Cosmopolitan Design Loretto corner sofa, 3 seats, left version, in velvet Chocolate (Vogue 6) with black plastic legs: W 250 × D 147 × H 68 cm; seat 40 cm high and 70 cm deep (117 cm on the chaise); the chaise is 125 cm wide with its arm; arms 30 cm wide; backrest 28 cm above the seat, per Cosmopolitan Design's product page and technical drawing. The chaise is on the left as you face the sofa, as in the shop's photos and in the user's link; the app can't mirror an item, so this item is the left version only. Built from its puffy cushions: arms of two stacked cushions, a seat-high cushion at the chaise's outer front corner, four seat columns and back cushions standing on a lower row. The seat and the chaise are surfaces, so cushions can be put on them. No clearance zone: the legroom in front of the two seats lies inside the item's box, beside the chaise."
+}

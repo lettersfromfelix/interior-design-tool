@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "painting-colour-blocks-150x100",
+  "name": "Painting, colour blocks 150 × 100",
+  "category": "decor",
+  "tags": ["living room", "bedroom", "art", "canvas", "picture", "wall", "chocolate and blue"],
+  "dimensions": { "width": 150, "depth": 3.5, "height": 100 },
+  "placement": { "type": "wall", "defaultElevation": 100, "minElevation": 30, "maxElevation": 155 },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "top half", "shape": "box", "size": { "x": 150, "y": 50, "z": 3.5 }, "position": { "x": 0, "y": 75, "z": 0 }, "material": "top" },
+      { "name": "lower left quarter", "shape": "box", "size": { "x": 75, "y": 50, "z": 3.5 }, "position": { "x": -37.5, "y": 25, "z": 0 }, "material": "lower-left" },
+      { "name": "lower right quarter", "shape": "box", "size": { "x": 75, "y": 50, "z": 3.5 }, "position": { "x": 37.5, "y": 25, "z": 0 }, "material": "lower-right" }
+    ]
+  },
+  "materialSlots": {
+    "top": { "label": "Top half", "default": "paint.light-beige", "allowed": ["paint.*", "lacquer.*"] },
+    "lower-left": { "label": "Lower left", "default": "paint.light-blue", "allowed": ["paint.*", "lacquer.*"] },
+    "lower-right": { "label": "Lower right", "default": "paint.chocolate", "allowed": ["paint.*", "lacquer.*"] }
+  },
+  "notes": "Built to the user's description, not a specific product: a 150 × 100 cm canvas, 3.5 cm deep, in three colour fields: the top half light beige, the lower left quarter light blue and the lower right quarter chocolate brown, as seen facing it. The blue and the brown are the collection's velvet colours (paint.light-blue, paint.chocolate). Hangs with its bottom 100 cm above the floor by default, so its centre is at 150 cm."
+}

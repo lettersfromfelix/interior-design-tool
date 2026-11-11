@@ -1,0 +1,28 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "coffee-table-pebble",
+  "name": "Coffee table, pebble",
+  "category": "table",
+  "tags": ["living room", "plaster", "organic", "sculptural", "chocolate and blue"],
+  "dimensions": { "width": 120, "depth": 77.8, "height": 38 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "top", "shape": "extrusion", "height": 5, "points": [[-41.61, -24.24], [-35.65, -27.36], [-29.48, -30.04], [-23.13, -32.26], [-16.63, -34.02], [-10.03, -35.3], [-3.35, -36.09], [3.38, -36.4], [10.1, -36.22], [16.8, -35.55], [23.43, -34.39], [29.95, -32.76], [36.34, -30.65], [42.57, -28.09], [44.21, -27.27], [45.78, -26.34], [47.29, -25.29], [48.71, -24.14], [50.05, -22.89], [51.3, -21.55], [52.45, -20.12], [53.49, -18.61], [54.42, -17.03], [55.24, -15.39], [55.93, -13.69], [56.5, -11.95], [56.95, -10.17], [57.26, -8.37], [57.45, -6.54], [57.5, -4.71], [57.42, -2.88], [57.21, -1.06], [56.87, 0.74], [56.4, 2.51], [55.81, 4.25], [55.09, 5.94], [54.26, 7.57], [53.3, 9.13], [52.24, 10.63], [51.08, 12.04], [49.81, 13.37], [48.45, 14.6], [43.16, 18.75], [37.58, 22.51], [31.74, 25.85], [25.67, 28.75], [19.4, 31.21], [12.98, 33.21], [6.42, 34.73], [-0.22, 35.78], [-6.93, 36.33], [-13.66, 36.4], [-20.37, 35.98], [-27.04, 35.07], [-33.63, 33.68], [-35.74, 33.07], [-37.81, 32.32], [-39.83, 31.42], [-41.77, 30.39], [-43.64, 29.22], [-45.42, 27.92], [-47.1, 26.5], [-48.69, 24.97], [-50.16, 23.33], [-51.51, 21.59], [-52.74, 19.76], [-53.84, 17.85], [-54.8, 15.87], [-55.62, 13.83], [-56.3, 11.73], [-56.83, 9.59], [-57.2, 7.42], [-57.43, 5.23], [-57.5, 3.03], [-57.42, 0.83], [-57.18, -1.36], [-56.79, -3.53], [-56.25, -5.67], [-55.56, -7.76], [-54.73, -9.8], [-53.76, -11.78], [-52.65, -13.68], [-51.41, -15.5], [-50.04, -17.23], [-48.56, -18.86], [-46.97, -20.39], [-45.28, -21.79], [-43.49, -23.08]], "position": { "x": 0, "y": 33, "z": 0 }, "material": "body" },
+      { "name": "top, rounded edge", "shape": "torus", "radius": 92.5, "tube": 2.5, "arc": 54.2, "position": { "x": 4.24, "y": 35.5, "z": 56.1 }, "rotation": { "y": 240.28 }, "material": "body" },
+      { "name": "top, rounded edge", "shape": "torus", "radius": 25.5, "tube": 2.5, "arc": 115.34, "position": { "x": 32, "y": 35.5, "z": -4.88 }, "rotation": { "y": 294.48 }, "material": "body" },
+      { "name": "top, rounded edge", "shape": "torus", "radius": 92.5, "tube": 2.5, "arc": 54.2, "position": { "x": -11.23, "y": 35.5, "z": -56.07 }, "rotation": { "y": 49.81 }, "material": "body" },
+      { "name": "top, rounded edge", "shape": "torus", "radius": 31.5, "tube": 2.5, "arc": 136.27, "position": { "x": -26, "y": 35.5, "z": 3.12 }, "rotation": { "y": 104.01 }, "material": "body" },
+      { "name": "legs", "shape": "cylinder", "radius": 10.5, "height": 33, "position": { "x": -34, "y": 16.5, "z": -9.88 }, "material": "body" },
+      { "name": "legs", "shape": "cylinder", "radius": 10.5, "height": 33, "position": { "x": -28, "y": 16.5, "z": 20.12 }, "material": "body" },
+      { "name": "legs", "shape": "cylinder", "radius": 10.5, "height": 33, "position": { "x": 41, "y": 16.5, "z": -2.88 }, "material": "body" }
+    ]
+  },
+  "materialSlots": {
+    "body": { "label": "Finish", "default": "stone.plaster-ivory", "allowed": ["stone.*", "lacquer.*", "wood.*"] }
+  },
+  "surfaces": [{ "name": "top", "height": 38, "width": 84, "depth": 46, "center": [0, -0.5] }],
+  "notes": "Own design, not a specific product: a low pebble-shaped coffee table in ivory plaster (microcement) with a softly rounded edge, on three round legs, W 120 × D 77.8 × H 38 cm, made to go with the round, soft shapes of the chocolate sofas. Travertine, lacquer and wood finishes can be picked."
+}

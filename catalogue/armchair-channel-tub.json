@@ -1,0 +1,36 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "armchair-channel-tub",
+  "name": "Armchair, channel-tufted, small",
+  "category": "seating",
+  "tags": ["living room", "bedroom", "reading", "velvet", "tub chair", "small", "chocolate and blue"],
+  "dimensions": { "width": 68, "depth": 68, "height": 74 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "legs", "shape": "cylinder", "radius": 1.3, "radiusTop": 2.1, "height": 16, "position": { "x": 19, "y": 8, "z": 19 }, "rotation": { "x": -6, "z": 6 }, "mirror": ["x", "z"], "material": "legs" },
+      { "name": "base", "shape": "lathe", "profile": [[0, 15], [26, 15], [26.78, 15.1], [27.5, 15.4], [28.12, 15.88], [28.6, 16.5], [28.9, 17.22], [29, 18], [29, 29], [28.9, 29.78], [28.6, 30.5], [28.12, 31.12], [27.5, 31.6], [26.78, 31.9], [26, 32], [0, 32]], "position": { "x": 0, "y": 0, "z": 0 }, "material": "upholstery" },
+      { "name": "seat cushion", "shape": "lathe", "profile": [[0, 31], [21, 31], [22.29, 31.17], [23.5, 31.67], [24.54, 32.46], [25.33, 33.5], [25.83, 34.71], [26, 36], [26, 39], [25.83, 40.29], [25.33, 41.5], [24.54, 42.54], [23.5, 43.33], [22.29, 43.83], [21, 44], [10.5, 45.08], [0, 45.8]], "position": { "x": 0, "y": 0, "z": 3 }, "material": "upholstery" },
+      { "name": "channels, 1", "shape": "box", "size": { "x": 12.6, "y": 43, "z": 10 }, "cornerRadius": 4.9, "position": { "x": -24.48, "y": 36.5, "z": 10.14 }, "rotation": { "x": 5, "y": 67.5 }, "material": "upholstery" },
+      { "name": "channels, 2", "shape": "box", "size": { "x": 12.6, "y": 48.76, "z": 10 }, "cornerRadius": 4.9, "position": { "x": -26.5, "y": 39.38, "z": 0 }, "rotation": { "x": 5, "y": 90 }, "material": "upholstery" },
+      { "name": "channels, 3", "shape": "box", "size": { "x": 12.6, "y": 53.24, "z": 10 }, "cornerRadius": 4.9, "position": { "x": -24.48, "y": 41.62, "z": -10.14 }, "rotation": { "x": 5, "y": 112.5 }, "material": "upholstery" },
+      { "name": "channels, 4", "shape": "box", "size": { "x": 12.6, "y": 56.44, "z": 10 }, "cornerRadius": 4.9, "position": { "x": -18.74, "y": 43.22, "z": -18.74 }, "rotation": { "x": 5, "y": 135 }, "material": "upholstery" },
+      { "name": "channels, 5", "shape": "box", "size": { "x": 12.6, "y": 58.36, "z": 10 }, "cornerRadius": 4.9, "position": { "x": -10.14, "y": 44.18, "z": -24.48 }, "rotation": { "x": 5, "y": 157.5 }, "material": "upholstery" },
+      { "name": "channels, 6", "shape": "box", "size": { "x": 12.6, "y": 59, "z": 10 }, "cornerRadius": 4.9, "position": { "x": 0, "y": 44.5, "z": -26.5 }, "rotation": { "x": 5, "y": 180 }, "material": "upholstery" },
+      { "name": "channels, 7", "shape": "box", "size": { "x": 12.6, "y": 58.36, "z": 10 }, "cornerRadius": 4.9, "position": { "x": 10.14, "y": 44.18, "z": -24.48 }, "rotation": { "x": 5, "y": 202.5 }, "material": "upholstery" },
+      { "name": "channels, 8", "shape": "box", "size": { "x": 12.6, "y": 56.44, "z": 10 }, "cornerRadius": 4.9, "position": { "x": 18.74, "y": 43.22, "z": -18.74 }, "rotation": { "x": 5, "y": 225 }, "material": "upholstery" },
+      { "name": "channels, 9", "shape": "box", "size": { "x": 12.6, "y": 53.24, "z": 10 }, "cornerRadius": 4.9, "position": { "x": 24.48, "y": 41.62, "z": -10.14 }, "rotation": { "x": 5, "y": 247.5 }, "material": "upholstery" },
+      { "name": "channels, 10", "shape": "box", "size": { "x": 12.6, "y": 48.76, "z": 10 }, "cornerRadius": 4.9, "position": { "x": 26.5, "y": 39.38, "z": 0 }, "rotation": { "x": 5, "y": 270 }, "material": "upholstery" },
+      { "name": "channels, 11", "shape": "box", "size": { "x": 12.6, "y": 43, "z": 10 }, "cornerRadius": 4.9, "position": { "x": 24.48, "y": 36.5, "z": 10.14 }, "rotation": { "x": 5, "y": 292.5 }, "material": "upholstery" }
+    ]
+  },
+  "materialSlots": {
+    "upholstery": { "label": "Upholstery", "default": "fabric.velvet-light-blue", "allowed": ["fabric.*", "leather.*"] },
+    "legs": { "label": "Legs", "default": "wood.walnut-dark", "allowed": ["wood.*", "metal.brass", "metal.black-matte"] }
+  },
+  "surfaces": [{ "name": "seat", "height": 45, "width": 40, "depth": 34, "center": [0, 7] }],
+  "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
+  "notes": "Own design, not a specific product: a small tub chair in light blue velvet whose back and arms are eleven puffy vertical channels, highest at the back, on four splayed dark walnut legs; made to go with the chocolate sofas. W 68 × D 68 × H 74 cm, seat height 45 cm, arm height 58 cm. Its seat is a surface, so a cushion can be put on it. Clearance: 45 cm of legroom in front."
+}

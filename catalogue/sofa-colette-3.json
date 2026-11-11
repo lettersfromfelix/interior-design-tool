@@ -1,0 +1,34 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "sofa-colette-3",
+  "name": "Sofa, James Lane Colette 3-seater",
+  "category": "seating",
+  "tags": ["living room", "chenille", "james lane", "colette", "curved", "chocolate and blue"],
+  "dimensions": { "width": 266, "depth": 109, "height": 72 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "feet", "shape": "cylinder", "radius": 2.5, "height": 3, "position": { "x": 0, "y": 1.5, "z": 26.5 }, "plan": "hidden", "material": "legs" },
+      { "name": "feet", "shape": "cylinder", "radius": 2.5, "height": 3, "position": { "x": 60.23, "y": 1.5, "z": 34.37 }, "mirror": ["x"], "plan": "hidden", "material": "legs" },
+      { "name": "feet", "shape": "cylinder", "radius": 2.5, "height": 3, "position": { "x": 0, "y": 1.5, "z": -40.5 }, "plan": "hidden", "material": "legs" },
+      { "name": "feet", "shape": "cylinder", "radius": 2.5, "height": 3, "position": { "x": 77.44, "y": 1.5, "z": -30.39 }, "mirror": ["x"], "plan": "hidden", "material": "legs" },
+      { "name": "seat base", "shape": "lathe", "arc": 37.2, "profile": [[303.58, 3], [306.69, 3.41], [309.58, 4.61], [312.07, 6.51], [313.97, 9], [315.17, 11.89], [315.58, 15], [315.58, 31], [315.07, 34.88], [313.57, 38.5], [311.19, 41.61], [308.08, 43.99], [304.46, 45.49], [300.58, 46], [235.58, 46], [231.7, 45.49], [228.08, 43.99], [224.97, 41.61], [222.59, 38.5], [221.09, 34.88], [220.58, 31], [220.58, 15], [220.99, 11.89], [222.19, 9], [224.1, 6.51], [226.58, 4.61], [229.47, 3.41], [232.58, 3], [303.58, 3]], "position": { "x": 0, "y": 0, "z": 261.08 }, "rotation": { "y": 251.4 }, "material": "upholstery" },
+      { "name": "seat base, rounded ends", "shape": "lathe", "arc": 180, "profile": [[0, 3], [35.5, 3], [38.61, 3.41], [41.5, 4.61], [43.99, 6.51], [45.89, 9], [47.09, 11.89], [47.5, 15], [47.5, 31], [46.99, 34.88], [45.49, 38.5], [43.11, 41.61], [40, 43.99], [36.38, 45.49], [32.5, 46], [0, 46]], "position": { "x": 85.5, "y": 0, "z": 7 }, "rotation": { "y": 288.6 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "backrest", "shape": "torus", "radius": 301.58, "tube": 14, "arc": 16.51, "position": { "x": 0, "y": 58, "z": 261.08 }, "rotation": { "y": 272.09 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "backrest, rounded inner ends", "shape": "sphere", "radius": 14, "position": { "x": 11, "y": 58, "z": -40.3 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "arm rolls, turn", "shape": "torus", "radius": 33.5, "tube": 14, "arc": 90, "position": { "x": 85.5, "y": 58, "z": 7 }, "rotation": { "y": 288.6 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "arm rolls", "shape": "cylinder", "radius": 14, "height": 10, "position": { "x": 115.66, "y": 58, "z": 22.42 }, "rotation": { "x": 90, "z": 18.6 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "arm rolls, front ends", "shape": "sphere", "radius": 14, "scale": { "x": 1, "y": 1, "z": 0.55 }, "position": { "x": 114.06, "y": 58, "z": 27.16 }, "rotation": { "y": 18.6 }, "mirror": ["x"], "material": "upholstery" }
+    ]
+  },
+  "materialSlots": {
+    "upholstery": { "label": "Upholstery", "default": "fabric.chenille-chocolate", "allowed": ["fabric.*"] },
+    "legs": { "label": "Feet", "default": "plastic.deep-black", "allowed": ["plastic.deep-black", "metal.black-matte"] }
+  },
+  "surfaces": [{ "name": "seat", "height": 46, "width": 180, "depth": 60, "center": [0, 10] }],
+  "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
+  "productUrl": "https://www.jameslane.com.au/colette-muse-chocolate-sofa-3-seater.html",
+  "notes": "James Lane Colette modular sofa, 3-seater (SKU 107COLMOD2PCCH): two one-arm modules, left and right, joined in the middle, in Muse chenille Chocolate on black plastic legs. W 266 × D 109 × H 72 cm, seat height 46 cm, seat depth 69 cm, per James Lane's product page. Its gentle curve, the rounded pebble ends of the seat base and the low backrest that flows around the ends into round arm rolls are drawn from the product photos; the two backrests meet in a V in the middle. The chenille preset is a little lighter and greyer than the Loretto's chocolate velvet, as in James Lane's photos and swatch. Its seat is a surface, so cushions can be put on it. Clearance: 45 cm of legroom in front."
+}

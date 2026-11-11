@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "armchair-riga",
+  "name": "Armchair, James Lane Riga",
+  "category": "seating",
+  "tags": ["living room", "reading", "boucle", "james lane", "riga", "sculptural", "chocolate and blue"],
+  "dimensions": { "width": 87, "depth": 84, "height": 72 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "arm slabs", "shape": "box", "size": { "x": 12, "y": 49.05, "z": 17.7 }, "cornerRadius": 5.9, "position": { "x": 37.5, "y": 24.52, "z": 17.65 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "arm slabs, rounded tops", "shape": "lathe", "profile": [[0, -6], [2.95, -6], [4.48, -5.8], [5.9, -5.21], [7.12, -4.27], [8.06, -3.05], [8.65, -1.63], [8.85, -0.1], [8.85, 0.1], [8.65, 1.63], [8.06, 3.05], [7.12, 4.27], [5.9, 5.21], [4.48, 5.8], [2.95, 6], [0, 6]], "position": { "x": 37.5, "y": 43.15, "z": 17.65 }, "rotation": { "z": 90 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "rear slab", "shape": "box", "size": { "x": 16.3, "y": 52.25, "z": 13.4 }, "cornerRadius": 6.4, "position": { "x": 0, "y": 26.12, "z": -35.3 }, "material": "upholstery" },
+      { "name": "rear slab, rounded top", "shape": "lathe", "profile": [[0, -6.7], [1.75, -6.7], [3.41, -6.48], [4.95, -5.84], [6.28, -4.83], [7.29, -3.5], [7.93, -1.96], [8.15, -0.3], [8.15, 0.3], [7.93, 1.96], [7.29, 3.5], [6.28, 4.83], [4.95, 5.84], [3.41, 6.48], [1.75, 6.7], [0, 6.7]], "position": { "x": 0, "y": 45.85, "z": -35.3 }, "rotation": { "x": 90 }, "material": "upholstery" },
+      { "name": "seat cushion", "shape": "lathe", "profile": [[0, 22], [26, 22], [28.33, 22.31], [30.5, 23.21], [32.36, 24.64], [33.79, 26.5], [34.69, 28.67], [35, 31], [35, 35], [34.69, 37.33], [33.79, 39.5], [32.36, 41.36], [30.5, 42.79], [28.33, 43.69], [26, 44], [13, 45.38], [0, 46.3]], "position": { "x": 0, "y": 0, "z": 7 }, "material": "upholstery" },
+      { "name": "backrest bolster", "shape": "lathe", "arc": 180, "profile": [[35.5, 48], [37.57, 48.27], [39.5, 49.07], [41.16, 50.34], [42.43, 52], [43.23, 53.93], [43.5, 56], [43.5, 64], [43.23, 66.07], [42.43, 68], [41.16, 69.66], [39.5, 70.93], [37.57, 71.73], [35.5, 72], [34.5, 72], [32.43, 71.73], [30.5, 70.93], [28.84, 69.66], [27.57, 68], [26.77, 66.07], [26.5, 64], [26.5, 56], [26.77, 53.93], [27.57, 52], [28.84, 50.34], [30.5, 49.07], [32.43, 48.27], [34.5, 48], [35.5, 48]], "position": { "x": 0, "y": 0, "z": 7 }, "rotation": { "y": 180 }, "material": "upholstery" },
+      { "name": "backrest bolster, sides", "shape": "box", "size": { "x": 17, "y": 24, "z": 21 }, "cornerRadius": 8, "position": { "x": 35, "y": 60, "z": 9.5 }, "mirror": ["x"], "material": "upholstery" }
+    ]
+  },
+  "materialSlots": {
+    "upholstery": { "label": "Upholstery", "default": "fabric.boucle-light-blue", "allowed": ["fabric.*"] }
+  },
+  "surfaces": [{ "name": "seat", "height": 45, "width": 50, "depth": 46, "center": [0, 5] }],
+  "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
+  "productUrl": "https://www.jameslane.com.au/riga-occasional-chair-boucle-ivory.html",
+  "notes": "James Lane Riga occasional chair (SKU 193RIGOCCCHABIV): W 87 × D 84 × H 72 cm, seat 54 cm wide, 63 cm deep and 43 cm high (47 cm to the top of the seat cushion in James Lane's dimension image), per James Lane's product page. Two upholstered slab arms run down to the floor as legs and a third slab carries the back; a thick round seat cushion hangs between them, and a curved bolster backrest rests on the slabs. James Lane makes it in bouclé Ivory, Muse Chocolate and Tahoe Taupe; light blue bouclé is the user's colour for this collection, not a stock colour. Its seat is a surface, so a cushion can be put on it. Clearance: 45 cm of legroom in front."
+}

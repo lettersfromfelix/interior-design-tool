@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "cushion-velvet-45",
+  "name": "Cushion 45 × 45, velvet",
+  "category": "decor",
+  "tags": ["living room", "pillow", "throw cushion", "sofa", "velvet", "chocolate and blue"],
+  "dimensions": { "width": 45, "depth": 21, "height": 44 },
+  "placement": { "type": "onTop" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "cushion corners", "shape": "box", "size": { "x": 45, "y": 45, "z": 2.4 }, "cornerRadius": 1.15, "position": { "x": 0, "y": 21.77, "z": 0 }, "rotation": { "x": -18 }, "material": "cover" },
+      { "name": "cushion filling", "shape": "sphere", "radius": 1, "scale": { "x": 22.6, "y": 22.6, "z": 8.2 }, "position": { "x": 0, "y": 21.77, "z": 0 }, "rotation": { "x": -18 }, "material": "cover" }
+    ]
+  },
+  "materialSlots": {
+    "cover": { "label": "Cover", "default": "fabric.velvet-light-blue", "allowed": ["fabric.*", "leather.*"] }
+  },
+  "notes": "Own design, not a specific product: a 45 × 45 cm velvet throw cushion with a plump middle, light blue like the small channel-tufted armchair and the Riga. It leans back about 18°, so its box is 45 × 21 × 44 cm. Put it on the seat of a sofa or an armchair (the Loretto, Colette and other sofas and armchairs with a seat surface); it then moves with them. Duplicate it for more."
+}
