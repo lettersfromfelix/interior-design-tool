@@ -11,6 +11,7 @@
  * overwritten (that tab's version is loaded instead, and other tabs are told about every change).
  */
 import { contentTag, isLayoutName, MAX_LAYOUT_BYTES, type DataDir, type FileEntry, type FilesResponse, type FsChange } from "../core/files";
+import { DEFAULT_LAYOUT_FILE } from "../state/store";
 import { LayoutConflictError, type DirListing, type FileBackend, type PutLayoutOptions } from "./fileBackend";
 
 /** localStorage key of the layouts kept in this browser: { "layouts/<name>.json": { text, mtime } }. */
@@ -42,6 +43,8 @@ export interface SiteBackendOptions {
   events?: Pick<EventTarget, "addEventListener" | "removeEventListener">;
   /** False if `storage` doesn't outlive the page (see browserStorage). */
   durable?: boolean;
+  /** The layout a first visit opens (default: layouts/default.json). */
+  startLayout?: string;
 }
 
 export function siteBackend(base: string, storage: KeyValueStore, options: SiteBackendOptions = {}): FileBackend {
@@ -100,6 +103,7 @@ export function siteBackend(base: string, storage: KeyValueStore, options: SiteB
   return {
     kind: "browser",
     durable: options.durable ?? true,
+    startLayout: options.startLayout ?? DEFAULT_LAYOUT_FILE,
 
     async fetchDir(dir) {
       const listing = await load(dir);

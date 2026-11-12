@@ -9,11 +9,11 @@ import { serializeLayout } from "../core/layout/serialize";
 import type { LayoutFile } from "../core/schema/layout";
 import { issue, type Issue } from "../core/validate/issues";
 import { parseLayout } from "../core/validate/layout";
-import { DEFAULT_LAYOUT_FILE, type AppStore } from "../state/store";
+import type { AppStore } from "../state/store";
 import { backend as defaultBackend } from "./backend";
 import type { FileBackend } from "./fileBackend";
 import type { LayoutSync } from "./layoutSync";
-import type { Repository } from "./repository";
+import { fallbackLayout, type Repository } from "./repository";
 
 /** "Variante Süd 2" -> "variante-sud-2" (file names stay plain ASCII). */
 export function layoutSlug(name: string): string {
@@ -146,7 +146,7 @@ export class LayoutManager {
     if (s.layout.file === file) {
       await this.sync.settle(); // its last changes go into the trash with it
       base = this.store.getState().layout.diskText;
-      this.store.getState().openLayout((others.find((l) => l.file === DEFAULT_LAYOUT_FILE) ?? others[0]).file);
+      this.store.getState().openLayout(fallbackLayout(others.map((l) => l.file), this.files.startLayout)!);
     } else {
       base = this.repo.layoutText(file);
     }

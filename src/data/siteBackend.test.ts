@@ -18,7 +18,7 @@ const DEMO = layoutText("Demo", 2);
 const DEFAULT = layoutText("Default");
 
 /** The website: the build's listings, a localStorage and the window that other tabs' "storage" events arrive at. */
-function website(layouts: Record<string, string> = { "layouts/default.json": DEFAULT, "layouts/demo.json": DEMO }) {
+function website(layouts: Record<string, string> = { "layouts/default.json": DEFAULT, "layouts/demo.json": DEMO }, startLayout?: string) {
   const listings: Record<string, FilesResponse> = {
     "/site/files/data.json": { dir: "data", files: [], assets: [] },
     "/site/files/catalogue.json": { dir: "catalogue", files: [], assets: [{ path: "catalogue/stool/model.glb", size: 10, mtime: 7 }] },
@@ -31,7 +31,7 @@ function website(layouts: Record<string, string> = { "layouts/default.json": DEF
   const memory = new Map<string, string>();
   const storage = { getItem: (k: string) => memory.get(k) ?? null, setItem: vi.fn((k: string, v: string) => void memory.set(k, v)) };
   const events = new EventTarget();
-  const files = siteBackend("/site/", storage, { fetch: fetch as typeof globalThis.fetch, events });
+  const files = siteBackend("/site/", storage, { fetch: fetch as typeof globalThis.fetch, events, startLayout });
   const kept = () => JSON.parse(memory.get(LAYOUTS_KEY) ?? "{}") as Record<string, { text: string }>;
   return { files, fetch, memory, storage, events, kept };
 }
@@ -156,6 +156,21 @@ describe("layouts on the website", () => {
     await repo.start();
     return { ...site, store, repo, sync, manager };
   }
+
+  it("opens the website's start layout on a first visit, or the default one if it isn't there", async () => {
+    const firstVisit = async (layouts: Record<string, string>) => {
+      const { files } = website(layouts, "layouts/living1.json");
+      const store = createAppStore(false, files.startLayout);
+      await new Repository(store, files).start();
+      return store.getState().layout;
+    };
+    expect(await firstVisit({ "layouts/default.json": DEFAULT, "layouts/living1.json": layoutText("Living1", 3) })).toMatchObject({
+      file: "layouts/living1.json",
+      status: "ready",
+      doc: { name: "Living1" },
+    });
+    expect(await firstVisit({ "layouts/default.json": DEFAULT, "layouts/demo.json": DEMO })).toMatchObject({ file: "layouts/default.json", status: "ready" });
+  });
 
   it("opens a layout file as a new layout, kept in the browser", async () => {
     const { store, manager, kept } = await app();

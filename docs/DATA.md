@@ -301,7 +301,8 @@ How the app treats the files:
 
 - **Several layouts.** The layout menu in the toolbar lists every file in `layouts/` (not subfolders). It opens,
   creates (empty or as a copy of the open one), renames and deletes them, and compares two side by side. The app
-  remembers which one was open; if that file is gone, it opens `default.json` (or the first one).
+  remembers which one was open. The first time, and when that file is gone, it opens `default.json` (the website
+  opens `living1.json`, see [below](#the-website-static-build)), or else the first one.
 - **Autosave.** Every change is written about half a second later. A new layout's file is created by the first
   change (or right away by "New…" and "Duplicate…"). Before another layout is opened, the open one is saved; if that
   fails, it stays open. Undo steps are kept per layout while the app runs.
@@ -356,14 +357,15 @@ There is no server, so `server/staticSite.ts` lists the data folders at build ti
 
 On the website (`src/data/siteBackend.ts`):
 
-- **Layouts.** The files in `layouts/` at build time come with the website as starting points. Changes are kept
-  in the browser's `localStorage` (key `interior-design-tool.layouts.v1`, the layout text exactly as in a file), per
-  browser and device, so a reload or a closed tab loses nothing. A changed layout that came with the website is
-  marked "changed in this browser"; **Reset…** drops the changes and shows the published version again (Undo brings
-  them back). Layouts made in the browser (**New…**, **Duplicate…**, **Open file…**) can be deleted. Clearing the
-  browser's site data deletes them all. Where the browser blocks site data (every `localStorage` access throws),
-  layouts and preferences are kept in memory instead (`FileBackend.durable` is false), and the status bar and the
-  layout menu say that changes last only until the tab closes.
+- **Layouts.** The files in `layouts/` at build time come with the website as starting points. A first visit opens
+  **Living1** (`layouts/living1.json`; `WEBSITE_START_LAYOUT` in `src/data/backend.ts`), later visits the layout that
+  was open last. Changes are kept in the browser's `localStorage` (key `interior-design-tool.layouts.v1`, the layout
+  text exactly as in a file), per browser and device, so a reload or a closed tab loses nothing. A changed layout that
+  came with the website is marked "changed in this browser"; **Reset…** drops the changes and shows the published
+  version again (Undo brings them back). Layouts made in the browser (**New…**, **Duplicate…**, **Open file…**) can
+  be deleted. Clearing the browser's site data deletes them all. Where the browser blocks site data (every
+  `localStorage` access throws), layouts and preferences are kept in memory instead (`FileBackend.durable` is false),
+  and the status bar and the layout menu say that changes last only until the tab closes.
 - **Save** (**⤓ Save** or <kbd>Ctrl</kbd>+<kbd>S</kbd>, also **Save to file** in the layout menu) downloads the open
   layout as `<file name>.json`, formatted like the files in `layouts/`. **Open file…** adds such a file, checked
   like any layout, and keeps it in the browser.

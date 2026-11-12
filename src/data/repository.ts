@@ -12,6 +12,11 @@ import type { FileBackend } from "./fileBackend";
 /** A layout in layouts/ itself (not in a subfolder such as .trash/). */
 const LAYOUT_FILE_RE = /^layouts\/[^/]+\.json$/;
 
+/** The layout to open instead of one that isn't there: the start layout, else layouts/default.json, else the first. */
+export function fallbackLayout(files: readonly string[], startLayout: string): string | undefined {
+  return [startLayout, DEFAULT_LAYOUT_FILE].find((f) => files.includes(f)) ?? files[0];
+}
+
 /** What the layout menu shows about a file: its name and size, also when the file has errors. */
 function layoutInfo(f: FileEntry): LayoutInfo {
   const fallback = f.path.slice("layouts/".length, -".json".length);
@@ -122,11 +127,11 @@ export class Repository {
     this.store.getState().setLayouts(files.map(layoutInfo).sort((a, b) => a.name.localeCompare(b.name) || a.file.localeCompare(b.file)));
     if (!this.layoutsSeen) {
       this.layoutsSeen = true;
-      // the layout that was open last time is gone: open the default one, or any
+      // the layout that was open last time (or the start layout) is gone: open the start layout, the default one, or any
       const s = this.store.getState();
-      if (files.length && !files.some((f) => f.path === s.layout.file)) {
-        s.openLayout((files.find((f) => f.path === DEFAULT_LAYOUT_FILE) ?? files[0]).path);
-      }
+      const paths = files.map((f) => f.path);
+      const instead = paths.includes(s.layout.file) ? undefined : fallbackLayout(paths, this.files.startLayout);
+      if (instead) s.openLayout(instead);
     }
     this.applyWorkingLayout(listing);
     this.applyCompare();

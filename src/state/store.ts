@@ -240,8 +240,8 @@ export function localStorageIfAllowed(): Storage | undefined {
   }
 }
 
-function loadPrefs(): Stored {
-  const fallback = { ...defaultPrefs, layoutFile: DEFAULT_LAYOUT_FILE };
+function loadPrefs(startLayout: string): Stored {
+  const fallback = { ...defaultPrefs, layoutFile: startLayout };
   try {
     const raw = localStorageIfAllowed()?.getItem(PREFS_KEY);
     if (!raw) return fallback;
@@ -258,7 +258,7 @@ function loadPrefs(): Stored {
       aids: readAids(p.aids),
       daylight: readDaylight(p.daylight),
       walk: readWalk(p.walk),
-      layoutFile: typeof p.layoutFile === "string" && /^layouts\/[^/]+\.json$/.test(p.layoutFile) ? p.layoutFile : DEFAULT_LAYOUT_FILE,
+      layoutFile: typeof p.layoutFile === "string" && /^layouts\/[^/]+\.json$/.test(p.layoutFile) ? p.layoutFile : startLayout,
     };
   } catch {
     return fallback;
@@ -283,8 +283,9 @@ const reloadedSince = (layout: LayoutState, revision: number) => layout.status !
 
 const pushPast = (h: History, doc: LayoutFile): History => ({ past: [...h.past, doc].slice(-HISTORY_LIMIT), future: [] });
 
-export function createAppStore(persist = localStorageIfAllowed() !== undefined) {
-  const stored = persist ? loadPrefs() : { ...defaultPrefs, layoutFile: DEFAULT_LAYOUT_FILE };
+/** `startLayout`: the layout to open when no layout is remembered (the file backend's `startLayout`). */
+export function createAppStore(persist = localStorageIfAllowed() !== undefined, startLayout = DEFAULT_LAYOUT_FILE) {
+  const stored = persist ? loadPrefs(startLayout) : { ...defaultPrefs, layoutFile: startLayout };
   const { layoutFile, ...prefs } = stored;
   /** Key of the last edit if it may be merged with the next one (slider gestures). */
   let lastMerge: string | undefined;

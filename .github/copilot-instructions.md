@@ -74,7 +74,9 @@ The schemas are strict: unknown properties are errors, ids are kebab-case, and p
   reloads a file that changes on disk, so you can read and edit layouts while it runs.
 - They are the user's files, and they are tracked in git (the user's decision) and published with the website.
   Don't create, change or delete them unless asked, and commit changes to them only when the user asks, not as part
-  of other work. `layouts/demo.json` is an example layout. `layouts/.trash/` (deleted layouts) is git-ignored.
+  of other work. `layouts/demo.json` is an example layout. The website opens `layouts/living1.json` (Living1) on a
+  first visit (`WEBSITE_START_LAYOUT` in `src/data/backend.ts`), the local app `layouts/default.json`.
+  `layouts/.trash/` (deleted layouts) is git-ignored.
 - To place furniture for the user, edit the layout file: `position` is the item's bottom centre `[x, z]`, `rotation`
   is in degrees, and items standing on another item have `parent` and positions relative to it.
 

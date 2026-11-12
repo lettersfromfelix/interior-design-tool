@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { backend } from "./data/backend";
 import { LayoutManager } from "./data/layouts";
 import { LayoutSync } from "./data/layoutSync";
 import { Repository } from "./data/repository";
@@ -11,7 +12,7 @@ import { ServicesContext } from "./ui/services";
 import { StoreContext } from "./ui/store";
 import "./ui/styles.css";
 
-const store = createAppStore();
+const store = createAppStore(undefined, backend.startLayout);
 const models = new ModelLibrary((file, issues) => store.getState().setRuntimeIssues(file, issues));
 const repository = new Repository(store);
 void repository.start();

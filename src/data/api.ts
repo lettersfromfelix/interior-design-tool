@@ -9,6 +9,7 @@ import {
   type TrashResponse,
   type WriteResponse,
 } from "../core/files";
+import { DEFAULT_LAYOUT_FILE } from "../state/store";
 import { LayoutConflictError, type DirListing, type FileBackend, type PutLayoutOptions } from "./fileBackend";
 
 export { LayoutConflictError, type PutLayoutOptions };
@@ -57,7 +58,7 @@ export function onFsChange(cb: (change: FsChange) => void): () => void {
   return () => hot.off(FS_CHANGE_EVENT, cb);
 }
 
-export const diskBackend: FileBackend = { kind: "disk", durable: true, fetchDir, putLayout, trashLayout, onFsChange };
+export const diskBackend: FileBackend = { kind: "disk", durable: true, startLayout: DEFAULT_LAYOUT_FILE, fetchDir, putLayout, trashLayout, onFsChange };
 
 /** URL for a repository-relative asset path (underlay, textures, GLB models); the website lives below a base path. */
 export const assetUrl = (repoPath: string, version?: number): string =>

@@ -1,0 +1,174 @@
+{
+  "$schema": "../schemas/layout.schema.json",
+  "schemaVersion": 1,
+  "name": "Living1",
+  "updatedAt": "2026-11-12T08:17:38.688Z",
+  "doors": {
+    "d-zimmer-13-0-balcony-n": 0,
+    "d-living-balcony-n": 0,
+    "d-living-balcony-se": 0,
+    "d-zimmer-15-9-balcony-se": 0,
+    "d-living-zimmer-15-9": 180,
+    "d-entrance": 0,
+    "d-living-zimmer-13-0": 109,
+    "d-entree-living": 0
+  },
+  "items": [
+    {
+      "uid": "dining-table-gueridon-105-1",
+      "item": "dining-table-gueridon-105",
+      "position": [1151, 392.8],
+      "rotation": 30
+    },
+    {
+      "uid": "dining-chair-eames-dsr-1",
+      "item": "dining-chair-eames-dsr",
+      "position": [1113.3, 407.1],
+      "rotation": 240
+    },
+    {
+      "uid": "dining-chair-eames-dsr-2",
+      "item": "dining-chair-eames-dsr",
+      "position": [1179.1, 432.3],
+      "rotation": 150
+    },
+    {
+      "uid": "dining-chair-eames-dsr-3",
+      "item": "dining-chair-eames-dsr",
+      "position": [1190.7, 371.1],
+      "rotation": 60
+    },
+    {
+      "uid": "tv-tripod-55-1",
+      "item": "tv-tripod-55",
+      "position": [582.5, 192.9],
+      "rotation": 26.3,
+      "materials": { "legs": "wood.walnut" }
+    },
+    { "uid": "bed-160x200-1", "item": "bed-160x200", "position": [244.9, 560.1], "rotation": 166.1 },
+    { "uid": "wardrobe-150-2", "item": "wardrobe-150", "position": [336.2, 615.7], "rotation": 166.1 },
+    {
+      "uid": "dining-chair-eames-dsr-4",
+      "item": "dining-chair-eames-dsr",
+      "position": [1132.1, 346.3],
+      "rotation": 330
+    },
+    { "uid": "rug-200x300-1", "item": "rug-200x300", "position": [505.2, 427.9], "rotation": 337.4 },
+    { "uid": "wardrobe-150-3", "item": "wardrobe-150", "position": [198.4, 649.9], "rotation": 166.1 },
+    {
+      "uid": "sideboard-usm-haller-2x2-1",
+      "item": "sideboard-usm-haller-2x2",
+      "position": [36.9, 300],
+      "rotation": 346.1,
+      "materials": { "panels": "lacquer.beige" }
+    },
+    {
+      "uid": "sideboard-usm-haller-2x2-2",
+      "item": "sideboard-usm-haller-2x2",
+      "position": [67.2, 351.8],
+      "rotation": 256.1,
+      "materials": { "panels": "lacquer.beige" }
+    },
+    {
+      "uid": "table-lamp-globe-1",
+      "item": "table-lamp-globe",
+      "position": [16.8, 0],
+      "rotation": 13.9,
+      "parent": { "uid": "sideboard-usm-haller-2x2-1", "surface": 0 }
+    },
+    { "uid": "plant-olive-tree-1", "item": "plant-olive-tree", "position": [62.1, 404.4], "rotation": 0 },
+    { "uid": "sofa-colette-3-1", "item": "sofa-colette-3", "position": [462.6, 460.3], "rotation": 246.1 },
+    {
+      "uid": "wall-panel-slats-80x100-3",
+      "item": "wall-panel-slats-80x100",
+      "position": [409, 518.3],
+      "rotation": 256.1,
+      "elevation": 0
+    },
+    {
+      "uid": "wall-panel-slats-80x100-4",
+      "item": "wall-panel-slats-80x100",
+      "position": [428.1, 595.5],
+      "rotation": 256.1,
+      "elevation": 0
+    },
+    {
+      "uid": "floor-lamp-paper-lantern-1",
+      "item": "floor-lamp-paper-lantern",
+      "position": [477.3, 586],
+      "rotation": 0
+    },
+    {
+      "uid": "coffee-table-pebble-1",
+      "item": "coffee-table-pebble",
+      "position": [577.4, 455.6],
+      "rotation": 84,
+      "materials": { "body": "wood.ash-white" }
+    },
+    {
+      "uid": "cushion-velvet-45-1",
+      "item": "cushion-velvet-45",
+      "position": [65.2, -1.3],
+      "rotation": 23.8,
+      "parent": { "uid": "sofa-colette-3-1", "surface": 0 }
+    },
+    {
+      "uid": "cushion-velvet-45-2",
+      "item": "cushion-velvet-45",
+      "position": [-65.6, 1.7],
+      "rotation": 324.3,
+      "parent": { "uid": "sofa-colette-3-1", "surface": 0 }
+    },
+    {
+      "uid": "wall-panel-slats-80x100-13",
+      "item": "wall-panel-slats-80x100",
+      "position": [389.7, 440.6],
+      "rotation": 256.1,
+      "elevation": 0
+    },
+    {
+      "uid": "wall-panel-slats-80x100-15",
+      "item": "wall-panel-slats-80x100",
+      "position": [370.4, 362.7],
+      "rotation": 256.1,
+      "elevation": 0
+    },
+    { "uid": "plant-olive-tree-2", "item": "plant-olive-tree", "position": [375.1, 343.8], "rotation": 0 },
+    {
+      "uid": "wall-shelf-80-1",
+      "item": "wall-shelf-80",
+      "position": [500.5, 176.2],
+      "rotation": 346.1,
+      "materials": { "body": "wood.wenge" }
+    },
+    {
+      "uid": "wall-panel-slats-80x100-1",
+      "item": "wall-panel-slats-80x100",
+      "position": [473.4, 611.4],
+      "rotation": 166.1,
+      "elevation": 0
+    },
+    {
+      "uid": "wall-panel-slats-80x100-2",
+      "item": "wall-panel-slats-80x100",
+      "position": [566.2, 588.4],
+      "rotation": 166.1,
+      "elevation": 0
+    },
+    {
+      "uid": "wall-panel-slats-80x100-5",
+      "item": "wall-panel-slats-80x100",
+      "position": [493.1, 606.5],
+      "rotation": 166.1,
+      "elevation": 0
+    },
+    {
+      "uid": "painting-colour-blocks-150x100-1",
+      "item": "painting-colour-blocks-150x100",
+      "position": [400.4, 481.2],
+      "rotation": 256.1,
+      "elevation": 120
+    },
+    { "uid": "armchair-eames-rar-1", "item": "armchair-eames-rar", "position": [636.6, 275.3], "rotation": 31.4 }
+  ]
+}

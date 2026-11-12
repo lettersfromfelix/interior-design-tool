@@ -30,7 +30,7 @@ repository's **Actions** tab). If a check fails, the previous version stays onli
 
 |  | Locally (`npm start`) | Website |
 |---|---|---|
-| **Layouts** | the files in `layouts/`, saved automatically | the layouts in `layouts/` come with it as starting points; your changes and new layouts are kept in this browser automatically (per browser and device) |
+| **Layouts** | the files in `layouts/`, saved automatically; opens `default.json` first | the layouts in `layouts/` come with it as starting points, and it opens **Living1** first; your changes and new layouts are kept in this browser automatically (per browser and device) |
 | **Save** | automatic, to the file | **⤓ Save** (<kbd>Ctrl</kbd>+<kbd>S</kbd>) downloads the layout as a JSON file |
 | **Open file…** (layout menu) | copies a layout file into `layouts/` | adds a layout file to the layouts in this browser |
 | **Reset…** | | drops this browser's changes to a layout that came with the website |
@@ -131,6 +131,8 @@ data/
 catalogue/              furniture, one item per file (or per folder with its 3D model) – see CATALOGUE.md
 layouts/
   *.json                one file per layout, autosaved; tracked in git and shipped with the website
+  default.json          the layout the local tool opens first
+  living1.json          Living1, the layout the website opens first
   demo.json             an example layout
   .trash/               deleted layouts (git-ignored)
 schemas/                GENERATED JSON Schemas for editor validation – don't edit
