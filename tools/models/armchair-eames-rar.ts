@@ -3,29 +3,32 @@
  * geometry (no third-party assets): the Vitra Eames Plastic Armchair RAR, the moulded one-piece armchair shell with a
  * seat pad, on the wire rocker base with two maple runners.
  *
- * The shell's shape follows the to-scale drawing of the Eames moulded plastic rocker on dimensions.com (side, front,
- * back and plan view; Herman Miller's version, 63.5 × 69.2 × 67.3 cm, scaled to Vitra's 62.5 × 69 × 67 cm, see
- * DRAWING_* and EDGE below). On Vitra's RAR the shell is shorter and sits further forward on the base than in that
- * drawing: Vitra's photos from the side and the front three-quarters (cameras fitted on the runners) and its dimension
- * drawing show it about 56 cm deep, well inside the 69 cm runners. So the drawn shell is set into Vitra's pose (POSE
- * below: the seat shortened, the back 6 cm further forward, turned forward by 2.8°). Dealer photos from all sides:
- * - At rest the chair tilts back: the seat rises towards the front at about 14°.
+ * The shell's shape started from the to-scale drawing of the Eames moulded plastic rocker on dimensions.com (side,
+ * front, back and plan view; Herman Miller's version, 63.5 × 69.2 × 67.3 cm, scaled to Vitra's 62.5 × 69 × 67 cm, see
+ * DRAWING_* below) and is matched to Vitra's photos from the side and the front three-quarters (cameras fitted on the
+ * runners), the front view of Vitra's dimension drawing and the reference picture from Vitra's configurator. On
+ * Vitra's RAR the shell is shorter and sits further forward on the base than in the dimensions.com drawing: about
+ * 56 cm deep, well inside the 69 cm runners. So the drawn shell is set into Vitra's pose (POSE below: the seat
+ * shortened, the back 6 cm further forward, turned forward by 2.8°). What the photos show:
+ * - At rest the chair tilts back a little: the broad, shallow seat rises gently towards the front (about 6°) into a
+ *   low, soft front edge that rolls down.
  * - One continuous shell: the seat flows on all sides into walls that rise to the rim. At the sides they are the arms,
- *   upright on the outside, their tops about 25 cm above the seat; behind they are the back, which leans back, flares
- *   back towards the top and rises above the arms in a broad dome; at the front the seat rolls down over its edge.
- *   Where the arms end, the rim sweeps down in an S-curve to the front edge.
- * - The rim is a lip that curls outwards: at the arms it stands out about 1.3 cm (the "ears" in the front view), at
- *   the top of the back it curls back, at the front it rolls under.
+ *   upright on the outside, their tops level at about 56 cm; behind they are the back, which leans back, flares back
+ *   towards the top and rises above the arms: its top line climbs gradually from the arms into a broad dome. Where
+ *   the arms end, the rim runs down to the front edge in one convex curve.
+ * - The rim is one thick, soft roll: the wall thickens towards it, mostly on the outside, and the lip curls outwards.
+ *   At the arms it stands out over the wall below (the "ears" in the front view), at the front it rolls under.
  *
  * The shell's mid-surface is built around a vertical axis through the seat. From the axis a dished floor (a height
  * field) runs out to a rounded rectangle. From there, in the vertical half-plane at each angle around the axis, a
  * quintic Hermite curve (tangent to the floor, ending in the wall's direction, without curvature at either end) rises
  * to the start of the lip, and the lip curls outwards, at right angles to the rim. The fit moves the start of the lip
- * until the lip's top and outermost point lie on EDGE, the rim taken from the drawing's views. The surface is offset
- * to both sides (5 mm wall, thickening to a 1 cm bead in the lip) and closed by a rounded edge, so the shell is one
- * smooth solid.
+ * until the outermost and highest points of the rounded edge lie on EDGE, the rim. The surface is offset to both sides
+ * (a 5 mm wall, thickening over the last part of the wall and the lip to a 1.5 cm roll, mostly on the outside) and
+ * closed by a rounded edge, so the shell is one smooth solid.
  *
- * The seat pad lies on the seat between the arms: 1.5 cm of upholstery with rounded edges, following the seat's dish.
+ * The seat pad covers most of the seat, as in the configurator picture: 1.5 cm of upholstery with rounded edges, from
+ * the bend into the back to just behind the front edge and a little way up the sides, following the seat's dish.
  *
  * The base: two wires under the shell carry the four shock mounts in pairs (the front one dips between its mounts)
  * and run down as the four legs to the runners; X-braces join every foot to the tops of the legs on its side and at
@@ -125,7 +128,7 @@ function byAngle(knots: Knots): (deg: number) => number {
   return spline([...before.reverse(), ...knots, ...after.reverse()]);
 }
 
-/** Overall size (Vitra): W 62.5 × D 69 × H 67 cm, seat height 33 cm, arms 25 cm above the seat. */
+/** Overall size (Vitra): W 62.5 × D 69 × H 67 cm, seat height 33 cm. */
 const SIZE = { width: 62.5, depth: 69, height: 67 };
 
 /**
@@ -142,60 +145,64 @@ const DRAWING_FRONT: Knots = [[34, 22.7], [35, 24.5], [36, 25.7], [37, 26.7], [3
 const DRAWING_PLAN: Knots = [[-32, 12.7], [-30, 14.9], [-28, 16.3], [-26, 17.4], [-24, 18.6], [-22, 20.1], [-20, 22.9], [-18, 26.9], [-16, 29.8], [-14, 30.85], [-12, 31.2], [-6, 31.26], [0, 31.26], [6, 31.27], [10, 31.27], [12, 31.1], [14, 30.2], [16, 27.4], [18, 26.0], [20, 25.5], [22, 25.3], [24, 25.1], [26, 24.65], [28, 23.4], [30, 20.1], [31, 16.4]];
 
 /**
- * The rim, half of it from the front edge round the right arm to the top of the back: [x, top, z] where the lip is
- * highest and outermost. From the drawing: z and the height from the side view, x from the plan, the front edge's
- * rise to the sides from the front view. Round the back, where the drawing's views disagree by up to 3 cm, the plan,
- * the side and the front view (they agree with each other and with the reference picture); the back view's dome is
- * wider at the shoulders. Where the rim falls steeply (the arm's front, the shoulders) and at the front corners, the
- * points lie about 1 cm inside the drawn outline: the curled lip and its bead stand out by that much.
+ * The rim, half of it from the front edge round the right arm to the top of the back: [x, top, z] where the rounded
+ * edge is highest and outermost, in the drawn frame (before POSE). The points are where Vitra's photos and the
+ * configurator picture have the rim after the pose, taken back through it: the front edge about 36.5 cm high, rising
+ * to the sides; the arm's front climbing to the arm in one convex curve; the arms level at about 56 cm; and from the
+ * shoulders a top line that climbs gradually into a broad dome, after the front view of Vitra's dimension drawing
+ * (half-width 25.7 cm at 55.2 cm high, 19.1 at 58.1, 12.5 at 63.5, 5.9 at 66.2). The plan's widths are the
+ * dimensions.com drawing's, scaled.
  */
 const EDGE: readonly Vec[] = [
-  [0, 41.3, 31.6],
-  [10, 41.25, 31.4],
-  [16.0, 41.3, 30.8],
-  [19.8, 41.35, 29.6],
-  [22.4, 41.7, 28.4],
-  [24.2, 42.6, 26.6],
-  [25.0, 44.4, 24.0],
-  [25.35, 47.2, 21.4],
-  [25.55, 49.5, 19.3],
-  [26.0, 51.7, 17.2],
-  [27.4, 54.1, 15.2],
-  [30.2, 57.4, 13.4],
-  [31.12, 59.0, 11.6],
-  [31.26, 59.3, 9.0],
-  [31.26, 58.8, 4.0],
-  [31.26, 58.2, 0.0],
-  [31.26, 57.45, -4.0],
-  [31.26, 56.78, -8.0],
-  [31.2, 56.1, -12.0],
-  [30.85, 55.8, -14.0],
-  [29.8, 55.4, -16.0],
-  [27.8, 55.3, -17.4],
-  [22.8, 55.4, -19.8],
-  [19.4, 56.0, -22.6],
-  [17.4, 58.8, -25.5],
-  [15.1, 61.8, -28.2],
-  [12.0, 64.5, -30.4],
-  [8.0, 66.1, -32.0],
-  [4.0, 66.85, -33.1],
-  [0.0, 67.0, -33.6],
+  [0, 39.28, 31.66],
+  [10, 39.27, 31.37],
+  [15.5, 39.42, 30.46],
+  [20.0, 39.89, 28.63],
+  [23.0, 40.69, 26.59],
+  [25.0, 41.93, 24.43],
+  [26.4, 43.83, 22.33],
+  [27.4, 45.84, 20.38],
+  [28.2, 48.16, 18.49],
+  [28.9, 50.59, 16.58],
+  [29.6, 53.0, 14.41],
+  [30.3, 55.11, 11.84],
+  [30.9, 56.61, 8.72],
+  [31.2, 57.39, 4.93],
+  [31.25, 57.54, 0.45],
+  [31.3, 57.44, -3.73],
+  [31.3, 57.35, -7.49],
+  [31.3, 57.25, -10.83],
+  [31.25, 57.15, -13.85],
+  [30.8, 57.15, -16.06],
+  [29.6, 57.26, -17.86],
+  [27.6, 57.48, -19.48],
+  [25.0, 57.81, -20.89],
+  [22.4, 58.53, -22.53],
+  [20.0, 59.44, -24.38],
+  [17.6, 60.74, -26.44],
+  [15.2, 62.45, -28.43],
+  [12.5, 64.16, -30.32],
+  [9.8, 65.24, -31.67],
+  [7.2, 66.05, -32.61],
+  [4.5, 66.72, -33.24],
+  [2.2, 66.95, -33.56],
+  [0.0, 67.0, -33.66],
 ];
 
 // ---- the shell (cm) ----
 const WALL = 0.5;
-/** The lip thickens to a bead at the edge. */
-const BEAD = 1.05;
+/** The wall thickens to a roll at the edge. */
+const BEAD = 1.5;
 /** Segments of the rounded edge. */
 const CAP = 6;
 /** The axis of the shell's parametrisation: x = 0, z = AXIS_Z. */
 const AXIS_Z = 4;
 
 /**
- * The floor (mid-surface): lowest at z = -6, rising towards the front at 17° (the tilt at rest) and a little more in
- * front of the middle, dished across.
+ * The floor (mid-surface): lowest at z = -6, rising gently towards the front (7.5° as drawn, about 6° after the pose)
+ * and a little more in front of z = 12, towards the low front edge; slightly dished across.
  */
-const FLOOR = { y0: 33.25, z0: -6, ease: 6, slope: Math.tan(17 * DEG), dish: 0.0018, front: 8, rise: 0.003 };
+const FLOOR = { y0: 34.0, z0: -6, ease: 6, slope: Math.tan(7.5 * DEG), dish: 0.0018, front: 12, rise: 0.0012 };
 const floorY = (x: number, z: number) =>
   FLOOR.y0 + FLOOR.slope * (Math.hypot(z - FLOOR.z0, FLOOR.ease) - FLOOR.ease) + FLOOR.dish * x * x + FLOOR.rise * Math.max(0, z - FLOOR.front) ** 2;
 const floorGrad = (x: number, z: number): [number, number] => [
@@ -203,24 +210,25 @@ const floorGrad = (x: number, z: number): [number, number] => [
   (FLOOR.slope * (z - FLOOR.z0)) / Math.hypot(z - FLOOR.z0, FLOOR.ease) + 2 * FLOOR.rise * Math.max(0, z - FLOOR.front),
 ];
 /**
- * The floor ends at a rounded rectangle (a superellipse), where the walls, the back and the front edge begin: wide and
- * nearly square, so the shell is flat underneath and turns up tightly into upright sides (the drawing's front view).
+ * The floor ends at a rounded rectangle (superellipses), where the walls, the back and the front edge begin: broad and
+ * squarish in front of its widest point, so the seat turns up tightly into upright sides (the drawing's front view),
+ * and rounder behind it, where the floor turns up into the corners of the back.
  */
-const RING = { x: 20, z: 5.25, dz: 15.75, power: 4 };
+const RING = { x: 20, z: 5.5, dz: 16.5, front: 3.2, back: 2.0 };
 
 /** Around the axis (degrees): the direction in which the wall arrives at the lip, from the horizontal outwards, ... */
-const WALL_ANGLE = byAngle([[0, 6], [20, 8], [31.5, 14], [38, 26], [42.6, 42], [47, 62], [51, 74], [55, 80], [62, 86], [72, 90], [117, 90], [124, 86], [131, 78], [139, 70], [146, 62], [158, 55.5], [180, 50.5]]);
+const WALL_ANGLE = byAngle([[0, 6], [20, 8], [31.5, 14], [38, 26], [42.6, 42], [47, 62], [51, 74], [55, 80], [62, 86], [72, 90], [105, 88], [112, 80], [120, 68], [128, 62], [136, 60.5], [146, 58], [158, 54], [180, 50.5]]);
 /**
  * ... how far the curve keeps to the floor's direction and to the wall's (shares of its chord): at the sides it keeps
  * long to both, a tight bend between a flat seat and upright walls; at the back it turns up soon and then runs long in
  * the wall's direction, so the lower back stands steep (about 25° from upright) and the upper back leans back (about
  * 40°), as in the drawing's side view, ...
  */
-const FLOOR_PULL = byAngle([[0, 0.5], [45, 0.5], [70, 0.75], [90, 0.85], [120, 0.8], [150, 0.5], [180, 0.37]]);
-const WALL_PULL = byAngle([[0, 0.35], [40, 0.45], [60, 0.95], [70, 1.3], [90, 1.55], [120, 1.45], [150, 1.6], [180, 1.95]]);
-/** ... and the lip: its tightest radius and how far it turns (degrees); round the top of the back it is only a bead. */
-const LIP_RADIUS = byAngle([[0, 1.45], [30, 1.3], [45, 1.0], [60, 0.85], [120, 0.85], [140, 0.95], [160, 1.15], [180, 1.3]]);
-const LIP_TURN = byAngle([[0, 112], [30, 110], [45, 102], [60, 100], [120, 100], [135, 80], [150, 52], [165, 32], [180, 24]]);
+const FLOOR_PULL = byAngle([[0, 0.5], [45, 0.5], [70, 0.75], [85, 0.8], [100, 0.65], [120, 0.48], [150, 0.42], [180, 0.37]]);
+const WALL_PULL = byAngle([[0, 0.35], [40, 0.45], [60, 0.95], [70, 1.3], [90, 1.55], [120, 1.75], [150, 1.6], [180, 1.95]]);
+/** ... and the lip: its tightest radius and how far it turns outwards (degrees); least on the steep arm fronts and round the top of the back. */
+const LIP_RADIUS = byAngle([[0, 1.8], [30, 1.8], [45, 1.6], [60, 1.4], [75, 1.8], [120, 2.2], [140, 1.8], [160, 1.6], [180, 1.5]]);
+const LIP_TURN = byAngle([[0, 70], [30, 58], [45, 45], [60, 35], [75, 55], [100, 65], [118, 80], [130, 66], [150, 42], [165, 30], [180, 26]]);
 
 const FLOOR_ROWS = [0, 0.16, 0.32, 0.47, 0.6, 0.71, 0.8, 0.87, 0.93, 0.97];
 const BAND_ROWS = 28;
@@ -274,7 +282,9 @@ function edgeAt(deg: number): { rho: number; y: number } {
 function ringRadius(deg: number): number {
   const s = Math.sin(deg * DEG);
   const c = Math.cos(deg * DEG);
-  const f = (rho: number) => Math.abs((rho * s) / RING.x) ** RING.power + Math.abs((AXIS_Z + rho * c - RING.z) / RING.dz) ** RING.power - 1;
+  // rounder behind the widest point (the back's corners) than in front of it
+  const power = deg < Math.atan2(RING.x, RING.z - AXIS_Z) / DEG ? RING.front : RING.back;
+  const f = (rho: number) => Math.abs((rho * s) / RING.x) ** power + Math.abs((AXIS_Z + rho * c - RING.z) / RING.dz) ** power - 1;
   let lo = 0;
   let hi = 40;
   for (let k = 0; k < 60; k++) {
@@ -309,6 +319,8 @@ interface Column {
   floor: Vec[];
   band: Vec[];
   lip: Vec[];
+  /** How far the lip has turned at each of its rows (radians). */
+  lipAngles: number[];
   /** The lip's frame: along the surface, away from the rim (m), and outwards (n). */
   m: Vec;
   n: Vec;
@@ -368,45 +380,75 @@ function buildColumns(offsets: { rho: number; y: number }[]): Column[] {
     const lipLength = 1.5 * radius * turn;
     // the lip turns by `turn` with its curvature rising from 0 and falling back (smooth), integrated in small steps
     const lip: Vec[] = [];
+    const lipAngles: number[] = [];
     let p = c.L;
     const steps = LIP_ROWS * 8;
     for (let k = 1; k <= steps; k++) {
       const s = ((k - 0.5) / steps) * lipLength;
       const angle = turn * smooth(s / lipLength);
       p = add(p, mul(add(mul(m, Math.cos(angle)), mul(n, Math.sin(angle))), lipLength / steps));
-      if (k % 8 === 0) lip.push(p);
+      if (k % 8 === 0) {
+        lip.push(p);
+        lipAngles.push(turn * smooth(k / steps));
+      }
     }
-    return { deg: c.deg, dir: c.dir, floor: c.floor, band: c.band, lip, m, n };
+    return { deg: c.deg, dir: c.dir, floor: c.floor, band: c.band, lip, lipAngles, m, n };
   });
 }
 
-/** Thickness by row: the wall, thickening to the bead over the lip. */
+/**
+ * Thickness by row: the wall, thickening towards the edge over the band's last GROW rows and the lip, to a soft roll.
+ * Most of the extra thickness goes to the outside (BEAD_IN on the sitter's side), so the inside runs smoothly into the
+ * rounded edge and the rim reads as one thick roll, not as a tube.
+ */
+const GROW = 6;
+const BEAD_IN = 0.3;
 const thickness = (row: number, rows: number) => {
-  const lipStart = rows - 1 - LIP_ROWS;
-  return row <= lipStart ? WALL : WALL + (BEAD - WALL) * smoother((row - lipStart) / LIP_ROWS);
+  const start = rows - 1 - LIP_ROWS - GROW;
+  return row <= start ? WALL : WALL + (BEAD - WALL) * smoother((row - start) / (LIP_ROWS + GROW));
+};
+/** How far the sitter's side and the outside lie from the mid-surface. */
+const sides = (row: number, rows: number) => {
+  const t = thickness(row, rows);
+  const inner = WALL / 2 + (t - WALL) * BEAD_IN;
+  return { inner, outer: t - inner };
 };
 
 // ---- fit: move the start of each lip until the lip's top and outermost point lie on the rim ----
 let offsets = columnDegrees.map(() => ({ rho: 1.5, y: 1.3 }));
 let columns: Column[] = [];
 let worst = 0;
-for (let round = 0; round < 8; round++) {
+let worstDeg = 0;
+for (let round = 0; round < 16; round++) {
   columns = buildColumns(offsets);
   worst = 0;
   offsets = columns.map((c, j) => {
     const e = edgeAt(c.deg);
     const rows = [...c.floor, ...c.band, ...c.lip];
-    const last = rows.length - 1;
+    const R = rows.length;
+    const lipFrom = R - c.lip.length;
     let top = -Infinity;
     let out = -Infinity;
-    rows.forEach((p, i) => {
-      if (i < c.floor.length + BAND_ROWS - 4) return;
-      const half = thickness(i, rows.length) / 2;
-      top = Math.max(top, p[1] + half);
-      out = Math.max(out, Math.hypot(p[0], p[2] - AXIS_Z) + (i === last ? half : 0));
-    });
-    worst = Math.max(worst, Math.abs(top - e.y), Math.abs(out - e.rho));
-    return { rho: offsets[j].rho + (out - e.rho), y: offsets[j].y + (top - e.y) };
+    const reach = (q: Vec) => {
+      top = Math.max(top, q[1]);
+      out = Math.max(out, Math.hypot(q[0], q[2] - AXIS_Z));
+    };
+    // both surfaces near the rim and the tip of the rounded edge; the sitter's side faces -n, turning with the lip
+    for (let i = R - 1 - LIP_ROWS - GROW - 2; i < R; i++) {
+      const phi = i >= lipFrom ? c.lipAngles[i - lipFrom] : 0;
+      const nIn = add(mul(c.n, -Math.cos(phi)), mul(c.m, Math.sin(phi)));
+      const { inner, outer } = sides(i, R);
+      reach(add(rows[i], mul(nIn, inner)));
+      reach(sub(rows[i], mul(nIn, outer)));
+      if (i === R - 1) {
+        const along = add(mul(c.m, Math.cos(phi)), mul(c.n, Math.sin(phi)));
+        reach(add(add(rows[i], mul(nIn, (inner - outer) / 2)), mul(along, (inner + outer) / 2)));
+      }
+    }
+    const miss = Math.max(Math.abs(top - e.y), Math.abs(out - e.rho));
+    if (miss > worst) [worst, worstDeg] = [miss, c.deg];
+    // damped: on the steep arm fronts the lip leans out of its column, and full steps overshoot
+    return { rho: offsets[j].rho + 0.6 * (out - e.rho), y: offsets[j].y + 0.6 * (top - e.y) };
   });
 }
 columns = buildColumns(offsets);
@@ -442,22 +484,25 @@ const shellData = (() => {
     const n0 = normalAt(0, 0);
     push(add(P(0, 0), mul(n0, (side * WALL) / 2)), mul(n0, side));
     for (let r = 1; r < R; r++) {
+      const { inner, outer } = sides(r, R);
       for (let c = 0; c < C; c++) {
         const n = normalAt(c, r);
-        push(add(P(c, r), mul(n, (side * thickness(r, R)) / 2)), mul(n, side));
+        push(add(P(c, r), mul(n, side > 0 ? inner : -outer)), mul(n, side));
       }
     }
   }
   // the rounded edge: half circles from the sitter's side round the end of the lip to the outside
   const capStart = positions.length / 3;
+  const end = sides(R - 1, R);
   for (let c = 0; c < C; c++) {
     const n = normalAt(c, R - 1);
     const e = unit(sub(sub(P(c, R - 1), P(c, R - 2)), mul(n, dot(sub(P(c, R - 1), P(c, R - 2)), n))));
-    const a = thickness(R - 1, R) / 2;
+    const centre = add(P(c, R - 1), mul(n, (end.inner - end.outer) / 2));
+    const a = (end.inner + end.outer) / 2;
     for (let k = 1; k < CAP; k++) {
       const th = (Math.PI * k) / CAP;
       const dirK = add(mul(n, Math.cos(th)), mul(e, Math.sin(th)));
-      push(add(P(c, R - 1), mul(dirK, a)), unit(dirK));
+      push(add(centre, mul(dirK, a)), unit(dirK));
     }
   }
   const capIndex = (c: number, k: number) => (k === 0 ? index(0, c, R - 1) : k === CAP ? index(1, c, R - 1) : capStart + (((c % C) + C) % C) * (CAP - 1) + (k - 1));
@@ -494,6 +539,8 @@ const shellGeometry = new BufferGeometry();
 shellGeometry.setAttribute("position", new Float32BufferAttribute(shellData.positions, 3));
 shellGeometry.setAttribute("normal", new Float32BufferAttribute(shellData.normals, 3));
 shellGeometry.setIndex(shellData.indices);
+// the surfaces' own normals: the wall's thickness changes towards the rim, so the offset surfaces tilt a little
+shellGeometry.computeVertexNormals();
 const shellMesh = new Mesh(shellGeometry, new MeshStandardMaterial());
 shellMesh.updateMatrixWorld();
 
@@ -505,16 +552,17 @@ function hitShell(x: number, z: number, down: boolean) {
   return hit.point.y;
 }
 
-// ---- the seat pad: on the seat, between the arms, from the bend into the back to near the front edge ----
-const PAD = { x: 20.2, z: 7.75, dz: 18.25, power: 3.4, thick: 1.5, round: 1.1, gap: 0.06 };
+// ---- the seat pad: most of the seat, its outline traced from the configurator picture onto this shell ----
+const PAD = { x: 25.3, z: 5, front: 24.5, back: 19.9, frontPower: 3.0, backPower: 2.3, thick: 1.5, round: 1.1, gap: 0.06 };
 const padGeometry = (() => {
   const RINGS = [0, 0.18, 0.36, 0.52, 0.65, 0.75, 0.83, 0.89, 0.93, 0.96, 0.98, 0.992, 1];
   const AROUND = 112;
   const outline = (a: number) => {
-    // the superellipse's radius in direction a
+    // two half superellipses, widest at z = PAD.z: rounder behind (as the floor turns up into the back) than in front
     const s = Math.sin(a);
     const c = Math.cos(a);
-    return 1 / (Math.abs(s / PAD.x) ** PAD.power + Math.abs(c / PAD.dz) ** PAD.power) ** (1 / PAD.power);
+    const [dz, p] = c >= 0 ? [PAD.front, PAD.frontPower] : [PAD.back, PAD.backPower];
+    return 1 / (Math.abs(s / PAD.x) ** p + Math.abs(c / dz) ** p) ** (1 / p);
   };
   const positions: number[] = [];
   const indices: number[] = [];
@@ -569,8 +617,8 @@ const padGeometry = (() => {
  * Vitra's photos of the RAR (from the side and from the front three-quarters, cameras fitted on the runners) and the
  * reference render show a shorter shell than the dimensions.com drawing (Vitra's dimension drawing: shell 52 cm
  * deep, runners 69): the back stands about 6 cm further forward over the runners, the front edge 1.6 cm further back,
- * and the shell tips forward by about 3° (front edge about 36.5 cm high, arms 57.5 cm, underside 31.5 cm, as in
- * Vitra's drawing). So the drawing's shell and the pad on it are warped: what is behind z = `from` moves forward by
+ * and the shell tips forward by about 3° (front edge about 36.5 cm high, arms about 56 cm, underside about 32.5 cm).
+ * So the drawing's shell and the pad on it are warped: what is behind z = `from` moves forward by
  * `back`, what is in front of z = `to` by `front`, smoothly in between (the seat gets shorter); then they turn forward
  * by `tilt` about `pivot` and are lowered until the top of the back is back at the full height.
  */
@@ -876,7 +924,7 @@ const points = (g: BufferGeometry): Vec[] => {
   return list;
 };
 const shellPoints = points(shellGeometry);
-console.log(`fit: ${columns.length} columns per half, largest miss ${worst.toFixed(3)} cm; scaled by ${factor.map((f) => f.toFixed(4)).join(" × ")} to ${SIZE.width} × ${SIZE.height} × ${SIZE.depth} cm`);
+console.log(`fit: ${columns.length} columns per half, largest miss ${worst.toFixed(3)} cm (at ${worstDeg.toFixed(1)}°); scaled by ${factor.map((f) => f.toFixed(4)).join(" × ")} to ${SIZE.width} × ${SIZE.height} × ${SIZE.depth} cm`);
 console.log(`model.glb: ${(glb.byteLength / 1024).toFixed(0)} KB, shell ${shellData.indices.length / 3} triangles`);
 
 const near = (list: Vec[], k: number, v: number, w: number) => list.filter((p) => Math.abs(p[k] - v) < w);
