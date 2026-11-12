@@ -82,6 +82,8 @@
       "pattern": { "type": "wood-grain", "color2": "#311E17", "scale": 30, "strength": 0.55 } },
     { "id": "wood.ash-black", "name": "Ash, black stained", "color": "#2A2624", "roughness": 0.55,
       "pattern": { "type": "wood-grain", "color2": "#1A1716", "scale": 35, "strength": 0.4 } },
+    { "id": "wood.maple-dark", "name": "Maple, dark stained", "color": "#3A251D", "roughness": 0.5,
+      "pattern": { "type": "wood-grain", "color2": "#2A1A14", "scale": 30, "strength": 0.45 } },
 
     { "id": "lacquer.white", "name": "Lacquer, white matt", "color": "#F0EFEA", "roughness": 0.45 },
     { "id": "lacquer.anthracite", "name": "Lacquer, anthracite matt", "color": "#383B3F", "roughness": 0.45 },
@@ -94,6 +96,7 @@
     { "id": "lacquer.black", "name": "Lacquer, black", "color": "#1C1C1C", "roughness": 0.4 },
 
     { "id": "plastic.deep-black", "name": "Plastic, deep black", "color": "#1A1A1A", "roughness": 0.42 },
+    { "id": "plastic.ice-grey", "name": "Plastic, ice grey", "color": "#A3B6B9", "roughness": 0.42 },
 
     { "id": "fabric.boucle-cream", "name": "Bouclé, cream", "color": "#EDE6DA", "roughness": 0.97,
       "pattern": { "type": "weave", "color2": "#DCD3C4", "scale": 2, "strength": 0.5 } },
@@ -123,6 +126,8 @@
     { "id": "fabric.felt-black", "name": "Felt, black (acoustic panels)", "color": "#232221", "roughness": 1 },
     { "id": "fabric.linen-natural", "name": "Linen, natural", "color": "#CBBFA8", "roughness": 0.95,
       "pattern": { "type": "weave", "color2": "#B6A98F", "scale": 1.5, "strength": 0.45 } },
+    { "id": "fabric.hopsak-blue-grey", "name": "Hopsak, pale blue-grey (seat pads)", "color": "#A9B3B4", "roughness": 0.95,
+      "pattern": { "type": "weave", "color2": "#97A2A3", "scale": 1, "strength": 0.4 } },
     { "id": "leather.cognac", "name": "Leather, cognac", "color": "#8A5530", "roughness": 0.6 },
     { "id": "leather.black", "name": "Leather, black", "color": "#201D1C", "roughness": 0.45 },
 
