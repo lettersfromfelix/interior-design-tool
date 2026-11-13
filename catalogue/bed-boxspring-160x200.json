@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "bed-boxspring-160x200",
+  "name": "Bed, boxspring 160 × 200, without headboard",
+  "category": "bed",
+  "tags": ["bedroom", "double bed", "boxspring", "no headboard", "alcove"],
+  "dimensions": { "width": 160, "depth": 200, "height": 62 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "feet", "shape": "cylinder", "radius": 2.5, "height": 7, "position": { "x": 70, "y": 3.5, "z": -88 }, "repeat": { "count": 3, "step": { "x": 0, "y": 0, "z": 88 } }, "mirror": ["x"], "material": "feet" },
+      { "name": "box spring", "shape": "box", "size": { "x": 160, "y": 28, "z": 200 }, "cornerRadius": 1.5, "position": { "x": 0, "y": 21, "z": 0 }, "material": "base" },
+      { "name": "mattress", "shape": "box", "size": { "x": 160, "y": 21, "z": 200 }, "cornerRadius": 4, "position": { "x": 0, "y": 45.5, "z": 0 }, "material": "bedding" },
+      { "name": "topper", "shape": "box", "size": { "x": 160, "y": 6, "z": 200 }, "cornerRadius": 3, "position": { "x": 0, "y": 59, "z": 0 }, "material": "bedding" }
+    ]
+  },
+  "materialSlots": {
+    "base": { "label": "Box spring", "default": "fabric.linen-grey", "allowed": ["fabric.*", "leather.*"] },
+    "feet": { "label": "Feet", "default": "metal.black-matte", "allowed": ["metal.*", "wood.*", "plastic.deep-black"] },
+    "bedding": { "label": "Mattress and topper", "default": "fabric.cotton-white", "allowed": ["fabric.*"] }
+  },
+  "surfaces": [{ "name": "bed", "height": 62, "width": 156, "depth": 196 }],
+  "clearance": { "left": 60, "right": 60, "note": "Room to get in and make the bed" },
+  "notes": "Generic boxspring bed, not a specific product, without a headboard: exactly 160 × 200 cm, so it can stand against the headboard box in the wardrobe's bed alcove (headboard-box-alcove-177), against the alcove's back panel or against a wall. An upholstered box spring on six low feet, a pocket-spring mattress and a topper: feet 7 cm, box spring 28 cm, mattress 21 cm, topper 6 cm, 62 cm in all, in the middle of the usual 50–70 cm (XXXLutz BOXXX 160 × 200: 73 cm as a \"comfort height\"). The mattress is a surface for cushions and pillows. In the alcove (177 cm wide), it has 8.5 cm to spare on each side, and its side clearance reaches the cheeks."
+}

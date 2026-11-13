@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "headboard-box-alcove-177",
+  "name": "Headboard box for the bed alcove, 177",
+  "category": "bed",
+  "tags": ["bedroom", "headboard", "built-in", "alcove", "ledge", "panelled", "fitted wardrobe"],
+  "dimensions": { "width": 177, "depth": 24, "height": 125 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "plinth", "shape": "box", "size": { "x": 177, "y": 8, "z": 16 }, "position": { "x": 0, "y": 4, "z": -2 }, "material": "box" },
+      { "name": "carcass", "shape": "box", "size": { "x": 177, "y": 115, "z": 19 }, "position": { "x": 0, "y": 65.5, "z": -0.5 }, "material": "box" },
+      { "name": "front panels", "shape": "box", "size": { "x": 114.7, "y": 58.7, "z": 2 }, "cornerRadius": 0.3, "position": { "x": -59, "y": 65.5, "z": 10 }, "rotation": { "z": 90 }, "repeat": { "count": 3, "step": { "x": 59, "y": 0, "z": 0 } }, "material": "box" },
+      { "name": "mouldings, verticals", "shape": "box", "size": { "x": 100.7, "y": 1.8, "z": 1 }, "cornerRadius": 0.45, "position": { "x": -80.45, "y": 65.5, "z": 11.5 }, "rotation": { "z": 90 }, "repeat": { "count": 3, "step": { "x": 59, "y": 0, "z": 0 } }, "mirror": ["x"], "plan": "hidden", "material": "box" },
+      { "name": "mouldings, bottom bars", "shape": "box", "size": { "x": 44.7, "y": 1.8, "z": 1 }, "cornerRadius": 0.45, "position": { "x": -59, "y": 16.05, "z": 11.5 }, "repeat": { "count": 3, "step": { "x": 59, "y": 0, "z": 0 } }, "plan": "hidden", "material": "box" },
+      { "name": "mouldings, top bars", "shape": "box", "size": { "x": 44.7, "y": 1.8, "z": 1 }, "cornerRadius": 0.45, "position": { "x": -59, "y": 114.95, "z": 11.5 }, "repeat": { "count": 3, "step": { "x": 59, "y": 0, "z": 0 } }, "plan": "hidden", "material": "box" },
+      { "name": "top", "shape": "box", "size": { "x": 177, "y": 2, "z": 21 }, "cornerRadius": 0.4, "position": { "x": 0, "y": 124, "z": 0.5 }, "material": "box" }
+    ]
+  },
+  "materialSlots": {
+    "box": { "label": "Box", "default": "lacquer.white", "allowed": ["lacquer.*", "paint.*", "wood.*"] }
+  },
+  "surfaces": [{ "name": "top", "height": 125, "width": 175, "depth": 19, "center": [0, 0.5] }],
+  "notes": "Built to the user's description, not a specific product. A box exactly as wide as the bed alcove of the fitted wardrobe walls (177 cm), standing against the alcove's back panel as a headboard: 177 cm wide, 125 high and 22 deep, with a ledge on top for a phone, books or a small lamp. The item is 24 cm deep: it includes the 2 cm of the alcove's back panel, so wall snap puts the box flush against the panel. Then slide it sideways between the cheeks: it has no play, and with the Distances aid on, the gaps to both cheeks disappear when it's centred. Its front matches the wardrobe: a plinth recessed on the side columns' plinth line, three panels with the doors' joints and mouldings (the module of the top cabinets above) and a top. 125 cm is a boxspring headboard's height (XXXLutz BOXXX 116 cm, IKEA DUNVIK 120 cm) plus about 10 cm; bed-boxspring-160x200 pushed against it leaves 63 cm of it above the mattress. Made for wardrobe-wall-bed-alcove-r5 and wardrobe-wall-bed-alcove-low, whose sconces sit 10 cm above it. It fits the original wardrobe-wall-bed-alcove's alcove too, but there it covers the niches and runs into the sconces. Two looks: in the fronts' colour it reads as part of the wardrobe (the default, lacquer.white), in the lining's walnut as part of the alcove. Colorways (fronts / lining / box): white & walnut, the default (lacquer.white / wood.walnut-natural / lacquer.white); all white (lacquer.white everywhere); all walnut (wood.walnut-natural everywhere); chocolate & walnut (lacquer.chocolate / wood.walnut-natural / lacquer.chocolate); light blue & oak (lacquer.light-blue / wood.oak-natural / lacquer.light-blue); off-white & smoked oak (lacquer.off-white / wood.oak-smoked / wood.oak-smoked). Every finish slot takes lacquer, paint and wood, so any other combination works too, including one colour for everything."
+}

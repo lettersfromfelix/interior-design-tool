@@ -78,6 +78,8 @@
       "pattern": { "type": "wood-grain", "color2": "#37261B", "scale": 40, "strength": 0.5 } },
     { "id": "wood.oak-taupe", "name": "Oak, taupe stained, fine grain", "color": "#AC9B8A", "roughness": 0.6,
       "pattern": { "type": "wood-grain", "color2": "#978675", "scale": 30, "strength": 0.35 } },
+    { "id": "wood.oak-smoked", "name": "Oak, smoked", "color": "#76675C", "roughness": 0.6,
+      "pattern": { "type": "wood-grain", "color2": "#5A4D44", "scale": 40, "strength": 0.5 } },
     { "id": "wood.wenge", "name": "Wengé stain", "color": "#3A2C24", "roughness": 0.5,
       "pattern": { "type": "wood-grain", "color2": "#2A1F19", "scale": 30, "strength": 0.45 } },
     { "id": "wood.teak", "name": "Teak", "color": "#9B6A40", "roughness": 0.55,
@@ -99,6 +101,9 @@
     { "id": "lacquer.beige", "name": "Lacquer, beige", "color": "#CDBFA6", "roughness": 0.45 },
     { "id": "lacquer.greige", "name": "Lacquer, greige matt", "color": "#CDC7BF", "roughness": 0.6 },
     { "id": "lacquer.pearl-grey", "name": "Lacquer, pearl grey (USM)", "color": "#C9CBC6", "roughness": 0.5 },
+    { "id": "lacquer.off-white", "name": "Lacquer, warm off-white matt", "color": "#EDE6D9", "roughness": 0.5 },
+    { "id": "lacquer.chocolate", "name": "Lacquer, chocolate matt (as the chocolate velvet)", "color": "#4A3830", "roughness": 0.55 },
+    { "id": "lacquer.light-blue", "name": "Lacquer, light blue matt (as the light blue velvet)", "color": "#A9C0D3", "roughness": 0.55 },
     { "id": "lacquer.black", "name": "Lacquer, black", "color": "#1C1C1C", "roughness": 0.4 },
 
     { "id": "plastic.deep-black", "name": "Plastic, deep black", "color": "#1A1A1A", "roughness": 0.42 },
