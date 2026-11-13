@@ -68,6 +68,8 @@
       "pattern": { "type": "wood-grain", "color2": "#A9825B", "scale": 40, "strength": 0.5 } },
     { "id": "wood.walnut", "name": "Walnut", "color": "#6E4C34", "roughness": 0.55,
       "pattern": { "type": "wood-grain", "color2": "#553826", "scale": 40, "strength": 0.5 } },
+    { "id": "wood.walnut-natural", "name": "Walnut, natural, broad figure", "color": "#8A6650", "roughness": 0.55,
+      "pattern": { "type": "wood-grain", "color2": "#6E4E3B", "scale": 90, "strength": 0.5 } },
     { "id": "wood.walnut-dark", "name": "Walnut, dark (kitchen handles)", "color": "#553A28", "roughness": 0.5,
       "pattern": { "type": "wood-grain", "color2": "#3E2A1C", "scale": 30, "strength": 0.45 } },
     { "id": "wood.ash-white", "name": "Ash, white oiled", "color": "#E3D7C4", "roughness": 0.6,
