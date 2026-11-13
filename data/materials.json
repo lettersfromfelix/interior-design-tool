@@ -96,6 +96,7 @@
     { "id": "lacquer.sage", "name": "Lacquer, sage green matt", "color": "#9AA58F", "roughness": 0.5 },
     { "id": "lacquer.ochre", "name": "Lacquer, ochre", "color": "#C3912F", "roughness": 0.45 },
     { "id": "lacquer.ruby-red", "name": "Lacquer, ruby red", "color": "#8D2230", "roughness": 0.4 },
+    { "id": "lacquer.burgundy", "name": "Lacquer, burgundy (deep wine red)", "color": "#6C1F2E", "roughness": 0.4 },
     { "id": "lacquer.cobalt", "name": "Lacquer, cobalt blue", "color": "#2C4E8E", "roughness": 0.4 },
     { "id": "lacquer.olive", "name": "Lacquer, olive green", "color": "#61643D", "roughness": 0.45 },
     { "id": "lacquer.beige", "name": "Lacquer, beige", "color": "#CDBFA6", "roughness": 0.45 },
