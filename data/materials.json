@@ -138,6 +138,8 @@
     { "id": "fabric.velvet-light-blue", "name": "Velvet, light blue", "color": "#A9C0D3", "roughness": 0.8 },
     { "id": "fabric.boucle-light-blue", "name": "Bouclé, light blue", "color": "#A9C0D3", "roughness": 0.97,
       "pattern": { "type": "weave", "color2": "#91A9BE", "scale": 2, "strength": 0.5 } },
+    { "id": "fabric.boucle-burgundy", "name": "Bouclé, burgundy (deep wine red)", "color": "#6A212F", "roughness": 0.97,
+      "pattern": { "type": "weave", "color2": "#591A27", "scale": 2, "strength": 0.5 } },
     { "id": "fabric.chenille-chocolate", "name": "Chenille, chocolate", "color": "#5A4A40", "roughness": 0.95,
       "pattern": { "type": "weave", "color2": "#493B33", "scale": 1.2, "strength": 0.35 } },
     { "id": "fabric.chenille-white", "name": "Chenille, white", "color": "#EEECE7", "roughness": 0.95,
