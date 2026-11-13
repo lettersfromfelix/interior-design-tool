@@ -1,0 +1,30 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "sofa-bed-aslak-140-closed",
+  "name": "Sofa bed, Innovation Aslak 140 (closed)",
+  "category": "seating",
+  "tags": ["sofa bed", "guest bed", "convertible", "click-clack", "office", "guest room", "innovation living", "closed"],
+  "dimensions": { "width": 200, "depth": 100, "height": 90 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "seat", "shape": "box", "size": { "x": 200, "y": 19, "z": 70 }, "cornerRadius": 5, "position": { "x": 0, "y": 38.5, "z": 15 }, "material": "upholstery" },
+      { "name": "back", "shape": "box", "size": { "x": 200, "y": 70, "z": 19 }, "cornerRadius": 5, "position": { "x": 0, "y": 56.58, "z": -26.52 }, "rotation": { "x": -29 }, "material": "upholstery" },
+      { "name": "frame", "shape": "box", "size": { "x": 194, "y": 5, "z": 68 }, "position": { "x": 0, "y": 26.5, "z": 14 }, "material": "frame" },
+      { "name": "mechanism plates", "shape": "box", "size": { "x": 0.6, "y": 11, "z": 24 }, "position": { "x": 96.7, "y": 27.5, "z": -10 }, "mirror": ["x"], "material": "frame" },
+      { "name": "legs, back", "shape": "cylinder", "radius": 1.3, "radiusTop": 1.8, "height": 25.24, "position": { "x": 88, "y": 12.4, "z": -11.9 }, "rotation": { "x": 18 }, "mirror": ["x"], "material": "legs" },
+      { "name": "legs, front", "shape": "cylinder", "radius": 1.3, "radiusTop": 1.8, "height": 25.24, "position": { "x": 88, "y": 12.4, "z": 35.9 }, "rotation": { "x": -18 }, "mirror": ["x"], "material": "legs" }
+    ]
+  },
+  "materialSlots": {
+    "upholstery": { "label": "Upholstery", "default": "fabric.linen-grey", "allowed": ["fabric.*"] },
+    "frame": { "label": "Frame", "default": "metal.black-matte", "allowed": ["metal.black-matte"] },
+    "legs": { "label": "Legs", "default": "wood.oak-natural", "allowed": ["wood.*", "metal.black-matte"] }
+  },
+  "surfaces": [{ "name": "seat", "height": 48, "width": 196, "depth": 56, "center": [0, 20] }],
+  "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
+  "productUrl": "https://www.innovationliving.com/products/by-type/sofa-beds/product-details/aslak-140-sofa-bed-nordic-cover-spring-565",
+  "notes": "Innovation Living Aslak 140 (design Per Weiss, Oliver & Lukas WeissKrogh), a click-clack sofa bed, closed as a sofa: 200 cm wide, 100 deep and 90 high, seat 60 cm deep at 48 cm. Its open counterpart is sofa-bed-aslak-140-open: a 140 × 200 cm bed at 48 cm, 140 cm deep from the wall, so it needs 40 cm more room in front when open. Both have the same width and back line, so the open one snaps to the same wall position. The 19 cm spring mattress in two parts makes the seat and the back; matt black steel frame, lacquered oak legs. The back also has a second, more reclined position (84 cm high, 112 deep)."
+}

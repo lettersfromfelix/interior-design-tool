@@ -1,0 +1,28 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "guest-bed-sideboard-160-closed",
+  "name": "Guest bed in a sideboard 160 (closed)",
+  "category": "storage",
+  "tags": ["guest bed", "cabinet bed", "kommodenbett", "convertible", "sideboard", "guest room", "office", "closed"],
+  "dimensions": { "width": 160, "depth": 55, "height": 82 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "legs, back", "shape": "cylinder", "radius": 1.4, "radiusTop": 2, "height": 10, "position": { "x": 74, "y": 5, "z": -21.5 }, "mirror": ["x"], "material": "body" },
+      { "name": "legs, front", "shape": "cylinder", "radius": 1.4, "radiusTop": 2, "height": 10, "position": { "x": 74, "y": 5, "z": 18 }, "mirror": ["x"], "material": "body" },
+      { "name": "carcass", "shape": "box", "size": { "x": 160, "y": 72, "z": 51.5 }, "position": { "x": 0, "y": 46, "z": -1.75 }, "material": "body" },
+      { "name": "doors", "shape": "box", "size": { "x": 51.73, "y": 68, "z": 2 }, "position": { "x": -52.13, "y": 46, "z": 25 }, "repeat": { "count": 3, "step": { "x": 52.13, "y": 0, "z": 0 } }, "material": "fronts" },
+      { "name": "handles", "shape": "box", "size": { "x": 14, "y": 1.2, "z": 1.5 }, "position": { "x": -52.13, "y": 73, "z": 26.75 }, "repeat": { "count": 3, "step": { "x": 52.13, "y": 0, "z": 0 } }, "plan": "hidden", "material": "handles" }
+    ]
+  },
+  "materialSlots": {
+    "body": { "label": "Body", "default": "wood.oak-natural", "allowed": ["wood.*", "lacquer.*"] },
+    "fronts": { "label": "Fronts", "default": "wood.oak-natural", "allowed": ["wood.*", "lacquer.*"] },
+    "handles": { "label": "Handles", "default": "metal.brass", "allowed": ["metal.*"] }
+  },
+  "surfaces": [{ "name": "top", "height": 82, "width": 158, "depth": 49.5, "center": [0, -1.75] }],
+  "clearance": { "front": 60, "note": "Room in front of the sideboard; opening the bed takes 151 cm (see the open item)" },
+  "notes": "Own design: a guest bed folded into a sideboard (cabinet bed, Kommodenbett), closed: 160 × 55 × 82 cm on 10 cm oak legs, with three doors in front that are one panel. Inside, a 140 × 200 cm foam mattress of 10 cm, folded three times, stands upright with the folded bed frame. Its open counterpart is guest-bed-sideboard-160-open: the front folds down onto folding legs as the middle section, the foot section unfolds from it and the mattress lies flat at 42 cm, 206 cm from the wall, so opening it takes 151 cm more room in front. Both have the same width and back line, so the open one snaps to the same wall position. Proportions after real cabinet beds (Night & Day Cube 163 × 67 × 93, open 204; Arason Creden-ZzZ; AFI Hamilton), which are taller because of their 15 cm mattresses."
+}

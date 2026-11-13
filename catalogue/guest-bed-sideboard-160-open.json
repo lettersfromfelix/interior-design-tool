@@ -1,0 +1,35 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "guest-bed-sideboard-160-open",
+  "name": "Guest bed in a sideboard 160 (open)",
+  "category": "bed",
+  "tags": ["guest bed", "cabinet bed", "kommodenbett", "convertible", "guest room", "open", "double bed"],
+  "dimensions": { "width": 160, "depth": 206, "height": 82 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "legs, back", "shape": "cylinder", "radius": 1.4, "radiusTop": 2, "height": 10, "position": { "x": 74, "y": 5, "z": -97 }, "mirror": ["x"], "material": "body" },
+      { "name": "legs, front", "shape": "cylinder", "radius": 1.4, "radiusTop": 2, "height": 10, "position": { "x": 74, "y": 5, "z": -57.5 }, "mirror": ["x"], "material": "body" },
+      { "name": "sides", "shape": "box", "size": { "x": 2, "y": 70, "z": 51.5 }, "position": { "x": 79, "y": 45, "z": -77.25 }, "mirror": ["x"], "material": "body" },
+      { "name": "top", "shape": "box", "size": { "x": 160, "y": 2, "z": 51.5 }, "position": { "x": 0, "y": 81, "z": -77.25 }, "material": "body" },
+      { "name": "bottom", "shape": "box", "size": { "x": 156, "y": 2, "z": 51.5 }, "position": { "x": 0, "y": 11, "z": -77.25 }, "material": "body" },
+      { "name": "back", "shape": "box", "size": { "x": 156, "y": 68, "z": 1.2 }, "position": { "x": 0, "y": 46, "z": -102.4 }, "material": "body" },
+      { "name": "deck, in the cabinet", "shape": "box", "size": { "x": 156, "y": 2, "z": 50.3 }, "position": { "x": 0, "y": 31, "z": -76.65 }, "material": "body" },
+      { "name": "middle section (the doors)", "shape": "box", "size": { "x": 51.73, "y": 2, "z": 68 }, "position": { "x": -52.13, "y": 31, "z": -17.5 }, "repeat": { "count": 3, "step": { "x": 52.13, "y": 0, "z": 0 } }, "material": "fronts" },
+      { "name": "foot section", "shape": "box", "size": { "x": 156, "y": 2, "z": 83.5 }, "position": { "x": 0, "y": 31, "z": 58.25 }, "material": "body" },
+      { "name": "foot rail", "shape": "box", "size": { "x": 156, "y": 10, "z": 3 }, "cornerRadius": 0.5, "position": { "x": 0, "y": 29, "z": 101.5 }, "material": "body" },
+      { "name": "folding legs", "shape": "box", "size": { "x": 4, "y": 30, "z": 4 }, "position": { "x": 72, "y": 15, "z": 12.5 }, "repeat": { "count": 2, "step": { "x": 0, "y": 0, "z": 83.5 } }, "mirror": ["x"], "material": "body" },
+      { "name": "mattress", "shape": "box", "size": { "x": 140, "y": 10, "z": 66.67 }, "cornerRadius": 2.5, "position": { "x": 0, "y": 37, "z": -68.17 }, "repeat": { "count": 3, "step": { "x": 0, "y": 0, "z": 66.67 } }, "material": "mattress" }
+    ]
+  },
+  "materialSlots": {
+    "body": { "label": "Body", "default": "wood.oak-natural", "allowed": ["wood.*", "lacquer.*"] },
+    "fronts": { "label": "Fronts", "default": "wood.oak-natural", "allowed": ["wood.*", "lacquer.*"] },
+    "mattress": { "label": "Mattress", "default": "fabric.cotton-white", "allowed": ["fabric.*"] }
+  },
+  "surfaces": [{ "name": "bed", "height": 42, "width": 136, "depth": 196, "center": [0, -1.5] }, { "name": "top", "height": 82, "width": 158, "depth": 47.5, "center": [0, -77.25] }],
+  "clearance": { "left": 50, "right": 50, "note": "Room to get in and make the bed: about 60 cm beside the mattress" },
+  "notes": "Own design: a guest bed folded into a sideboard (cabinet bed, Kommodenbett), open: a 140 × 200 cm foam mattress of 10 cm (three sections) at 42 cm, 206 cm from the wall. The front panel lies on folding legs as the middle section, the foot section has unfolded from it, and the head end lies on a deck inside the cabinet, whose back, sides and top stay as the headboard (the top is still a shelf). Its closed counterpart is guest-bed-sideboard-160-closed, a sideboard 160 × 55 × 82 cm: open, it reaches 151 cm further into the room. Both have the same width and back line, so this one snaps to the same wall position."
+}

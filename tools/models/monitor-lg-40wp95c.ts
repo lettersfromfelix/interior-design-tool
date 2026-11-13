@@ -20,14 +20,15 @@ const PANEL = { w: 94.72, h: 41.92, bezel: 0.5, back: 0.7 }; // overall; the bla
 const SCREEN = { w: 92.93, h: 39.2, bottom: 1.72 }; // the screen area and its bottom edge above the panel's
 const LOW = 50.47 - PANEL.h; // the panel's bottom edge above the desk with the stand at its lowest
 const DEPTH = 28.3; // with the stand
-// the housing's bulge behind the panel, in steps: half-width, from–to above the panel's bottom edge, depth
-const BULGE: [number, number, number, number][] = [
-  [34, 3, 39, 1.2],
-  [30.5, 4.5, 37.5, 2.4],
-  [27, 6, 36, 3.6],
-  [23.5, 7.5, 34.5, 4.8],
-  [20, 9, 33, 5.8],
-];
+// the housing's bulge behind the panel: a rounded dome built from thin layers, each from the panel's back to its own
+// depth; their half-width and height shrink along an ellipse from the outermost layer to the deepest one
+const DOME = { depth: 5.8, layers: 8, outer: { half: 34, y: [3, 39] }, inner: { half: 20, y: [9, 33] } };
+const BULGE: [number, number, number, number][] = Array.from({ length: DOME.layers }, (_, i) => {
+  const t = (i + 1) / DOME.layers;
+  const k = Math.sqrt(1 - t * t);
+  const lerp = (a: number, b: number) => b + (a - b) * k;
+  return [lerp(DOME.outer.half, DOME.inner.half), lerp(DOME.outer.y[0], DOME.inner.y[0]), lerp(DOME.outer.y[1], DOME.inner.y[1]), DOME.depth * t];
+});
 const COLUMN = { w: 4.4, d: 3, top: LOW + 27 };
 const HINGE = { w: 10, d: 1.5, y: [LOW + 14, LOW + 26] as const };
 const BASE = { t: 1.4, halfWidth: 29, mid: 5.6, tip: 4 }; // thickness; outer half-width; band widths

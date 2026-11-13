@@ -1,0 +1,38 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "sofa-bed-vimle-2-open",
+  "name": "Sofa bed, IKEA VIMLE 2 seats (open)",
+  "category": "bed",
+  "tags": ["sofa bed", "guest bed", "convertible", "pull-out", "guest room", "ikea", "open", "double bed"],
+  "dimensions": { "width": 190, "depth": 241, "height": 83 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "arms", "shape": "box", "size": { "x": 15, "y": 62.5, "z": 98 }, "cornerRadius": 3, "position": { "x": 87.5, "y": 33.75, "z": -71.5 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "backrest", "shape": "box", "size": { "x": 160, "y": 65.5, "z": 14 }, "cornerRadius": 2, "position": { "x": 0, "y": 35.25, "z": -113.5 }, "material": "upholstery" },
+      { "name": "seat box", "shape": "box", "size": { "x": 160, "y": 28, "z": 83 }, "cornerRadius": 2, "position": { "x": 0, "y": 20, "z": -65 }, "material": "upholstery" },
+      { "name": "back cushions", "shape": "box", "size": { "x": 79, "y": 36, "z": 22 }, "cornerRadius": 6, "position": { "x": 40, "y": 64.19, "z": -94.45 }, "rotation": { "x": -12 }, "mirror": ["x"], "material": "upholstery" },
+      { "name": "feet", "shape": "cylinder", "radius": 1.6, "height": 2.5, "position": { "x": 87.5, "y": 1.25, "z": -114.5 }, "repeat": { "count": 2, "step": { "x": 0, "y": 0, "z": 86 } }, "mirror": ["x"], "plan": "hidden", "material": "feet" },
+      { "name": "mattress", "shape": "box", "size": { "x": 140, "y": 12, "z": 200 }, "cornerRadius": 3, "position": { "x": 0, "y": 47, "z": 20.5 }, "material": "mattress" },
+      { "name": "bed frame, side rails", "shape": "box", "size": { "x": 1.5, "y": 3, "z": 199.5 }, "position": { "x": 70.75, "y": 39.5, "z": 20.25 }, "mirror": ["x"], "material": "frame" },
+      { "name": "bed frame, foot rail", "shape": "box", "size": { "x": 143, "y": 3, "z": 1.5 }, "position": { "x": 0, "y": 39.5, "z": 119.25 }, "material": "frame" },
+      { "name": "bed frame, hinge rail", "shape": "box", "size": { "x": 143, "y": 3, "z": 2 }, "position": { "x": 0, "y": 39.5, "z": 17.5 }, "material": "frame" },
+      { "name": "legs, middle, uprights", "shape": "cylinder", "radius": 1.1, "height": 36.9, "position": { "x": 65.5, "y": 19.55, "z": 17.5 }, "mirror": ["x"], "material": "frame" },
+      { "name": "legs, middle, floor bar", "shape": "cylinder", "radius": 1.1, "height": 131, "position": { "x": 0, "y": 1.1, "z": 17.5 }, "rotation": { "z": 90 }, "plan": "hidden", "material": "frame" },
+      { "name": "legs, foot, uprights", "shape": "cylinder", "radius": 1.1, "height": 36.9, "position": { "x": 65.5, "y": 19.55, "z": 108.5 }, "mirror": ["x"], "material": "frame" },
+      { "name": "legs, foot, floor bar", "shape": "cylinder", "radius": 1.1, "height": 131, "position": { "x": 0, "y": 1.1, "z": 108.5 }, "rotation": { "z": 90 }, "plan": "hidden", "material": "frame" }
+    ]
+  },
+  "materialSlots": {
+    "upholstery": { "label": "Upholstery", "default": "fabric.wool-beige", "allowed": ["fabric.*"] },
+    "feet": { "label": "Feet", "default": "plastic.deep-black", "allowed": ["plastic.deep-black"] },
+    "mattress": { "label": "Mattress", "default": "fabric.cotton-white", "allowed": ["fabric.*"] },
+    "frame": { "label": "Bed frame", "default": "metal.black-matte", "allowed": ["metal.black-matte"] }
+  },
+  "surfaces": [{ "name": "bed", "height": 53, "width": 136, "depth": 196, "center": [0, 20.5] }],
+  "clearance": { "front": 30, "left": 35, "right": 35, "note": "Room to get in and make the bed: about 60 cm beside the mattress" },
+  "productUrl": "https://www.ikea.com/ch/en/p/vimle-2-seat-sofa-bed-gunnared-beige-s89545229/",
+  "notes": "IKEA VIMLE 2-seat sofa-bed, pulled out as a bed: a 140 × 200 cm foam mattress (12 cm) at 53 cm on a black steel frame with two U-shaped legs, 241 cm deep from the wall; the seat cushions are off (not shown), the arms, the backrest and the back cushions stay. Its closed counterpart is sofa-bed-vimle-2-closed, a sofa 98 cm deep: open, it reaches 143 cm further into the room. Both have the same width and back line, so this one snaps to the same wall position."
+}
