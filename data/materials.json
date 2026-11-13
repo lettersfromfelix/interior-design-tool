@@ -176,6 +176,12 @@
       "pattern": { "type": "weave", "color2": "#9A634E", "scale": 4, "strength": 0.5 } },
     { "id": "rug.slate-heather", "name": "Wool, slate blue heather", "color": "#6E7B86", "roughness": 0.98,
       "pattern": { "type": "noise", "color2": "#A5AFB7", "scale": 40, "strength": 0.7 } },
+    { "id": "curtain.voile-white", "name": "Voile, white (sheer curtains)", "color": "#F4F2ED", "roughness": 0.9, "opacity": 0.5,
+      "pattern": { "type": "weave", "color2": "#E3DFD6", "scale": 0.3, "strength": 0.3 } },
+    { "id": "curtain.voile-light-blue", "name": "Voile, light blue (sheer curtains)", "color": "#C3D3E0", "roughness": 0.9, "opacity": 0.5,
+      "pattern": { "type": "weave", "color2": "#B2C4D3", "scale": 0.3, "strength": 0.3 } },
+    { "id": "curtain.linen-light-blue", "name": "Linen, light blue, unlined (curtains)", "color": "#A9C0D3", "roughness": 0.95, "opacity": 0.8,
+      "pattern": { "type": "weave", "color2": "#97AEC2", "scale": 0.45, "strength": 0.35 } },
     { "id": "leather.cognac", "name": "Leather, cognac", "color": "#8A5530", "roughness": 0.6 },
     { "id": "leather.black", "name": "Leather, black", "color": "#201D1C", "roughness": 0.45 },
 
