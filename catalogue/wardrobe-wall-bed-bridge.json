@@ -1,0 +1,41 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "wardrobe-wall-bed-bridge",
+  "name": "Wardrobe wall with bed bridge",
+  "category": "storage",
+  "tags": ["bedroom", "closet", "built-in", "fitted wardrobe", "bridge", "overbed", "headboard", "shelf", "reading light", "greige"],
+  "dimensions": { "width": 292, "depth": 60, "height": 255 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "end panels beside the bed", "shape": "box", "size": { "x": 2, "y": 255, "z": 57 }, "position": { "x": 91, "y": 127.5, "z": -1.5 }, "mirror": ["x"], "material": "fronts" },
+      { "name": "carcass", "shape": "box", "size": { "x": 54, "y": 252, "z": 55 }, "position": { "x": 119, "y": 126, "z": -2.5 }, "mirror": ["x"], "material": "fronts" },
+      { "name": "fillers against the walls", "shape": "box", "size": { "x": 3, "y": 252, "z": 2 }, "position": { "x": 144.5, "y": 126, "z": 26 }, "mirror": ["x"], "material": "fronts" },
+      { "name": "tall doors", "shape": "box", "size": { "x": 50.7, "y": 214.85, "z": 2 }, "cornerRadius": 0.3, "position": { "x": 117.5, "y": 109.43, "z": 26 }, "mirror": ["x"], "material": "fronts" },
+      { "name": "top doors", "shape": "box", "size": { "x": 50.7, "y": 34.7, "z": 2 }, "cornerRadius": 0.3, "position": { "x": 117.5, "y": 234.5, "z": 26 }, "mirror": ["x"], "material": "fronts" },
+      { "name": "top panels above the columns", "shape": "box", "size": { "x": 54, "y": 3, "z": 57 }, "position": { "x": 119, "y": 253.5, "z": -1.5 }, "mirror": ["x"], "material": "fronts" },
+      { "name": "handles, bars", "shape": "box", "size": { "x": 1.6, "y": 48, "z": 1.2 }, "cornerRadius": 0.55, "position": { "x": 94.65, "y": 100, "z": 29.4 }, "mirror": ["x"], "material": "metal" },
+      { "name": "handles, posts", "shape": "cylinder", "radius": 0.5, "height": 1.8, "position": { "x": 94.65, "y": 80, "z": 27.9 }, "rotation": { "x": 90 }, "repeat": { "count": 2, "step": { "x": 0, "y": 40, "z": 0 } }, "mirror": ["x"], "plan": "hidden", "material": "metal" },
+      { "name": "bridge cabinets", "shape": "box", "size": { "x": 180, "y": 62, "z": 33 }, "position": { "x": 0, "y": 221, "z": -13.5 }, "plan": "dashed", "material": "fronts" },
+      { "name": "bridge cabinets, back board", "shape": "box", "size": { "x": 179.8, "y": 61.8, "z": 1.9 }, "position": { "x": 0, "y": 221, "z": -28.95 }, "material": "fronts" },
+      { "name": "bridge doors", "shape": "box", "size": { "x": 44.7, "y": 61.7, "z": 2 }, "cornerRadius": 0.3, "position": { "x": -67.5, "y": 221, "z": 4 }, "repeat": { "count": 4, "step": { "x": 45, "y": 0, "z": 0 } }, "material": "fronts" },
+      { "name": "top panel above the bridge", "shape": "box", "size": { "x": 180, "y": 3, "z": 35 }, "position": { "x": 0, "y": 253.5, "z": -12.5 }, "plan": "hidden", "material": "fronts" },
+      { "name": "niche, back panel", "shape": "box", "size": { "x": 180, "y": 74, "z": 2 }, "position": { "x": 0, "y": 153, "z": -29 }, "material": "fronts" },
+      { "name": "headboard", "shape": "box", "size": { "x": 180, "y": 113, "z": 20 }, "position": { "x": 0, "y": 56.5, "z": -20 }, "material": "headboard" },
+      { "name": "shelf", "shape": "box", "size": { "x": 180, "y": 3, "z": 20 }, "position": { "x": 0, "y": 114.5, "z": -20 }, "material": "fronts" },
+      { "name": "reading spots, plates", "shape": "cylinder", "radius": 3.5, "height": 1.2, "position": { "x": 73, "y": 104, "z": -9.4 }, "rotation": { "x": 90 }, "mirror": ["x"], "plan": "hidden", "material": "metal" },
+      { "name": "reading spots, joints", "shape": "sphere", "radius": 1.3, "position": { "x": 73, "y": 104, "z": -8.02 }, "mirror": ["x"], "plan": "hidden", "material": "metal" },
+      { "name": "reading spots, heads", "shape": "cylinder", "radius": 2, "height": 6.5, "position": { "x": 72.02, "y": 101.59, "z": -5.32 }, "rotation": { "x": 130, "y": 20 }, "mirror": ["x"], "plan": "hidden", "material": "metal" },
+      { "name": "reading spots, lenses", "shape": "cylinder", "radius": 1.6, "height": 0.3, "position": { "x": 71.13, "y": 99.4, "z": -2.87 }, "rotation": { "x": 130, "y": 20 }, "mirror": ["x"], "plan": "hidden", "material": "lenses" }
+    ]
+  },
+  "materialSlots": {
+    "fronts": { "label": "Fronts, carcass and shelf", "default": "lacquer.greige", "allowed": ["lacquer.*", "paint.*", "wood.*"] },
+    "headboard": { "label": "Headboard panel", "default": "wood.oak-taupe", "allowed": ["wood.*", "lacquer.*", "paint.*", "fabric.*", "leather.*"] },
+    "metal": { "label": "Handles and reading spots", "default": "metal.powder-clay", "allowed": ["metal.powder-clay", "metal.brushed-steel", "metal.stainless", "metal.chrome", "metal.brass", "metal.black-matte"] },
+    "lenses": { "label": "Reading spots, light", "default": "glass.opal-lit", "allowed": ["glass.opal-lit", "glass.opal"] }
+  },
+  "notes": "Built to the user's description and inspiration photo, not a specific product. The second fitted wardrobe wall for the short wall of Zimmer 13.0 on the bathroom side (the first is wardrobe-wall-bed-alcove), wall to wall and floor to ceiling, with flat greige doors: a column on each side with a tall and a top door and a long bar handle on the bed side, a bridge of four push-to-open cabinets over the bed (underside 190 cm, 35 cm deep), and 3 cm fillers against the walls. Between the columns, 180 cm for the bed: an open niche under the bridge, and a headboard panel 20 cm deep with a shelf on top at 116 cm and two reading spots. Bed 160 × 200 (170 cm wide) stands with 5 cm to spare on each side, its headboard against the panel; its own 95 cm headboard leaves the shelf and the spots in view, and its side clearance reaches the columns. The width, 292 cm, is the plan value of checklist M04, not yet measured. After measuring, rebuild the item with `npx tsx tools/models/wardrobe-wall-bed-bridge.ts <width>`: the side columns take up the difference. No clearance zone: zones always cover a whole side, and one in front would cover the bed. The column doors need about 51 cm in front of them; with the bed in place, its side clearance covers that."
+}
