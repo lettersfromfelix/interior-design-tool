@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "throw-folded",
+  "name": "Throw, folded",
+  "category": "decor",
+  "tags": ["living room", "bedroom", "throw", "blanket", "wool", "sofa", "bed"],
+  "dimensions": { "width": 43.33, "depth": 61.97, "height": 4.5 },
+  "placement": { "type": "onTop" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "layers 1–3", "shape": "box", "size": { "x": 41.08, "y": 1.5, "z": 56.67 }, "cornerRadius": 0.7, "position": { "x": 1.13, "y": 0.75, "z": -2.65 }, "material": "throw" },
+      { "name": "layers 4–6", "shape": "box", "size": { "x": 40.48, "y": 1.5, "z": 56.07 }, "cornerRadius": 0.7, "position": { "x": 1.22, "y": 2.25, "z": -2.95 }, "material": "throw" },
+      { "name": "layers 7–9", "shape": "box", "size": { "x": 39.88, "y": 1.5, "z": 55.47 }, "cornerRadius": 0.7, "position": { "x": 0.33, "y": 3.75, "z": -2.35 }, "material": "throw" },
+      { "name": "fold", "shape": "cylinder", "radius": 2.25, "height": 56.27, "position": { "x": -19.41, "y": 2.25, "z": -2.65 }, "rotation": { "x": 90 }, "material": "throw" },
+      { "name": "fringe", "shape": "cylinder", "radius": 0.35, "height": 5.33, "position": { "x": -19.5, "y": 1.28, "z": 28.19 }, "rotation": { "x": -69.7, "y": 5 }, "repeat": { "count": 8, "step": { "x": 5.2, "y": 0, "z": 0 } }, "material": "throw" },
+      { "name": "fringe, shorter tassels", "shape": "cylinder", "radius": 0.35, "height": 4.68, "position": { "x": -16.9, "y": 1.28, "z": 27.84 }, "rotation": { "x": -66.72, "y": -5 }, "repeat": { "count": 8, "step": { "x": 5.2, "y": 0, "z": 0 } }, "material": "throw" }
+    ]
+  },
+  "materialSlots": {
+    "throw": { "label": "Throw", "default": "fabric.boucle-cream", "allowed": ["fabric.*", "rug.*"] }
+  },
+  "notes": "Generic wool throw, not a specific product: 130 × 170 cm with fringed ends, folded in thirds both ways to 43.33 × 56.67 cm and 4.5 cm high; the fringe lies in front of it, so the item is 61.97 cm deep. Drop it on anything that offers a surface, such as a sofa or armchair seat, a bed, the bedspread (bedspread-quilted-240x260) or the ledge of the headboard box: it keeps the angle it is dropped at, like the cushions, and moves with what it lies on. Cream bouclé by default; any fabric, or one of the rug colorways (rug.*) to match the rug."
+}
