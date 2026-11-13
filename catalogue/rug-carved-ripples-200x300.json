@@ -56,9 +56,9 @@
     ]
   },
   "materialSlots": {
-    "rug": { "label": "Rug", "default": "fabric.wool-ivory", "allowed": ["fabric.*"] },
-    "carving": { "label": "Carved lines", "default": "fabric.wool-beige", "allowed": ["fabric.*"] }
+    "rug": { "label": "Rug", "default": "fabric.wool-ivory", "allowed": ["fabric.*", "rug.light-blue", "rug.chocolate", "rug.mushroom", "rug.sage", "rug.terracotta", "rug.slate-heather"] },
+    "carving": { "label": "Carved lines", "default": "fabric.wool-beige", "allowed": ["fabric.*", "rug.light-blue", "rug.chocolate", "rug.mushroom", "rug.sage", "rug.terracotta", "rug.slate-heather"] }
   },
   "collision": "none",
-  "notes": "Own design, not a specific product: an ivory wool rug, 200 × 300 cm, with carved ripples in beige that spread from two corners and meet in the middle, to go with the round, soft shapes of the chocolate sofas. Furniture can stand on it: it takes no part in collision checks."
+  "notes": "Own design, not a specific product: an ivory wool rug, 200 × 300 cm, with carved ripples in beige that spread from two corners and meet in the middle, to go with the round, soft shapes of the chocolate sofas. Furniture can stand on it: it takes no part in collision checks. Both parts take any fabric and the plain rug colorways; the patterned ones (abstract, stripe, berber) are left out, as they would compete with the carving. Pairs that work (rug / carved lines): ivory / beige (the default, fabric.wool-ivory / fabric.wool-beige); light blue / ivory (rug.light-blue / fabric.wool-ivory); chocolate / mushroom (rug.chocolate / rug.mushroom); mushroom / chocolate (rug.mushroom / rug.chocolate); sage / ivory (rug.sage / fabric.wool-ivory); terracotta / sand (rug.terracotta / fabric.wool-sand); slate / light blue (rug.slate-heather / rug.light-blue)."
 }

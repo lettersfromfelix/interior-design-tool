@@ -14,8 +14,8 @@
     ]
   },
   "materialSlots": {
-    "rug": { "label": "Rug", "default": "fabric.wool-beige", "allowed": ["fabric.*"] }
+    "rug": { "label": "Rug", "default": "fabric.wool-beige", "allowed": ["rug.*", "fabric.*"] }
   },
   "collision": "none",
-  "notes": "Generic example with typical sizes, not a specific product. Beige by default, as the user asked for a beige 200 × 300 cm rug; any fabric can be picked. Furniture can stand on it: it takes no part in collision checks."
+  "notes": "Generic example with typical sizes, not a specific product. Beige by default, as the user asked for a beige 200 × 300 cm rug. Besides any fabric, it takes the rug colorways (rug.*): two abstract watercolours that get busier towards the edges (rug.abstract-ivory-slate, ivory with taupe and slate clouds like the rug in the user's photo; rug.abstract-sand-rust, sand with rust and chocolate), a fine stripe (rug.stripe-ivory-charcoal, running lengthwise), a flecked berber (rug.berber-oatmeal) and plain wools: rug.light-blue, rug.chocolate, rug.mushroom, rug.sage, rug.terracotta and rug.slate-heather. Furniture can stand on it: it takes no part in collision checks."
 }
