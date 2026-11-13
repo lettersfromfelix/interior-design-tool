@@ -1,0 +1,32 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "desk-sit-stand-180",
+  "name": "Desk, electric sit-stand 180 × 80",
+  "category": "table",
+  "tags": ["office", "desk", "height-adjustable", "standing desk", "workstation"],
+  "dimensions": { "width": 180, "depth": 80, "height": 74 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "top", "shape": "box", "size": { "x": 180, "y": 2.5, "z": 80 }, "cornerRadius": 0.5, "position": { "x": 0, "y": 72.75, "z": 0 }, "material": "top" },
+      { "name": "feet", "shape": "box", "size": { "x": 7, "y": 3, "z": 70 }, "cornerRadius": 1.4, "position": { "x": 65, "y": 2.3, "z": 0 }, "mirror": ["x"], "material": "frame" },
+      { "name": "glides", "shape": "cylinder", "radius": 1.6, "height": 0.8, "position": { "x": 65, "y": 0.4, "z": -32 }, "repeat": { "count": 2, "step": { "x": 0, "y": 0, "z": 64 } }, "mirror": ["x"], "plan": "hidden", "material": "frame" },
+      { "name": "columns, lower sections", "shape": "box", "size": { "x": 7, "y": 34.2, "z": 5.5 }, "cornerRadius": 0.6, "position": { "x": 65, "y": 20.9, "z": 0 }, "mirror": ["x"], "material": "frame" },
+      { "name": "columns, upper sections", "shape": "box", "size": { "x": 6.2, "y": 30.5, "z": 4.7 }, "cornerRadius": 0.5, "position": { "x": 65, "y": 53.25, "z": 0 }, "mirror": ["x"], "material": "frame" },
+      { "name": "motor housings", "shape": "box", "size": { "x": 9, "y": 6, "z": 8 }, "cornerRadius": 0.8, "position": { "x": 65, "y": 65.5, "z": 0 }, "mirror": ["x"], "material": "frame" },
+      { "name": "side brackets", "shape": "box", "size": { "x": 4, "y": 3, "z": 64 }, "cornerRadius": 0.4, "position": { "x": 65, "y": 70, "z": 0 }, "mirror": ["x"], "material": "frame" },
+      { "name": "crossbar", "shape": "box", "size": { "x": 126, "y": 3, "z": 5 }, "cornerRadius": 0.4, "position": { "x": 0, "y": 70, "z": 0 }, "material": "frame" },
+      { "name": "cable tray, bottom", "shape": "box", "size": { "x": 110, "y": 0.3, "z": 11 }, "position": { "x": 0, "y": 59.65, "z": -30 }, "material": "frame" },
+      { "name": "cable tray, sides", "shape": "box", "size": { "x": 110, "y": 9, "z": 0.3 }, "position": { "x": 0, "y": 64, "z": -35.35 }, "repeat": { "count": 2, "step": { "x": 0, "y": 0, "z": 10.7 } }, "material": "frame" },
+      { "name": "control panel", "shape": "box", "size": { "x": 12, "y": 2.2, "z": 4.5 }, "cornerRadius": 0.6, "position": { "x": 60, "y": 70.4, "z": 36.25 }, "plan": "hidden", "material": "frame" }
+    ]
+  },
+  "materialSlots": {
+    "top": { "label": "Top", "default": "wood.oak-natural", "allowed": ["wood.*", "lacquer.*"] },
+    "frame": { "label": "Frame", "default": "metal.black-matte", "allowed": ["metal.*", "lacquer.white", "lacquer.anthracite", "lacquer.black"] }
+  },
+  "surfaces": [{ "name": "top", "height": 74, "width": 180, "depth": 80 }],
+  "notes": "Generic example with typical sizes, not a specific product. An electric sit-stand desk with a 180 × 80 cm top on a slim dual-motor T-frame (columns 130 cm apart on 70 cm feet), a cable tray under the back edge and a control panel under the front right. Such frames move the top between about 62 and 127 cm; the item shows it at a sitting height of 74 cm. Room for a 40\" ultrawide monitor with a speaker on each side."
+}

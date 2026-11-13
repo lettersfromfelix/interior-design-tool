@@ -98,10 +98,12 @@
     { "id": "lacquer.olive", "name": "Lacquer, olive green", "color": "#61643D", "roughness": 0.45 },
     { "id": "lacquer.beige", "name": "Lacquer, beige", "color": "#CDBFA6", "roughness": 0.45 },
     { "id": "lacquer.greige", "name": "Lacquer, greige matt", "color": "#CDC7BF", "roughness": 0.6 },
+    { "id": "lacquer.pearl-grey", "name": "Lacquer, pearl grey (USM)", "color": "#C9CBC6", "roughness": 0.5 },
     { "id": "lacquer.black", "name": "Lacquer, black", "color": "#1C1C1C", "roughness": 0.4 },
 
     { "id": "plastic.deep-black", "name": "Plastic, deep black", "color": "#1A1A1A", "roughness": 0.42 },
     { "id": "plastic.ice-grey", "name": "Plastic, ice grey", "color": "#A3B6B9", "roughness": 0.42 },
+    { "id": "plastic.graphite", "name": "Plastic, graphite", "color": "#3E3F42", "roughness": 0.55 },
 
     { "id": "fabric.boucle-cream", "name": "Bouclé, cream", "color": "#EDE6DA", "roughness": 0.97,
       "pattern": { "type": "weave", "color2": "#DCD3C4", "scale": 2, "strength": 0.5 } },
@@ -133,6 +135,10 @@
       "pattern": { "type": "weave", "color2": "#B6A98F", "scale": 1.5, "strength": 0.45 } },
     { "id": "fabric.hopsak-blue-grey", "name": "Hopsak, pale blue-grey (seat pads)", "color": "#A9B3B4", "roughness": 0.95,
       "pattern": { "type": "weave", "color2": "#97A2A3", "scale": 1, "strength": 0.4 } },
+    { "id": "fabric.mesh-graphite", "name": "Mesh, graphite (office chairs)", "color": "#5A5C60", "roughness": 0.9,
+      "pattern": { "type": "weave", "color2": "#323336", "scale": 0.5, "strength": 0.6 } },
+    { "id": "fabric.aramid-yellow", "name": "Aramid weave, yellow (speaker cones)", "color": "#D9BC72", "roughness": 0.6,
+      "pattern": { "type": "weave", "color2": "#BF9F55", "scale": 0.4, "strength": 0.5 } },
     { "id": "leather.cognac", "name": "Leather, cognac", "color": "#8A5530", "roughness": 0.6 },
     { "id": "leather.black", "name": "Leather, black", "color": "#201D1C", "roughness": 0.45 },
 

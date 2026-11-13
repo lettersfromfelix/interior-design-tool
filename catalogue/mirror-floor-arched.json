@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "mirror-floor-arched",
+  "name": "Floor mirror, arched",
+  "category": "decor",
+  "tags": ["mirror", "full-length", "standing mirror", "bedroom", "hallway", "arch"],
+  "dimensions": { "width": 65, "depth": 33.9, "height": 174.6 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "frame, sides", "shape": "box", "size": { "x": 2, "y": 142.5, "z": 2.5 }, "position": { "x": 31.5, "y": 71.09, "z": 9.49 }, "rotation": { "x": -5 }, "mirror": ["x"], "material": "frame" },
+      { "name": "frame, bottom", "shape": "box", "size": { "x": 61, "y": 2, "z": 2.5 }, "position": { "x": 0, "y": 1.11, "z": 15.61 }, "rotation": { "x": -5 }, "material": "frame" },
+      { "name": "frame, top", "shape": "lathe", "profile": [[30.5, 0], [32.5, 0], [32.5, 0.01], [32.5, 2.49], [32.5, 2.5], [30.5, 2.5], [30.5, 2.49], [30.5, 0.01], [30.5, 0]], "arc": 180, "position": { "x": 0, "y": 142.18, "z": 4.52 }, "rotation": { "x": -85, "y": -180, "z": 180 }, "material": "frame" },
+      { "name": "glass", "shape": "extrusion", "points": [[-30.8, 1.7], [30.8, 1.7], [30.8, 142.5], [30.5, 146.5], [29.8, 150.5], [28.5, 154.3], [26.7, 157.9], [24.4, 161.2], [21.8, 164.3], [18.7, 166.9], [15.4, 169.2], [11.8, 171], [8, 172.3], [4, 173], [0, 173.3], [-4, 173], [-8, 172.3], [-11.8, 171], [-15.4, 169.2], [-18.7, 166.9], [-21.8, 164.3], [-24.4, 161.2], [-26.7, 157.9], [-28.5, 154.3], [-29.8, 150.5], [-30.5, 146.5], [-30.8, 142.5]], "height": 0.4, "position": { "x": 0, "y": 0.19, "z": 16.64 }, "rotation": { "x": -85, "y": -180, "z": 180 }, "material": "glass" },
+      { "name": "backing board", "shape": "extrusion", "points": [[-30.8, 1.7], [30.8, 1.7], [30.8, 142.5], [30.5, 146.5], [29.8, 150.5], [28.5, 154.3], [26.7, 157.9], [24.4, 161.2], [21.8, 164.3], [18.7, 166.9], [15.4, 169.2], [11.8, 171], [8, 172.3], [4, 173], [0, 173.3], [-4, 173], [-8, 172.3], [-11.8, 171], [-15.4, 169.2], [-18.7, 166.9], [-21.8, 164.3], [-24.4, 161.2], [-26.7, 157.9], [-28.5, 154.3], [-29.8, 150.5], [-30.5, 146.5], [-30.8, 142.5]], "height": 1.8000000000000003, "position": { "x": 0, "y": 0.16, "z": 16.24 }, "rotation": { "x": -85, "y": -180, "z": 180 }, "material": "frame" },
+      { "name": "hinge", "shape": "box", "size": { "x": 6, "y": 5, "z": 1 }, "position": { "x": 0, "y": 99.58, "z": 5.24 }, "rotation": { "x": -5 }, "plan": "hidden", "material": "frame" },
+      { "name": "leg", "shape": "box", "size": { "x": 2.5, "y": 101.48, "z": 0.8 }, "cornerRadius": 0.35, "position": { "x": 0, "y": 49.84, "z": -5.55 }, "rotation": { "x": 11.24 }, "material": "frame" },
+      { "name": "foot", "shape": "box", "size": { "x": 3.5, "y": 0.8, "z": 3 }, "cornerRadius": 0.35, "position": { "x": 0, "y": 0.4, "z": -15.44 }, "plan": "hidden", "material": "frame" }
+    ]
+  },
+  "materialSlots": {
+    "frame": { "label": "Frame and leg", "default": "metal.black-matte", "allowed": ["metal.*", "wood.*"] },
+    "glass": { "label": "Mirror", "default": "glass.mirror", "allowed": ["glass.mirror", "glass.smoke"] }
+  },
+  "clearance": { "front": 70, "note": "Room to stand in front of the mirror" },
+  "notes": "Built to the user's description, not a specific product. A full-length mirror, 65 × 175 cm along the glass with straight sides and bottom and a semicircular top, in a slim frame (2 cm wide, 2.5 cm deep). A hinged leg behind it holds it leaning back 5°, so it stands on its own anywhere in a room; snapped to a wall, the leg's foot touches the wall and the top of the frame is 16.1 cm from it. The glass is a plain mirror finish: the app doesn't render reflections."
+}
