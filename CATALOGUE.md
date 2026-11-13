@@ -257,6 +257,10 @@ free height above it (up to the next shelf board). Give an item one surface per 
   on a sideboard).
 - For a round top, use the largest square that fits (side = 0.7 × diameter), so nothing put on it overhangs the edge;
   `coffee-table-round-80.json` does this.
+- For a seat, the surface is the free part of the seat: between the arms, from the front of the back cushions to the
+  front edge. Put it at the seat cushions' height; on a domed, quilted or tilted seat, at its median height, so things
+  sink in a little where the seat is higher rather than float where it is lower (`armchair-riga.json`,
+  `lounge-chair-eames.json`). A curved sofa gets one rectangle per part of the curve (`sofa-bubble-curve.json`).
 
 Validation warns if a surface lies outside the footprint or above the item.
 
@@ -359,7 +363,7 @@ All examples are real files in `catalogue/` and validate without warnings (`npm 
 ### Parametric floor item: `catalogue/sofa-3-seater.json`
 
 Upholstery with rounded boxes, `mirror` for the legs and arms, `repeat` for the three seat and back cushions, a
-tilted backrest, two material slots and a clearance zone in front.
+tilted backrest, two material slots, a seat surface for cushions and a clearance zone in front.
 
 ```json
 {
@@ -386,8 +390,9 @@ tilted backrest, two material slots and a clearance zone in front.
     "upholstery": { "label": "Upholstery", "default": "fabric.linen-grey", "allowed": ["fabric.*", "leather.*"] },
     "legs": { "label": "Legs", "default": "wood.oak-natural", "allowed": ["wood.*", "metal.black-matte", "metal.brass"] }
   },
+  "surfaces": [{ "name": "seat", "height": 44, "width": 184, "depth": 63, "center": [0, 13.5] }],
   "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
-  "notes": "Generic example with typical sizes, not a specific product."
+  "notes": "Generic example with typical sizes, not a specific product. Its seat is a surface, so cushions and a throw can be put on it."
 }
 ```
 

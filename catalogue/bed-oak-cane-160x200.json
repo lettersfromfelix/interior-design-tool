@@ -29,6 +29,10 @@
     "duvet": { "label": "Duvet", "default": "fabric.linen-grey", "allowed": ["fabric.*"] },
     "throw": { "label": "Throw", "default": "fabric.wool-olive", "allowed": ["fabric.*"] }
   },
+  "surfaces": [
+    { "name": "duvet", "height": 58, "width": 166, "depth": 99, "center": [0, 7.5] },
+    { "name": "throw", "height": 61.5, "width": 168, "depth": 38, "center": [0, 76] }
+  ],
   "clearance": { "left": 55, "right": 55, "note": "Room to get in and make the bed" },
-  "notes": "Own design, not a specific product: a solid oak bed for a 160 × 200 cm mattress, with a woven cane headboard between square posts and a low footboard. 170 × 212 cm, headboard 95 cm; mattress top 52 cm. Shown made up. Clearance: 55 cm on both sides to get in and make the bed."
+  "notes": "Own design, not a specific product: a solid oak bed for a 160 × 200 cm mattress, with a woven cane headboard between square posts and a low footboard. 170 × 212 cm, headboard 95 cm; mattress top 52 cm. Shown made up. The duvet and the throw across its foot are surfaces, so cushions or a folded throw can be put on the bed. Clearance: 55 cm on both sides to get in and make the bed."
 }

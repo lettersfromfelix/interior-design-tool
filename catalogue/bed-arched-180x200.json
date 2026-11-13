@@ -28,6 +28,10 @@
     "throw": { "label": "Throw and cushions", "default": "fabric.velvet-rust", "allowed": ["fabric.*"] },
     "feet": { "label": "Feet", "default": "wood.oak-dark", "allowed": ["wood.*", "metal.black-matte", "metal.brass"] }
   },
+  "surfaces": [
+    { "name": "duvet", "height": 66.5, "width": 186, "depth": 90, "center": [0, 16] },
+    { "name": "throw", "height": 70, "width": 192, "depth": 42, "center": [0, 82] }
+  ],
   "clearance": { "left": 60, "right": 60, "note": "Room to get in and make the bed" },
-  "notes": "Own design, not a specific product: an upholstered bed for a 180 × 200 cm mattress with a tall headboard whose upper corners are rounded into an arch. 194 × 216 cm, headboard 112 cm; mattress top 58 cm. Shown made up, with a throw and two cushions. Clearance: 60 cm on both sides to get in and make the bed."
+  "notes": "Own design, not a specific product: an upholstered bed for a 180 × 200 cm mattress with a tall headboard whose upper corners are rounded into an arch. 194 × 216 cm, headboard 112 cm; mattress top 58 cm. Shown made up, with a throw and two cushions. The duvet and the throw across its foot are surfaces, so cushions or a folded throw can be put on the bed. Clearance: 60 cm on both sides to get in and make the bed."
 }

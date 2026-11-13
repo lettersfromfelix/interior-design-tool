@@ -28,6 +28,7 @@
   "materialSlots": {
     "upholstery": { "label": "Upholstery", "default": "fabric.boucle-cream", "allowed": ["fabric.*", "leather.*"] }
   },
+  "surfaces": [{ "name": "seat", "height": 38, "width": 228, "depth": 62, "center": [0, 15] }],
   "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
-  "notes": "Own design, inspired by Mario Bellini's Camaleonda (B&B Italia, 1970), not the product itself: three deep quilted seat modules between two quilted arms, standing directly on the floor. Seat height 40 cm, arm height 60 cm, seat depth about 64 cm. Clearance: 45 cm of legroom in front."
+  "notes": "Own design, inspired by Mario Bellini's Camaleonda (B&B Italia, 1970), not the product itself: three deep quilted seat modules between two quilted arms, standing directly on the floor. Seat height 40 cm, arm height 60 cm, seat depth about 64 cm. Its seat is a surface, at 38 cm where things sink a little into the quilting, so cushions and a throw can be put on it. Clearance: 45 cm of legroom in front."
 }

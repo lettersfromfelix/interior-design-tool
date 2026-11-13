@@ -19,7 +19,8 @@
     "upholstery": { "label": "Upholstery", "default": "fabric.velvet-rust", "allowed": ["fabric.*", "leather.*"] },
     "base": { "label": "Base", "default": "lacquer.black", "allowed": ["lacquer.black", "metal.brass"] }
   },
+  "surfaces": [{ "name": "seat", "height": 35.5, "width": 46, "depth": 28, "center": [0, 11.5] }],
   "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
   "productUrl": "https://www.gubi.com/en/products/pacha-lounge-chair",
-  "notes": "Gubi Pacha Lounge Chair without armrests (design Pierre Paulin, 1975): W 85 × D 77 × H 65 cm, seat height 37 cm, seat depth 54 cm, per Gubi's fact sheet (via smow and Scandinavia Design). A low, fully upholstered shell on a small lacquered base; the swivel version is a little higher. Rust velvet is a suggestion. Clearance: 45 cm of legroom in front."
+  "notes": "Gubi Pacha Lounge Chair without armrests (design Pierre Paulin, 1975): W 85 × D 77 × H 65 cm, seat height 37 cm, seat depth 54 cm, per Gubi's fact sheet (via smow and Scandinavia Design). A low, fully upholstered shell on a small lacquered base; the swivel version is a little higher. Rust velvet is a suggestion. The top of its domed seat is a surface, so a cushion or a throw can be put on it; a throw is bigger than the dome's top, so its back tucks under the backrest. Clearance: 45 cm of legroom in front."
 }

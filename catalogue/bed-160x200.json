@@ -26,6 +26,7 @@
     "headboard": { "label": "Headboard", "default": "fabric.linen-grey", "allowed": ["fabric.*", "leather.*"] },
     "bedding": { "label": "Bedding", "default": "fabric.cotton-white", "allowed": ["fabric.*"] }
   },
+  "surfaces": [{ "name": "duvet", "height": 56, "width": 166, "depth": 119, "center": [0, 43.5] }],
   "clearance": { "front": 60, "left": 60, "right": 60, "note": "Room to walk around the bed and make it" },
-  "notes": "Generic example with typical sizes, not a specific product. For a 160 × 200 mattress; the mattress top is 50 cm above the floor and the channel-stitched headboard stands on the floor."
+  "notes": "Generic example with typical sizes, not a specific product. For a 160 × 200 mattress; the mattress top is 50 cm above the floor and the channel-stitched headboard stands on the floor. The top of the duvet is a surface, so cushions or a folded throw can be put on the bed."
 }

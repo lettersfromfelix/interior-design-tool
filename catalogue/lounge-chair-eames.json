@@ -40,7 +40,8 @@
     "cushions": { "label": "Cushions", "default": "leather.black", "allowed": ["leather.*", "fabric.*"] },
     "base": { "label": "Base and arms", "default": "metal.black-matte", "allowed": ["metal.black-matte", "metal.chrome"] }
   },
+  "surfaces": [{ "name": "seat", "height": 37, "width": 56, "depth": 48, "center": [0, 15.5] }],
   "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
   "productUrl": "https://www.vitra.com/en-ch/product/lounge-chair",
-  "notes": "Vitra Eames Lounge Chair, classic size (design Charles & Ray Eames, 1956): W 84 × D 85 × H 84 cm (the depth grows to 91 cm when reclined), seat height 38 cm, seat depth 57 cm, as listed by Finnish Design Shop. Moulded plywood shells (walnut, palisander, oak or black ash), leather cushions, five-star aluminium swivel base. The shell angles are taken from photos. Pairs with \"Ottoman, Eames\". Clearance: 45 cm of legroom in front."
+  "notes": "Vitra Eames Lounge Chair, classic size (design Charles & Ray Eames, 1956): W 84 × D 85 × H 84 cm (the depth grows to 91 cm when reclined), seat height 38 cm, seat depth 57 cm, as listed by Finnish Design Shop. Moulded plywood shells (walnut, palisander, oak or black ash), leather cushions, five-star aluminium swivel base. The shell angles are taken from photos. Pairs with \"Ottoman, Eames\". Its seat is a surface, so a cushion or a throw can be put on it; the seat tilts back, so they sink into it a little at the front. Clearance: 45 cm of legroom in front."
 }

@@ -27,6 +27,7 @@
     "wood": { "label": "Frame", "default": "wood.teak", "allowed": ["wood.teak", "wood.oak-natural", "wood.ash-black", "wood.walnut"] },
     "cane": { "label": "Seat and back", "default": "cane.natural", "allowed": ["cane.*"] }
   },
+  "surfaces": [{ "name": "seat", "height": 38.5, "width": 41, "depth": 46, "center": [0, 3] }],
   "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
-  "notes": "Own design, inspired by Pierre Jeanneret's chairs for Chandigarh (1950s), not a reproduction: solid teak with inverted-V side frames under the armrests and a woven cane seat and back. Seat height 38 cm, armrests 59 cm. Clearance: 45 cm of legroom in front."
+  "notes": "Own design, inspired by Pierre Jeanneret's chairs for Chandigarh (1950s), not a reproduction: solid teak with inverted-V side frames under the armrests and a woven cane seat and back. Seat height 38 cm, armrests 59 cm. Its seat is a surface, so a cushion or a throw can be put on it. Clearance: 45 cm of legroom in front."
 }

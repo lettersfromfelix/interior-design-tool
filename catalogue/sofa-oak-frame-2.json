@@ -27,6 +27,7 @@
     "frame": { "label": "Frame", "default": "wood.oak-natural", "allowed": ["wood.*"] },
     "upholstery": { "label": "Cushions", "default": "fabric.linen-natural", "allowed": ["fabric.*", "leather.*"] }
   },
+  "surfaces": [{ "name": "seat", "height": 42, "width": 162, "depth": 50, "center": [0, 9] }],
   "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
-  "notes": "Own design in the Danish modern tradition, not a specific product: a solid oak frame with spindle sides, flat armrests and loose seat and back cushions. Seat height 42 cm, arm height 61 cm. Clearance: 45 cm of legroom in front."
+  "notes": "Own design in the Danish modern tradition, not a specific product: a solid oak frame with spindle sides, flat armrests and loose seat and back cushions. Seat height 42 cm, arm height 61 cm. Its seat is a surface, so cushions and a throw can be put on it. Clearance: 45 cm of legroom in front."
 }

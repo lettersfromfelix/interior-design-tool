@@ -41,7 +41,12 @@
     "upholstery": { "label": "Upholstery", "default": "fabric.chocolate", "allowed": ["fabric.*"] },
     "feet": { "label": "Feet", "default": "wood.wenge", "allowed": ["wood.wenge"] }
   },
+  "surfaces": [
+    { "name": "seat, middle", "height": 39, "width": 68, "depth": 38, "center": [0, 19] },
+    { "name": "seat, left end", "height": 39, "width": 40, "depth": 36, "center": [-50, 27] },
+    { "name": "seat, right end", "height": 39, "width": 40, "depth": 36, "center": [50, 27] }
+  ],
   "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
   "productUrl": "https://www.roche-bobois.com/de-CH/produkt/bubble-curve-3--4-sitzer-sofa---gerundet/4765.html",
-  "notes": "Roche Bobois Bubble Curve, curved 3/4-seat sofa (design Sacha Lakic): W 248 × D 132 × H 80 cm, seat height 38 cm, from Roche Bobois' product page and technical sheet FA565. Built from upright stuffed tubes and cushion bubbles that follow the sheet's drawings: the back curves gently, the front curves inwards between the rounded arms, so the seat is about 115 cm deep in the middle while the arms reach 132 cm; the arms step down from 78 to 45 cm. Feet in solid beech, wengé stain. Chocolate brown by default; Roche Bobois makes this sofa only in its Bamboo, Orsetto Flex, Passion, Signature, Smile Flex and Techno 2D/3D/4D fabrics, so pick the exact colour in the store. The clearance zone is the legroom in front of the seat."
+  "notes": "Roche Bobois Bubble Curve, curved 3/4-seat sofa (design Sacha Lakic): W 248 × D 132 × H 80 cm, seat height 38 cm, from Roche Bobois' product page and technical sheet FA565. Built from upright stuffed tubes and cushion bubbles that follow the sheet's drawings: the back curves gently, the front curves inwards between the rounded arms, so the seat is about 115 cm deep in the middle while the arms reach 132 cm; the arms step down from 78 to 45 cm. Feet in solid beech, wengé stain. Chocolate brown by default; Roche Bobois makes this sofa only in its Bamboo, Orsetto Flex, Passion, Signature, Smile Flex and Techno 2D/3D/4D fabrics, so pick the exact colour in the store. Its seat is three surfaces that follow the curve, the middle and the two ends, at 39 cm where things sink a little into the bubbles, so cushions and a throw can be put on it; the throw fits best in the middle, turned sideways on its own, or lengthwise between cushions on the end seats. The clearance zone is the legroom in front of the seat."
 }

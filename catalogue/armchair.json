@@ -22,6 +22,7 @@
     "upholstery": { "label": "Upholstery", "default": "fabric.boucle-cream", "allowed": ["fabric.*", "leather.*"] },
     "legs": { "label": "Legs", "default": "wood.oak-natural", "allowed": ["wood.*", "metal.black-matte", "metal.brass"] }
   },
+  "surfaces": [{ "name": "seat", "height": 44, "width": 52, "depth": 53, "center": [0, 13.5] }],
   "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
-  "notes": "Generic example with typical sizes, not a specific product. Seat height 44 cm, armrests 60 cm."
+  "notes": "Generic example with typical sizes, not a specific product. Seat height 44 cm, armrests 60 cm. Its seat is a surface, so a cushion or a throw can be put on it."
 }

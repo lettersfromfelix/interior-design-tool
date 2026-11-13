@@ -27,7 +27,8 @@
     "upholstery": { "label": "Upholstery", "default": "fabric.wool-olive", "allowed": ["fabric.*", "leather.*"] },
     "frame": { "label": "Frame", "default": "metal.chrome", "allowed": ["metal.chrome"] }
   },
+  "surfaces": [{ "name": "seat", "height": 44.5, "width": 201.5, "depth": 52, "center": [0, 13.85] }],
   "clearance": { "front": 45, "note": "Legroom in front of the seat; a coffee table can stand 45 cm away" },
   "productUrl": "https://www.knoll.com/shop/en_us/living-sofas-sectionals/florence-knoll-sofa-three-seat/100464796.html",
-  "notes": "Knoll Florence Knoll Sofa, three seat (design Florence Knoll, 1954), item 100464796: 90½ × 32¼ × 31¼ in (229.9 × 81.9 × 79.4 cm), seat height 44.5 cm, seat depth 53.3 cm, arm height 59.7 cm, as on knoll.com. A solid wood body on a polished chrome outer frame, with three tufted seat and back cushions; the height of the chrome legs and the button pattern are taken from photos. The olive wool is a suggestion: Knoll offers many fabrics and leathers. Clearance: 45 cm of legroom in front."
+  "notes": "Knoll Florence Knoll Sofa, three seat (design Florence Knoll, 1954), item 100464796: 90½ × 32¼ × 31¼ in (229.9 × 81.9 × 79.4 cm), seat height 44.5 cm, seat depth 53.3 cm, arm height 59.7 cm, as on knoll.com. A solid wood body on a polished chrome outer frame, with three tufted seat and back cushions; the height of the chrome legs and the button pattern are taken from photos. The olive wool is a suggestion: Knoll offers many fabrics and leathers. Its seat is a surface, so cushions and a throw can be put on it. Clearance: 45 cm of legroom in front."
 }
