@@ -1,0 +1,30 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "bed-boxspring-150x200-headboard",
+  "name": "Bed, boxspring 150 × 200, with headboard",
+  "category": "bed",
+  "tags": ["bedroom", "double bed", "boxspring", "headboard", "channel tufted", "alcove"],
+  "dimensions": { "width": 150, "depth": 212, "height": 116 },
+  "placement": { "type": "floor" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "feet", "shape": "cylinder", "radius": 2.5, "height": 7, "position": { "x": 65, "y": 3.5, "z": -82 }, "repeat": { "count": 3, "step": { "x": 0, "y": 0, "z": 88 } }, "mirror": ["x"], "material": "feet" },
+      { "name": "box spring", "shape": "box", "size": { "x": 150, "y": 28, "z": 200 }, "cornerRadius": 1.5, "position": { "x": 0, "y": 21, "z": 6 }, "material": "base" },
+      { "name": "mattress", "shape": "box", "size": { "x": 150, "y": 21, "z": 200 }, "cornerRadius": 4, "position": { "x": 0, "y": 45.5, "z": 6 }, "material": "bedding" },
+      { "name": "topper", "shape": "box", "size": { "x": 150, "y": 6, "z": 200 }, "cornerRadius": 3, "position": { "x": 0, "y": 59, "z": 6 }, "material": "bedding" },
+      { "name": "headboard, back panel", "shape": "box", "size": { "x": 150, "y": 116, "z": 4 }, "cornerRadius": 1.5, "position": { "x": 0, "y": 58, "z": -102 }, "material": "headboard" },
+      { "name": "headboard, channels", "shape": "box", "size": { "x": 24.6, "y": 115, "z": 6 }, "cornerRadius": 2.9, "position": { "x": -62.5, "y": 58, "z": -97 }, "repeat": { "count": 6, "step": { "x": 25, "y": 0, "z": 0 } }, "material": "headboard" }
+    ]
+  },
+  "materialSlots": {
+    "base": { "label": "Box spring", "default": "fabric.linen-grey", "allowed": ["fabric.*", "leather.*"] },
+    "headboard": { "label": "Headboard", "default": "fabric.linen-grey", "allowed": ["fabric.*", "leather.*"] },
+    "feet": { "label": "Feet", "default": "metal.black-matte", "allowed": ["metal.*", "wood.*", "plastic.deep-black"] },
+    "bedding": { "label": "Mattress and topper", "default": "fabric.cotton-white", "allowed": ["fabric.*"] }
+  },
+  "surfaces": [{ "name": "bed", "height": 62, "width": 146, "depth": 196, "center": [0, 6] }],
+  "clearance": { "left": 60, "right": 60, "note": "Room to get in and make the bed" },
+  "notes": "Generic boxspring bed, not a specific product: for a 150 × 200 cm mattress, exactly 150 cm wide overall, with an upholstered headboard. Built as bed-boxspring-160x200: six low feet, a box spring, a pocket-spring mattress and a topper, 62 cm to the top (feet 7, box spring 28, mattress 21, topper 6 cm). The headboard is 116 cm high (XXXLutz BOXXX: 116 cm, IKEA DUNVIK: 120 cm) and 10 cm deep, with 6 padded vertical channels; it has its own material slot. The item is 212 cm long: 200 + the headboard's 10 + 2 cm left free behind it, so wall snap puts the headboard flush against the back panel of the wardrobe walls' bed alcove (against a plain wall it stands 2 cm off). In the alcove (177 cm wide) it leaves 13.5 cm on each side, and the headboard stays below the sconces of wardrobe-wall-bed-alcove-r5 and -low (135–150 cm); in the original version the sconce shades (103–118 cm) hang beside its outer channels, 10–20 cm in front of it. The mattress is a surface for the bedding (duvet-200x210, pillow-65x65, bedspread-quilted-240x260, made for 160 cm beds: on this one the duvet is 7.5 cm wider than the mattress on each side)."
+}

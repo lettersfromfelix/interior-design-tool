@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "pillow-65x65",
+  "name": "Pillow 65 × 65",
+  "category": "bedding",
+  "tags": ["bedroom", "pillow", "bed", "Swiss size"],
+  "dimensions": { "width": 65, "depth": 65, "height": 14 },
+  "placement": { "type": "onTop" },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "body", "shape": "box", "size": { "x": 63, "y": 11, "z": 63 }, "cornerRadius": 5.4, "position": { "x": 0, "y": 5.5, "z": 0 }, "material": "cover" },
+      { "name": "filling", "shape": "sphere", "radius": 1, "scale": { "x": 29.5, "y": 4, "z": 29.5 }, "position": { "x": 0, "y": 10, "z": 0 }, "material": "cover" }
+    ]
+  },
+  "materialSlots": {
+    "cover": { "label": "Pillowcase", "default": "fabric.cotton-white", "allowed": ["fabric.*"] }
+  },
+  "notes": "Generic pillow, not a specific product: 65 × 65 cm, the Swiss standard size, lying flat and about 14 cm high. Put two at the head end of a 160 cm bed, on the duvet (duvet-200x210) or straight on the mattress; they then move with the bed. Pushed to the head end they leave about 18 cm of the duvet free before the bedspread (bedspread-quilted-240x260) begins."
+}

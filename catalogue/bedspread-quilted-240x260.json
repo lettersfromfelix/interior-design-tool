@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "bedspread-quilted-240x260",
+  "name": "Bedspread 240 × 260, quilted",
+  "category": "bedding",
+  "tags": ["bedroom", "bedspread", "quilt", "bed", "Swiss size"],
+  "dimensions": { "width": 168.2, "depth": 208.2, "height": 2.4 },
+  "placement": { "type": "onTop", "hangsBelow": 31 },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "top", "shape": "box", "size": { "x": 163.4, "y": 1.2, "z": 116.7 }, "cornerRadius": 0.55, "position": { "x": 0, "y": 0.6, "z": 43.35 }, "material": "quilt" },
+      { "name": "folded-back band", "shape": "box", "size": { "x": 163.4, "y": 1.2, "z": 20 }, "cornerRadius": 0.55, "position": { "x": 0, "y": 1.8, "z": -5 }, "material": "quilt" },
+      { "name": "fold", "shape": "cylinder", "radius": 1.2, "height": 163.4, "position": { "x": 0, "y": 1.2, "z": -15 }, "rotation": { "z": 90 }, "material": "quilt" },
+      { "name": "side edges", "shape": "cylinder", "radius": 2.4, "height": 116.7, "position": { "x": 81.7, "y": -1.2, "z": 43.35 }, "rotation": { "x": 90 }, "mirror": ["x"], "material": "quilt" },
+      { "name": "foot edge", "shape": "cylinder", "radius": 2.4, "height": 163.4, "position": { "x": 0, "y": -1.2, "z": 101.7 }, "rotation": { "z": 90 }, "material": "quilt" },
+      { "name": "foot edge corners", "shape": "sphere", "radius": 2.4, "position": { "x": 81.7, "y": -1.2, "z": 101.7 }, "mirror": ["x"], "material": "quilt" },
+      { "name": "sides", "shape": "box", "size": { "x": 1.2, "y": 29.8, "z": 116.7 }, "cornerRadius": 0.55, "position": { "x": 83.5, "y": -16.1, "z": 43.35 }, "mirror": ["x"], "material": "quilt" },
+      { "name": "foot", "shape": "box", "size": { "x": 163.4, "y": 29.8, "z": 1.2 }, "cornerRadius": 0.55, "position": { "x": 0, "y": -16.1, "z": 103.5 }, "material": "quilt" },
+      { "name": "foot corners", "shape": "cylinder", "radius": 2.4, "height": 29.8, "position": { "x": 81.7, "y": -16.1, "z": 101.7 }, "mirror": ["x"], "material": "quilt" }
+    ]
+  },
+  "materialSlots": {
+    "quilt": { "label": "Bedspread", "default": "fabric.quilted-rose", "allowed": ["fabric.*"] }
+  },
+  "surfaces": [{ "name": "top", "height": 1.2, "width": 163.4, "depth": 96.7, "center": [0, 53.35] }],
+  "notes": "Generic quilted bedspread, not a specific product: 240 × 260 cm (German: Tagesdecke), for a 160 × 200 bed, like the dusty pink one in the user's inspiration photo. Drop it on the duvet (duvet-200x210): it is centred and lies square on it, from -85 cm below the head end of the mattress (just below the pillows) to the foot, its head edge folded back 20 cm, and hangs 31 cm down the sides and the foot, over the duvet's drapes. It works straight on the mattress too. The item's box (168.2 × 208.2 cm) is the bedspread as it lies on the bed. The quilting is the material's stitched pattern: fabric.quilted-rose (default), fabric.quilted-light-blue and fabric.quilted-sand; plain fabrics show it unquilted. Its top is a surface for cushions and throws."
+}

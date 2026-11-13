@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/catalogue-item.schema.json",
+  "schemaVersion": 1,
+  "id": "duvet-200x210",
+  "name": "Duvet 200 × 210",
+  "category": "bedding",
+  "tags": ["bedroom", "duvet", "bed", "Swiss size"],
+  "dimensions": { "width": 165, "depth": 205, "height": 6 },
+  "placement": { "type": "onTop", "hangsBelow": 14 },
+  "geometry": {
+    "type": "parametric",
+    "parts": [
+      { "name": "top", "shape": "box", "size": { "x": 165, "y": 6, "z": 201.5 }, "cornerRadius": 2.9, "position": { "x": 0, "y": 3, "z": 1.75 }, "material": "duvet" },
+      { "name": "loft", "shape": "sphere", "radius": 1, "scale": { "x": 78, "y": 3, "z": 96 }, "position": { "x": 0, "y": 4, "z": 1.75 }, "plan": "hidden", "material": "duvet" },
+      { "name": "sides", "shape": "box", "size": { "x": 2.1, "y": 17, "z": 197.1 }, "cornerRadius": 1, "position": { "x": 81.45, "y": -5.5, "z": 1.05 }, "mirror": ["x"], "material": "duvet" },
+      { "name": "foot", "shape": "box", "size": { "x": 159.2, "y": 17, "z": 2.1 }, "cornerRadius": 1, "position": { "x": 0, "y": -5.5, "z": 101.45 }, "material": "duvet" },
+      { "name": "foot corners", "shape": "cylinder", "radius": 2.9, "height": 17, "position": { "x": 79.6, "y": -5.5, "z": 99.6 }, "mirror": ["x"], "material": "duvet" }
+    ]
+  },
+  "materialSlots": {
+    "duvet": { "label": "Duvet cover", "default": "fabric.cotton-white", "allowed": ["fabric.*"] }
+  },
+  "surfaces": [{ "name": "top", "height": 6, "width": 160, "depth": 196 }],
+  "notes": "Generic duvet, not a specific product: 200 × 210 cm, the Swiss size for a 160 cm bed, made up over a 160 × 200 mattress (bed-boxspring-160x200). It covers the whole mattress, 6 cm thick, and hangs 14 cm down the sides and the foot; the item's box (165 × 205 cm) is the duvet as it lies on the bed, 2.5 cm wider than the mattress on each side. Drop it on the bed: it is centred and lies square on it. Its top is a surface for the pillows (pillow-65x65) and the bedspread (bedspread-quilted-240x260), which then move with it. On a 150 cm bed (bed-boxspring-150x200-headboard) it is 7.5 cm wider than the mattress on each side."
+}
