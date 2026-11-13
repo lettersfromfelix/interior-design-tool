@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { HexColor, MaterialId, PositiveCm } from "./common";
 
-export const PatternType = z.enum(["wood-grain", "planks", "tiles", "weave", "noise"]);
+export const PatternType = z.enum(["wood-grain", "planks", "tiles", "weave", "noise", "watercolour", "stripes"]);
 
 export const MaterialPreset = z.strictObject({
   /** "<group>.<name>"; the group is the part before the dot (wood, fabric, metal, paint, floor, …). */
@@ -31,6 +31,12 @@ export const MaterialPreset = z.strictObject({
       /** Tiles: small dark flecks (0–1), e.g. fossil fragments in limestone; colour `fleckColor` (default: dark `color2`). */
       flecks: z.number().min(0).max(1).optional(),
       fleckColor: HexColor.optional(),
+      /** Watercolour: a second patch colour, in fewer and smaller patches than `color2`. */
+      color3: HexColor.optional(),
+      /** Watercolour: how much busier the patches get away from the middle of the part, towards a rug's edges (0–1). */
+      edges: z.number().min(0).max(1).optional(),
+      /** Stripes: the width of each stripe (cm); `scale` is the distance from one stripe to the next. Default 1. */
+      stripeWidth: PositiveCm.optional(),
     })
     .optional(),
   /** Optional image textures (paths relative to the repository root, e.g. data/textures/oak.jpg). */

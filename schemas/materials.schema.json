@@ -60,7 +60,9 @@
                   "planks",
                   "tiles",
                   "weave",
-                  "noise"
+                  "noise",
+                  "watercolour",
+                  "stripes"
                 ]
               },
               "color2": {
@@ -104,6 +106,20 @@
               "fleckColor": {
                 "type": "string",
                 "pattern": "^#[0-9a-fA-F]{6}$"
+              },
+              "color3": {
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}$"
+              },
+              "edges": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "stripeWidth": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "centimetres (> 0)"
               }
             },
             "required": [

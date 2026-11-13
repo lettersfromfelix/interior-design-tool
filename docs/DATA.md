@@ -220,11 +220,15 @@ without `--force`. After measuring, edit `data/apartment.json` directly.
     color: "#RRGGBB",
     roughness?: 0..1, metalness?: 0..1, opacity?: 0..1,
     emissive?: "#RRGGBB", emissiveIntensity?: number,
-    pattern?: { type: "wood-grain" | "planks" | "tiles" | "weave" | "noise",
+    pattern?: { type: "wood-grain" | "planks" | "tiles" | "weave" | "noise" | "watercolour" | "stripes",
                 color2: "#RRGGBB", scale: number /* cm per repeat */, strength?: 0..1,
                 // tiles only:
                 jointColor?: "#RRGGBB", jointWidth?: number /* cm, default 0.3 */,
-                variation?: 0..1, veins?: 0..1, flecks?: 0..1, fleckColor?: "#RRGGBB" },
+                variation?: 0..1, veins?: 0..1, flecks?: 0..1, fleckColor?: "#RRGGBB",
+                // watercolour only:
+                color3?: "#RRGGBB", edges?: 0..1,
+                // stripes only:
+                stripeWidth?: number /* cm, default 1 */ },
     texture?: { map: "data/textures/….jpg", normalMap?: string, repeat: number /* cm */ }
   }] }
 ```
@@ -234,8 +238,15 @@ For `tiles`, `scale` is the tile's edge. `variation` makes the tiles differ in t
 in `color2`, and `flecks` adds small dark flecks (`fleckColor`, default a dark `color2`), as in natural stone: the
 floor's limestone tiles use all three, the bathroom's ceramic tiles only a little `variation`. With any of the three,
 one texture holds a block of 5 × 5 different tiles, so the pattern repeats only every five tiles.
+Two patterns are made for rugs. `watercolour` paints an abstract rug: irregular, streaky clouds in `color2` along the
+length, and fewer, smaller ones in `color3`, some at the rims of the others. `strength` sets how many, and `edges`
+thins them out in the middle of the part, so the rug gets busier towards its edges; use a `scale` of at least the
+rug's length (300), so it doesn't repeat on it. `stripes` draws one `color2` stripe, `stripeWidth` wide, every `scale`
+cm, along the length. A part's pattern is centred on the part's middle, and on a floor item "along the length" means
+along its depth.
 Groups in use: `paint`, `floor`, `kitchen`, `stone`, `tile`, `door`, `frame`, `glass`, `ceramic`, `metal`, `wood`,
-`lacquer`, `plastic`, `fabric`, `leather`, `cane`, `paper`, `plant`. New presets and groups can be added freely.
+`lacquer`, `plastic`, `fabric`, `rug`, `leather`, `cane`, `paper`, `plant`. New presets and groups can be added
+freely. The `rug` presets are the rug colorways; the rug items offer them besides any fabric.
 Unknown ids show an issue with suggestions and fall back to neutral grey. Catalogue items offer presets per material
 slot, by id or by group (`"fabric.*"`).
 

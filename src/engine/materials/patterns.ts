@@ -229,8 +229,137 @@ function noise(ctx: Ctx, n: number, base: RGB, c2: RGB, p: Pattern, rand: () => 
   return p.scale;
 }
 
-const painters = { tiles, planks, "wood-grain": woodGrain, weave, noise } as const;
-const resolution: Record<Pattern["type"], number> = { tiles: 512, planks: 1024, "wood-grain": 512, weave: 128, noise: 256 };
+/** A soft patch of a watercolour pattern on the canvas: centre and radii (px), turn (radians), colour, opacity, blur (px). */
+export interface Patch {
+  x: number;
+  y: number;
+  rx: number;
+  ry: number;
+  angle: number;
+  color: RGB;
+  alpha: number;
+  blur: number;
+}
+
+const smoothstep = (a: number, b: number, v: number): number => {
+  const t = Math.max(0, Math.min(1, (v - a) / (b - a)));
+  return t * t * (3 - 2 * t);
+};
+
+/**
+ * How far a canvas point lies from the middle of the part: 0 there, 1 half a repeat away. Part UVs are centimetres
+ * from the geometry's origin, which falls on the canvas corner, so on a rug this grows towards its edges.
+ */
+export const fromMiddle = (x: number, y: number, n: number): number => {
+  const wrap = (v: number) => ((v % n) + n) % n;
+  const [u, v] = [wrap(x), wrap(y)];
+  return Math.max(Math.min(u, n - u), Math.min(v, n - v)) / (n / 2);
+};
+
+/**
+ * The patches of a watercolour pattern on an n × n canvas: clouds of thin, overlapping streaks in `color2`, some paler,
+ * running along v (the length of a rug), each cloud a few irregular lobes with ragged ends, and fewer, smaller clouds
+ * in `color3`. The streaks build up uneven, dry-brushed patches like an abstract rug's. `strength` sets how many;
+ * `edges` thins them out in the middle of the part.
+ */
+export function watercolourPatches(p: Pattern, base: RGB, n: number, rand: () => number): Patch[] {
+  const s = p.strength ?? 0.5;
+  const edges = p.edges ?? 0;
+  const pxPerCm = n / p.scale;
+  const c2 = rgb(p.color2);
+  const c3 = p.color3 ? rgb(p.color3) : undefined;
+  const clouds = Math.max(4, Math.round((40 + 140 * s) * (p.scale / 300) ** 2));
+  const out: Patch[] = [];
+  for (let i = 0; i < clouds; i++) {
+    const x = rand() * n;
+    const y = rand() * n;
+    const keep = 1 - edges + edges * smoothstep(0.2, 0.62, fromMiddle(x, y, n));
+    const accent = c3 !== undefined && rand() < 0.28;
+    const size = rand();
+    if (rand() > keep) continue;
+    const color = accent ? c3 : c2;
+    const R = (accent ? 6 + 12 * size : 10 + 30 * size * size) * pxPerCm;
+    const turn = Math.PI / 2 + (rand() - 0.5) * 0.4;
+    const [cos, sin] = [Math.cos(turn), Math.sin(turn)];
+    const lobes = 2 + Math.floor(rand() * 3);
+    // main clouds sometimes carry a small lobe of the accent colour at their rim, as on the rug in the user's photo
+    const rim = !accent && c3 !== undefined && rand() < 0.35;
+    for (let l = 0; l < lobes + (rim ? 1 : 0); l++) {
+      const atRim = l === lobes;
+      const side = rand() < 0.5 ? -1 : 1;
+      const [la, lc] = atRim ? [(rand() - 0.5) * 1.6 * R, side * (0.35 + 0.3 * rand()) * R] : [(rand() - 0.5) * 1.6 * R, (rand() - 0.5) * R];
+      const lr = R * (atRim ? 0.25 + 0.2 * rand() : 0.45 + 0.4 * rand());
+      const lobeColor = atRim && c3 ? c3 : color;
+      const strong = accent || atRim;
+      const strokes = Math.round((7 * lr) / pxPerCm);
+      for (let k = 0; k < strokes; k++) {
+        const along = la + (rand() - 0.5) * 2 * lr;
+        const across = lc + (rand() - 0.5) * lr * (1 - Math.abs(along - la) / (1.3 * lr)); // narrower towards the ends
+        out.push({
+          x: x + cos * along - sin * across,
+          y: y + sin * along + cos * across,
+          rx: lr * (0.15 + 0.35 * rand()),
+          ry: pxPerCm * (0.25 + 0.6 * rand()),
+          angle: turn + (rand() - 0.5) * 0.2,
+          // the accent's cores must stay strong to keep its own colour on the ground
+          color: mix(lobeColor, base, rand() * (strong ? 0.15 : 0.35)),
+          alpha: Math.min(0.6, (0.14 + 0.2 * rand()) * (0.6 + 0.4 * s) * (strong ? 1.5 : 1)),
+          blur: 0,
+        });
+      }
+    }
+  }
+  return out;
+}
+
+/** Abstract, watercolour-like washes (rugs): see `watercolourPatches`; a fine grain over all of it, as of wool pile. */
+function watercolour(ctx: Ctx, n: number, base: RGB, c2: RGB, p: Pattern, rand: () => number, s: number): number {
+  ctx.fillStyle = css(base);
+  ctx.fillRect(0, 0, n, n);
+  blobs(ctx, n, rand, 1500, () => css(mix(base, c2, rand() * 0.6), 0.04 + 0.04 * s), n / 1500, n / 300);
+  for (const q of watercolourPatches(p, base, n, rand)) {
+    ctx.filter = q.blur >= 1 ? `blur(${q.blur.toFixed(1)}px)` : "none";
+    ctx.fillStyle = css(q.color, q.alpha);
+    const reach = Math.max(q.rx, q.ry) + 3 * q.blur;
+    wrapped(n, ((q.x % n) + n) % n, ((q.y % n) + n) % n, reach, (x, y) => {
+      ctx.beginPath();
+      ctx.ellipse(x, y, q.rx, q.ry, q.angle, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+  ctx.filter = "none";
+  const light = mix(base, [255, 255, 255], 0.25);
+  for (let i = 0; i < 40000; i++) {
+    ctx.fillStyle = css(rand() < 0.5 ? light : mix(base, c2, 0.5), 0.12 + 0.1 * rand());
+    ctx.fillRect(rand() * n, rand() * n, 1.5, 1.5);
+  }
+  return p.scale;
+}
+
+/** Width in px of a stripe on an n px canvas that holds one repeat (`scale` cm) of a stripes pattern. */
+export const stripePx = (p: Pattern, n: number): number => Math.max(1.5, Math.min(n, ((p.stripeWidth ?? 1) * n) / p.scale));
+
+/**
+ * Stripes (rugs): one `color2` stripe every `scale` cm, `stripeWidth` wide, on a faintly ribbed ground. They run along
+ * v, which is the depth of a horizontal face (along a rug's length), and are centred on the middle of the part.
+ */
+function stripes(ctx: Ctx, n: number, base: RGB, c2: RGB, p: Pattern, rand: () => number, s: number): number {
+  ctx.fillStyle = css(base);
+  ctx.fillRect(0, 0, n, n);
+  blobs(ctx, n, rand, 300, () => css(mix(base, c2, rand() * 0.4), 0.06 * s), n / 120, n / 30);
+  // rows across, as on a woven rug
+  ctx.fillStyle = css(mix(base, c2, 0.5), 0.05 * s);
+  for (let y = 0; y < n; y += n / 32) ctx.fillRect(0, y, n, Math.max(1, n / 128));
+  // the stripe, centred on the repeat's edge so that it wraps
+  const w = stripePx(p, n);
+  ctx.fillStyle = css(c2);
+  ctx.fillRect(0, 0, w / 2, n);
+  ctx.fillRect(n - w / 2, 0, w / 2, n);
+  return p.scale;
+}
+
+const painters = { tiles, planks, "wood-grain": woodGrain, weave, noise, watercolour, stripes } as const;
+const resolution: Record<Pattern["type"], number> = { tiles: 512, planks: 1024, "wood-grain": 512, weave: 128, noise: 256, watercolour: 1024, stripes: 256 };
 
 /** Canvas size: a block of tiles gets about 10 px per cm (up to 2048), so that thin joints stay sharp. */
 function textureSize(p: Pattern): number {
