@@ -5,6 +5,7 @@
  */
 import { DirectionalLight, HemisphereLight, NeutralToneMapping, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
 import { resolveMaterials } from "../core/catalogue/materials";
+import { hangsBelow } from "../core/schema/catalogue";
 import type { CatalogueEntry } from "../data/catalogue";
 import type { AppState, AppStore } from "../state/store";
 import { buildItem } from "./items/buildItem";
@@ -90,9 +91,9 @@ export class ThumbnailService {
     return this.mats.lib;
   }
 
-  /** Put the camera so that the item's bounding box fills the image. */
-  private frame(width: number, height: number, depth: number): void {
-    const center = new Vector3(0, height / 2, 0);
+  /** Put the camera so that the item's bounding box (from `below` under its bottom up to `height`) fills the image. */
+  private frame(width: number, height: number, depth: number, below = 0): void {
+    const center = new Vector3(0, (height - below) / 2, 0);
     const z = VIEW_DIR;
     const x = new Vector3(0, 1, 0).cross(z).normalize();
     const y = z.clone().cross(x);
@@ -101,7 +102,7 @@ export class ThumbnailService {
     for (const sx of [-1, 1]) {
       for (const sy of [-1, 1]) {
         for (const sz of [-1, 1]) {
-          const c = new Vector3((sx * width) / 2, (sy * height) / 2, (sz * depth) / 2);
+          const c = new Vector3((sx * width) / 2, (sy * (height + below)) / 2, (sz * depth) / 2);
           dist = Math.max(dist, c.dot(z) + Math.max(Math.abs(c.dot(x)), Math.abs(c.dot(y))) / t);
         }
       }
@@ -141,7 +142,7 @@ export class ThumbnailService {
       onLoaded: () => {},
     });
     const { width, height, depth } = entry.item.dimensions;
-    this.frame(width, height, depth);
+    this.frame(width, height, depth, hangsBelow(entry.item));
     this.scene.add(built.root);
     r.render(this.scene, this.camera);
     const url = r.domElement.toDataURL("image/png");

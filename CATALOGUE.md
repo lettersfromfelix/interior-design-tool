@@ -25,7 +25,8 @@ errors), its item is left out, and everything else keeps working. Fix the file a
 - **Centimetres** for all sizes and positions, **degrees** for angles.
 - Every item has its own frame. The **origin is the bottom centre** of its box, **x = width**, **y = up**,
   **z = depth**, and the **front faces +z**. Standing in front of the item and looking at it, +x is on your right.
-- So the item fills x from −width/2 to +width/2, z from −depth/2 (back) to +depth/2 (front), and y from 0 to height.
+- So the item fills x from −width/2 to +width/2, z from −depth/2 (back) to +depth/2 (front), and y from 0 to height
+  (an `onTop` item with `hangsBelow` reaches down to −hangsBelow, see [placement](#placement)).
 
 Placed items turn clockwise seen from above; at 0° their front faces down the floor plan. The apartment's coordinate
 system is described in [docs/DATA.md](docs/DATA.md#units-and-coordinate-system).
@@ -71,7 +72,7 @@ renamed or broken, its placed copies stay in the layout and show as red placehol
 type Placement =
   | { type: "floor" }
   | { type: "wall", defaultElevation: number, minElevation?: number, maxElevation?: number }
-  | { type: "onTop", alsoOnFloor?: boolean }
+  | { type: "onTop", alsoOnFloor?: boolean, hangsBelow?: number }
   | { type: "ceiling" };
 
 type Surface = { name?: string, height: number, width: number, depth: number, center?: [x, z], maxItemHeight?: number };
@@ -98,7 +99,7 @@ exactly one size; there are no variants, and sizes can't be changed in the app. 
 |---|---|---|
 | `floor` | most furniture | Stands on the floor. With **Wall snap** on, its back snaps flush against a wall when it comes within 25 cm and is turned less than 25° from facing straight away from the wall; a side within 10 cm of a crossing wall slides into the corner. |
 | `wall` | shelves, pictures, a TV | Always hangs on a wall: its back (−z) flush against the nearest wall (never on glass), its bottom edge `defaultElevation` cm above the floor. Each placed copy's height can be changed in **Inspect**, within `minElevation` … `maxElevation`. Covering a window or door, or not hanging on a wall (e.g. after typing a position), is a warning. |
-| `onTop` | table lamps, vases, books | Stands on a [surface](#surfaces-stacking) of another item when you drop it there, and from then on moves, turns, duplicates and is deleted with it. On the floor it gets a warning, unless `alsoOnFloor: true`. |
+| `onTop` | table lamps, vases, books, bedding | Stands on a [surface](#surfaces-stacking) of another item when you drop it there, and from then on moves, turns, duplicates and is deleted with it. On the floor it gets a warning, unless `alsoOnFloor: true`. Things that hang over the edges, such as a duvet or a tablecloth, give `hangsBelow`: how far (cm) their parts reach below the surface they lie on. |
 | `ceiling` | pendant lamps | Hangs from the ceiling: its top touches the ceiling, at whatever height the ceiling is. Moves like a floor item, without wall snap. |
 
 **Grid** snapping works for all of them, except on a surface; for wall items and items snapped to a wall it works
@@ -248,6 +249,8 @@ free height above it (up to the next shelf board). Give an item one surface per 
   surfaces, it takes the highest one it fits under; in 3D, the one nearest to the point you are pointing at, so you
   can choose a lower board.
 - Its whole `dimensions` footprint stays inside the rectangle; if it is bigger than the surface, it is centred on it.
+  An item with `hangsBelow` that is bigger than the surface in both directions, such as a duvet on a bed, also lies
+  square on it when you drop it there, facing the same way as the item below; you can still turn it afterwards.
 - From then on it belongs to that item: it moves and turns with it, and is duplicated and deleted with it. Drag it
   off to put it somewhere else.
 - Only `onTop` items stack, but any item can have surfaces: wall items (the wall shelf) and `onTop` items too (a tray
@@ -321,7 +324,8 @@ What the app reports:
 - an unknown preset as a `default` (rendered grey) or in `allowed`, a default that isn't allowed, a group with no
   presets;
 - a slot that no part or `materialMap` uses;
-- parts sticking out of `dimensions` by more than 1 cm; a surface outside the footprint or above the item;
+- parts sticking out of `dimensions` by more than 1 cm (below the bottom: more than `hangsBelow` + 1 cm for `onTop`
+  items); a surface outside the footprint or above the item;
 - a wall item that would reach above the ceiling; an item taller than the ceiling;
 - an `id` that differs from the file name; a `src` whose upper/lower case differs from the file on disk;
 - a model stretched unevenly by more than 5 %; a `materialMap` name the model doesn't have.

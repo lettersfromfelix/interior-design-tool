@@ -83,6 +83,28 @@ describe("catalogue validation", () => {
     expect(messages(r)).toEqual([expect.stringMatching(/^warning geometry.parts: the parts extend beyond the declared dimensions: x from -20 to 20 \(width 30/)]);
   });
 
+  it("lets the parts of onTop items hang below their bottom by hangsBelow, and no further", () => {
+    // a cloth: a top 2 cm thick and a side hanging 20 cm below the surface it lies on
+    const cloth = (placement: Record<string, unknown>) =>
+      stool({
+        dimensions: { width: 50, depth: 50, height: 2 },
+        placement,
+        geometry: {
+          type: "parametric",
+          parts: [
+            { name: "top", shape: "box", size: { x: 50, y: 2, z: 50 }, position: { x: 0, y: 1, z: 0 }, material: "seat" },
+            { name: "side", shape: "box", size: { x: 50, y: 20, z: 1 }, position: { x: 0, y: -10, z: 24.5 }, material: "legs" },
+          ],
+        },
+      });
+    expect(run(cloth({ type: "onTop", hangsBelow: 20 })).issues).toEqual([]);
+    expect(messages(run(cloth({ type: "onTop", hangsBelow: 10 })))).toEqual([
+      expect.stringMatching(/the parts extend beyond the declared dimensions: y from -20 to 2 \(height 2, hangsBelow 10: -10 to 2\)/),
+    ]);
+    expect(messages(run(cloth({ type: "onTop" })))).toEqual([expect.stringMatching(/y from -20 to 2 \(height 2: 0 to 2\)/)]);
+    expect(run(cloth({ type: "floor", hangsBelow: 20 })).item).toBeUndefined();
+  });
+
   it("warns when the file name and the id differ", () => {
     expect(messages(run(stool(), "catalogue/bar-stool.json"))).toEqual(['warning id: id "stool" does not match the file name "bar-stool"']);
     expect(run(stool(), "catalogue/stool/item.json").issues).toEqual([]);

@@ -104,6 +104,11 @@
             },
             "alsoOnFloor": {
               "type": "boolean"
+            },
+            "hangsBelow": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "centimetres (> 0)"
             }
           },
           "required": [

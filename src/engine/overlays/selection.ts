@@ -22,6 +22,8 @@ export interface Footprint {
   width: number;
   depth: number;
   height: number;
+  /** How far the item hangs below its bottom (cm), e.g. the sides of a duvet. */
+  below?: number;
 }
 
 export class SelectionOverlay {
@@ -86,7 +88,8 @@ export class SelectionOverlay {
     const px = (n: number, min: number) => (this.pxScale > 0 ? Math.max(min, n * this.pxScale) : min * 1.5);
 
     // the item's box; in 2D only its outline from above shows
-    const box = new BoxGeometry(size.width, size.height, size.depth).translate(0, pose.y + size.height / 2, 0);
+    const below = size.below ?? 0;
+    const box = new BoxGeometry(size.width, size.height + below, size.depth).translate(0, pose.y + (size.height - below) / 2, 0);
     this.outline = new LineSegments(new EdgesGeometry(box), this.lineMat);
     box.dispose();
 

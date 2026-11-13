@@ -33,8 +33,11 @@ export const Placement = z.discriminatedUnion("type", [
     minElevation: z.number().min(0).optional(),
     maxElevation: z.number().min(0).optional(),
   }),
-  /** Stands on another item's surface (lamp on a sideboard). `alsoOnFloor` allows it on the floor too. */
-  z.strictObject({ type: z.literal("onTop"), alsoOnFloor: z.boolean().optional() }),
+  /**
+   * Stands on another item's surface (lamp on a sideboard). `alsoOnFloor` allows it on the floor too. `hangsBelow`:
+   * how far its parts hang below the surface it stands on (cm), e.g. the sides of a duvet or a tablecloth.
+   */
+  z.strictObject({ type: z.literal("onTop"), alsoOnFloor: z.boolean().optional(), hangsBelow: PositiveCm.optional() }),
   /** Hangs from the ceiling: the item's top touches the ceiling (include the cord in the geometry). */
   z.strictObject({ type: z.literal("ceiling") }),
 ]);
@@ -120,3 +123,7 @@ export type PlacementType = Placement["type"];
 export type ModelGeometry = z.infer<typeof ModelGeometry>;
 export type Surface = z.infer<typeof Surface>;
 export type CatalogueItem = z.infer<typeof CatalogueItem>;
+
+/** How far the item's parts may reach below its bottom (cm): `hangsBelow` of an onTop item, otherwise 0. */
+export const hangsBelow = (item: Pick<CatalogueItem, "placement">): number =>
+  item.placement.type === "onTop" ? (item.placement.hangsBelow ?? 0) : 0;

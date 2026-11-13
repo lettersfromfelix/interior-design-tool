@@ -58,7 +58,13 @@ const chair = item("chair", [45, 50, 85], { clearance: { back: 60 } }, [
   box("back", [45, 40, 4], [0, 65, -23]),
   { ...box("legs", [3, 41, 3], [-21, 20.5, -23.5]), repeat: { count: 2, step: { x: 42, y: 0, z: 0 } }, mirror: ["z"] },
 ]);
-const catalogue = new Map([sideboard, lamp, wardrobe, shelf, rug, table, chair].map((i) => [i.id, i]));
+const bed = item("bed", [160, 200, 62], { surfaces: [{ name: "mattress", height: 62, width: 156, depth: 196 }] });
+// a cover bigger than the mattress in both directions that hangs over its edges, like a duvet; the same size without
+// hanging over (a tray too big for it); and a runner, bigger only across the bed
+const cover = item("cover", [166, 206, 7], { placement: { type: "onTop", hangsBelow: 20 } });
+const tray = item("tray", [166, 206, 7], { placement: { type: "onTop" } });
+const runner = item("runner", [200, 40, 2], { placement: { type: "onTop" } });
+const catalogue = new Map([sideboard, lamp, wardrobe, shelf, rug, table, chair, bed, cover, tray, runner].map((i) => [i.id, i]));
 const lookup = (id: string) => catalogue.get(id);
 
 const placed = (uid: string, itemId: string, position: Vec2, rotation = 0, extra: Partial<PlacedItem> = {}): PlacedItem => ({
@@ -369,6 +375,22 @@ describe("placement solver", () => {
       uid: "s",
       surface: 0,
     });
+  });
+  it("squares up a cover bigger than the surface in both directions when it is dropped there", () => {
+    const doc = layout(placed("b", "bed", [400, 500], 166.06));
+    const sol = solvePlacement(cover, { point: [430, 520], rotation: 0 }, ctx(doc), new Set());
+    expect(sol.placement).toEqual({ position: [0, 0], rotation: 0, parent: { uid: "b", surface: 0 } });
+    // anything else keeps the rotation it is dropped with, as before: too big but not hanging over, bigger in one
+    // direction only, or smaller
+    for (const [other, dropped, kept] of [[tray, 0, 193.9], [runner, 0, 193.9], [lamp, 20, 213.9]] as const) {
+      expect(solvePlacement(other, { point: [400, 500], rotation: dropped }, ctx(doc), new Set()).placement.rotation, other.id).toBeCloseTo(kept);
+    }
+  });
+  it("keeps the stored rotation of an item on a surface until it is dropped again", () => {
+    const doc = layout(placed("b", "bed", [400, 500], 166.06), placed("c", "cover", [0, 0], 30, { parent: { uid: "b", surface: 0 } }));
+    expect(resolvePoses(doc, lookup, ap.ceilingHeight).get("c")!.rotation).toBeCloseTo(196.06);
+    const m: Mover = { item: cover, uid: "c", moving: new Set(["c"]), isNew: false, before: new Map() };
+    expect(currentAttempt(m, ctx(doc))!.solution.placement.rotation).toBe(30);
   });
   it("snaps to the grid on the plan", () => {
     const sol = solvePlacement(wardrobe, { point: [903.4, 446.2], rotation: 0 }, ctx(layout(), { grid: true, gridSize: 10, wallSnap: false }), new Set());

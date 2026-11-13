@@ -26,6 +26,7 @@ import { resolvePoses, type WorldPose } from "../core/layout/poses";
 import { indexApartment, shownOpening } from "../core/placement/apartment";
 import { clearanceZones, type Conflict } from "../core/placement/collisions";
 import type { Solid } from "../core/placement/shapes";
+import { hangsBelow } from "../core/schema/catalogue";
 import type { Vec2 } from "../core/schema/common";
 import type { LayoutFile, LayoutSurfaces } from "../core/schema/layout";
 import { apartmentSun } from "../core/sun";
@@ -507,11 +508,12 @@ export class Engine {
       this.selection.hide();
       return;
     }
-    const size = s.catalogue.entries.get(placed.item)?.item.dimensions ?? { width: UNKNOWN_SIZE, depth: UNKNOWN_SIZE, height: UNKNOWN_SIZE };
+    const entry = s.catalogue.entries.get(placed.item)?.item;
+    const size = entry ? { ...entry.dimensions, below: hangsBelow(entry) } : { width: UNKNOWN_SIZE, depth: UNKNOWN_SIZE, height: UNKNOWN_SIZE };
     // the object's current transform: follows previews while dragging or rotating
     const pose = { x: item.position.x, y: item.position.y, z: item.position.z, rotation: -item.rotation.y / DEG };
     // wall items always face away from their wall
-    const wallItem = s.catalogue.entries.get(placed.item)?.item.placement.type === "wall";
+    const wallItem = entry?.placement.type === "wall";
     const rotatable = !placed.locked && s.layout.status === "ready" && !wallItem;
     this.selection.show(pose, size, rotatable, this.view === "2d" ? this.plan.cmPerPx : 0);
   }

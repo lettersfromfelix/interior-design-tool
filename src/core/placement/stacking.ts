@@ -69,11 +69,14 @@ export function pickSurface(
 
 /**
  * Position and rotation relative to the base item for an item standing on surface `s` near the world `point`,
- * kept inside the surface (centred if it is too big for it).
+ * kept inside the surface (centred if it is too big for it). A cover (`drapes`: it hangs over the edges) that is
+ * bigger than the surface in both directions, such as a duvet on a bed, also lies square on it, facing the same way
+ * as the base item.
  */
-export function placeOnSurface(point: Vec2, worldRotation: number, size: Size, s: WorldSurface): { position: Vec2; rotation: number } {
+export function placeOnSurface(point: Vec2, worldRotation: number, size: Size, s: WorldSurface, drapes = false): { position: Vec2; rotation: number } {
   const rel = toLocal(point, s.base);
-  const rotation = normalizeRotation(worldRotation - s.base.rotation);
+  const square = drapes && size.width > s.surface.width && size.depth > s.surface.depth;
+  const rotation = square ? 0 : normalizeRotation(worldRotation - s.base.rotation);
   const [ex, ez] = rotatedExtents(size.width, size.depth, rotation);
   const [cx, cz] = s.surface.center ?? [0, 0];
   const keep = (v: number, c: number, half: number, e: number) => (half >= e ? Math.min(c + half - e, Math.max(c - half + e, v)) : c);

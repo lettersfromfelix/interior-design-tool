@@ -5,7 +5,7 @@
 import { partsBounds } from "../catalogue/bounds";
 import { isAllowed, isModelItem, matchesAllowed, ORIGINAL } from "../catalogue/materials";
 import { dirname, expectedId, resolveRelative } from "../catalogue/paths";
-import { CatalogueItem } from "../schema/catalogue";
+import { CatalogueItem, hangsBelow } from "../schema/catalogue";
 import type { MaterialPreset } from "../schema/materials";
 import { fromZod, issue, parseJson, type Issue } from "./issues";
 import { checkMaterialRef } from "./materials";
@@ -103,15 +103,18 @@ export function validateCatalogueFile(file: string, text: string, ctx: Catalogue
 
     const b = partsBounds(item.geometry.parts);
     if (b) {
+      const below = hangsBelow(item);
       const out: string[] = [];
       if (b.min.x < -w / 2 - T || b.max.x > w / 2 + T) out.push(`x from ${fmt(b.min.x)} to ${fmt(b.max.x)} (width ${w}: ±${fmt(w / 2)})`);
       if (b.min.z < -d / 2 - T || b.max.z > d / 2 + T) out.push(`z from ${fmt(b.min.z)} to ${fmt(b.max.z)} (depth ${d}: ±${fmt(d / 2)})`);
-      if (b.min.y < -T || b.max.y > h + T) out.push(`y from ${fmt(b.min.y)} to ${fmt(b.max.y)} (height ${h}: 0 to ${h})`);
+      if (b.min.y < -below - T || b.max.y > h + T) {
+        out.push(`y from ${fmt(b.min.y)} to ${fmt(b.max.y)} (height ${h}${below ? `, hangsBelow ${below}` : ""}: ${fmt(-below)} to ${h})`);
+      }
       if (out.length) {
         warn(
           "geometry.parts",
           `the parts extend beyond the declared dimensions: ${out.join("; ")}`,
-          "The origin is the bottom centre of the item: x runs from −width/2 to +width/2, z from −depth/2 to +depth/2 (front = +z), y from 0 to height.",
+          "The origin is the bottom centre of the item: x runs from −width/2 to +width/2, z from −depth/2 to +depth/2 (front = +z), y from 0 to height (onTop items with hangsBelow: from −hangsBelow).",
         );
       }
     }

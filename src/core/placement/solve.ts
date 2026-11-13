@@ -5,7 +5,7 @@
  */
 import { addItem, setPlacement, type PlacementChange } from "../layout/commands";
 import { resolvePoses, type ItemLookup, type WorldPose } from "../layout/poses";
-import type { CatalogueItem } from "../schema/catalogue";
+import { hangsBelow, type CatalogueItem } from "../schema/catalogue";
 import type { Vec2 } from "../schema/common";
 import type { LayoutFile } from "../schema/layout";
 import type { Aids } from "./aids";
@@ -55,7 +55,10 @@ export function solvePlacement(item: CatalogueItem, target: Target, ctx: Placeme
   if (type === "onTop") {
     const surfaces = worldSurfaces(ctx.doc, ctx.lookup, ctx.poses, exclude);
     const s = pickSurface(target.point, surfaces, size.height, target.hint);
-    if (s) return { placement: { ...placeOnSurface(target.point, target.rotation, size, s), parent: { uid: s.uid, surface: s.index } }, snap: "surface" };
+    if (s) {
+      const placement = placeOnSurface(target.point, target.rotation, size, s, hangsBelow(item) > 0);
+      return { placement: { ...placement, parent: { uid: s.uid, surface: s.index } }, snap: "surface" };
+    }
   }
   if (type === "wall") {
     let snap = mountOnWall(target.point, size, ap.faces);
