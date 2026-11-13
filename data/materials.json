@@ -128,6 +128,8 @@
       "pattern": { "type": "weave", "color2": "#91A9BE", "scale": 2, "strength": 0.5 } },
     { "id": "fabric.chenille-chocolate", "name": "Chenille, chocolate", "color": "#5A4A40", "roughness": 0.95,
       "pattern": { "type": "weave", "color2": "#493B33", "scale": 1.2, "strength": 0.35 } },
+    { "id": "fabric.chenille-white", "name": "Chenille, white", "color": "#EEECE7", "roughness": 0.95,
+      "pattern": { "type": "weave", "color2": "#E0DDD6", "scale": 1.2, "strength": 0.35 } },
     { "id": "fabric.wool-ivory", "name": "Wool, ivory (rugs)", "color": "#E8E1D3", "roughness": 0.98,
       "pattern": { "type": "weave", "color2": "#D8CEBC", "scale": 4, "strength": 0.5 } },
     { "id": "fabric.felt-black", "name": "Felt, black (acoustic panels)", "color": "#232221", "roughness": 1 },
