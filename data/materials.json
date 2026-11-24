@@ -184,6 +184,8 @@
       "pattern": { "type": "weave", "color2": "#9A634E", "scale": 4, "strength": 0.5 } },
     { "id": "rug.slate-heather", "name": "Wool, slate blue heather", "color": "#6E7B86", "roughness": 0.98,
       "pattern": { "type": "noise", "color2": "#A5AFB7", "scale": 40, "strength": 0.7 } },
+    { "id": "rug.hjortsvang-off-white", "name": "Braided wool, off-white (IKEA HJORTSVANG)", "color": "#DFD8CD", "roughness": 0.98,
+      "texture": { "map": "data/textures/rug-hjortsvang.jpg", "normalMap": "data/textures/rug-hjortsvang-normal.jpg", "repeat": 57.5 } },
     { "id": "curtain.voile-white", "name": "Voile, white (sheer curtains)", "color": "#F4F2ED", "roughness": 0.9, "opacity": 0.5,
       "pattern": { "type": "weave", "color2": "#E3DFD6", "scale": 0.3, "strength": 0.3 } },
     { "id": "curtain.voile-light-blue", "name": "Voile, light blue (sheer curtains)", "color": "#C3D3E0", "roughness": 0.9, "opacity": 0.5,
