@@ -140,6 +140,8 @@
       "pattern": { "type": "weave", "color2": "#91A9BE", "scale": 2, "strength": 0.5 } },
     { "id": "fabric.boucle-burgundy", "name": "Bouclé, burgundy (deep wine red)", "color": "#6A212F", "roughness": 0.97,
       "pattern": { "type": "weave", "color2": "#591A27", "scale": 2, "strength": 0.5 } },
+    { "id": "fabric.teddy-boucle-taupe", "name": "Teddy bouclé, taupe (as Westwing's Wolke)", "color": "#7D7168", "roughness": 0.95,
+      "texture": { "map": "data/textures/fabric-teddy-boucle-taupe.jpg", "normalMap": "data/textures/fabric-teddy-boucle-taupe-normal.jpg", "repeat": 128 } },
     { "id": "fabric.chenille-chocolate", "name": "Chenille, chocolate", "color": "#5A4A40", "roughness": 0.95,
       "pattern": { "type": "weave", "color2": "#493B33", "scale": 1.2, "strength": 0.35 } },
     { "id": "fabric.espresso", "name": "Fabric, espresso (very dark brown)", "color": "#332A27", "roughness": 0.93,

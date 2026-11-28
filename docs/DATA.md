@@ -249,7 +249,11 @@ A `texture` uses image files instead: `map` (the colour) and optionally `normalM
 both a square tile of `repeat` cm, laid like patterns (in cm from the part's middle, the image's top towards the
 item's back). Use it only for a surface the patterns can't draw. The images in `data/textures/` are generated from code
 by the scripts in `tools/textures/`, never made from a photo: `rug.hjortsvang-off-white`, the braided wool of IKEA's
-HJORTSVANG rug, comes from `python tools/textures/rug-hjortsvang.py`.
+HJORTSVANG rug, comes from `python tools/textures/rug-hjortsvang.py`, and `fabric.teddy-boucle-taupe`, the taupe teddy
+bouclé of Westwing's Wolke sofa, from `python tools/textures/fabric-teddy-boucle-taupe.py`. On the rounded surfaces of
+3D models, the mapping turns from one side's projection to the next where a surface turns past 45°, and along that
+line a texture is squeezed into a narrow, even band; with patterns and quiet textures it doesn't show, with a strong
+one like the teddy bouclé it shows up close as a faint line along the edges.
 Groups in use: `paint`, `floor`, `kitchen`, `stone`, `tile`, `door`, `frame`, `glass`, `ceramic`, `metal`, `wood`,
 `lacquer`, `plastic`, `fabric`, `rug`, `leather`, `cane`, `paper`, `plant`. New presets and groups can be added
 freely. The `rug` presets are the rug colorways; the rug items offer them besides any fabric.
